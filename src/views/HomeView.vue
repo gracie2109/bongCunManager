@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input'
+import CustomInputField from "@/components/common/CustomInputField.vue";
 
 const formSchema = toTypedSchema(productFormSchema)
 const store = useProductStore();
@@ -108,12 +109,15 @@ const testUpdate = reactive(['next.js','sveltekit','nuxt'])
             </FormItem>
           </FormField>
 
-    <CustomCombobox
-        :options="frameworks"
-        placeholder="Choose"
-        @select-option="selectOption"
-        :value="testUpdate"
-    />
+          <CustomCombobox
+              :options="frameworks"
+              placeholder="Choose"
+              @select-option="selectOption"
+              :value="testUpdate"
+          />
+
+
+          <CustomInputField label="name" />
           <CustomButton :button-text="$t('common.submit')" :loading="loading" type="submit" />
   </form>
 
