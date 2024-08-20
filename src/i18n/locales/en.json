@@ -1,0 +1,33 @@
+{
+  "locale": {
+    "en": "English",
+    "vi": "Vietnamese"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About"
+  },
+  "common": {
+    "submit": "Submit",
+    "success": "{action} successfully!",
+    "fail": "{action} failed, {mess}!",
+    "create": "Create",
+    "update": "Update",
+    "delete": "Delete",
+    "dataExisted": "{field} is existed!",
+    "dataNotExisted": "{field} not existed!"
+  },
+  "pageMeta": {
+    "home": "HOME",
+    "product_list": "List Products"
+  },
+  "validation":{
+    "min": "{name} must be at least {min} characters"
+  },
+  "pageFields": {
+    "products": {
+      "name": "Product Name",
+      "description": "Description"
+    }
+  }
+}

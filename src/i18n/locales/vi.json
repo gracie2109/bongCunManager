@@ -1,0 +1,34 @@
+{
+  "locale": {
+    "en": "Tiếng Anh",
+    "vi": "Tiếng Việt"
+  },
+  "nav": {
+    "home": "trang chủ",
+    "about": "thông tin"
+  },
+  "common": {
+    "submit": "Ghi lại",
+    "success": "{action} thành công",
+    "fail": "{action} thất bại, {mess}!",
+    "create": "Tạo",
+    "update": "Cập nhật",
+    "delete": "Xóa",
+    "dataExisted": "{field} đã tồn tại!",
+    "dataNotExisted": "{field} không tồn tại!"
+  },
+  "pageMeta": {
+    "home": "Trang chủ ",
+    "product_list": "Danh sách sản phẩm"
+  },
+  "validation":{
+    "min": "{name} cần tối thiểu {min} ký tự"
+  },
+  "pageFields": {
+    "products": {
+      "name": "Tên sản phẩm",
+      "description": "Mô tả"
+
+    }
+  }
+}
