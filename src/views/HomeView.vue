@@ -88,7 +88,7 @@ const testUpdate = reactive(['next.js','sveltekit','nuxt'])
         </div>
       </div>
     <div>
-  <form class="w-2/3 space-y-6" @submit="onSubmit">
+  <form class="w-1/3 space-y-6" @submit="onSubmit">
       <FormField v-slot="{ componentField }" name="name">
             <FormItem>
               <FormLabel>{{ $t('pageFields.products.name') }}</FormLabel>

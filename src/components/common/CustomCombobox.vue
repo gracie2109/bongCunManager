@@ -30,7 +30,7 @@ function handleSelect(data: any) {
       dataValue.value = [data];
     }
   }
-  emit('selectOption', dataValue.value)
+  emit('selectOption', dataValue.value);
 }
 
 onMounted(() => {
@@ -73,7 +73,7 @@ onMounted(() => {
           <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50"/>
         </Button>
       </PopoverTrigger>
-      <PopoverContent  class=" p-0 w-[full]">
+      <PopoverContent  class=" p-0 w-[full] z-[1000] bg-white">
         <Command>
           <CommandInput :placeholder="props.placeholder" class="h-9"/>
           <CommandEmpty>No item found.</CommandEmpty>
