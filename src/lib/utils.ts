@@ -32,3 +32,13 @@ export function sendMessageToast(status: ResponseStatus, method: RestfullMethod,
   else if (toastType === 'error') return toast.error(i18n.global.t('common.fail', {action: i18n.global.t(`common.${method}`), mess: message}));
   else toast(i18n.global.t(`common.${status}`, {action: i18n.global.t(`common.${method}`)}))
 }
+
+export function setLocalStorage (key: string, data:any) {
+  if(!key) return;
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+export function getLocalStorage(key:string) {
+  if(!key) return;
+  return JSON.parse(JSON.stringify(localStorage.getItem(key)));
+}

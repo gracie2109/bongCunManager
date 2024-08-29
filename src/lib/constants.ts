@@ -21,3 +21,13 @@ export const DEFINE_PRODUCT_CATEGORIES =[
     }
 ]
 
+export const PAGE_LAYOUT = {
+    'ADMIN': 'admin',
+    'CLIENT': 'client',
+    'NO_LAYOUT': 'empty',
+}
+
+export const LOCAL_STORAGE_KEY = {
+    'LAYOUT': 'layout',
+    'THEME':'theme'
+}

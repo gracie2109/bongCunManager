@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {useForm} from 'vee-validate'
 import {toTypedSchema} from '@vee-validate/zod'
-import {useProductStore} from "@/stores/products"
+import {useProductStore} from "@/stores/modules/products"
 import {type InferProductFormInfo, productFormSchema} from "@/validations/products";
 import {storeToRefs} from "pinia";
 import {onMounted, reactive, ref} from "vue";
@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input'
+import CustomInputField from "@/components/common/CustomInputField.vue";
 
 const formSchema = toTypedSchema(productFormSchema)
 const store = useProductStore();
@@ -87,7 +88,7 @@ const testUpdate = reactive(['next.js','sveltekit','nuxt'])
         </div>
       </div>
     <div>
-  <form class="w-2/3 space-y-6" @submit="onSubmit">
+  <form class="w-1/3 space-y-6" @submit="onSubmit">
       <FormField v-slot="{ componentField }" name="name">
             <FormItem>
               <FormLabel>{{ $t('pageFields.products.name') }}</FormLabel>
@@ -108,12 +109,15 @@ const testUpdate = reactive(['next.js','sveltekit','nuxt'])
             </FormItem>
           </FormField>
 
-    <CustomCombobox
-        :options="frameworks"
-        placeholder="Choose"
-        @select-option="selectOption"
-        :value="testUpdate"
-    />
+          <CustomCombobox
+              :options="frameworks"
+              placeholder="Choose"
+              @select-option="selectOption"
+              :value="testUpdate"
+          />
+
+
+          <CustomInputField label="name" />
           <CustomButton :button-text="$t('common.submit')" :loading="loading" type="submit" />
   </form>
 
