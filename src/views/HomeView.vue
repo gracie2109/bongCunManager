@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {useForm} from 'vee-validate'
 import {toTypedSchema} from '@vee-validate/zod'
-import {useProductStore} from "@/stores/products"
+import {useProductStore} from "@/stores/modules/products"
 import {type InferProductFormInfo, productFormSchema} from "@/validations/products";
 import {storeToRefs} from "pinia";
 import {onMounted, reactive, ref} from "vue";

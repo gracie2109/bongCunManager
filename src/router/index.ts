@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue';
 import i18n from '@/i18n';
 import * as  Vue from 'vue';
+import {PAGE_LAYOUT} from "@/lib/constants"
+import TestView from "@/views/TestView.vue";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_PUBLIC_PATH || ''),
   routes: [
@@ -11,10 +14,18 @@ const router = createRouter({
       component: HomeView,
       meta: {
         key:'home',
-        view: 'normal'
+        layout: PAGE_LAYOUT.CLIENT
       }
     },
-
+    {
+      path: '/test',
+      name: 'test',
+      component: TestView,
+      meta: {
+        key:'test',
+        layout: PAGE_LAYOUT.ADMIN
+      }
+    },
   ]
 })
 router.afterEach((to, from) => {
