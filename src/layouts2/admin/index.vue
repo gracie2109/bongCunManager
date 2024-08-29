@@ -1,6 +1,6 @@
 <template>
   <p>This is admin Layout</p>
-  <router-view />
+  <slot />
 </template>
 <script setup lang="ts">
 </script>
