@@ -4,7 +4,7 @@ import {toTypedSchema} from '@vee-validate/zod'
 import {useProductStore} from "@/stores/modules/products"
 import {type InferProductFormInfo, productFormSchema} from "@/validations/products";
 import {storeToRefs} from "pinia";
-import {onMounted, reactive, ref} from "vue";
+import {h, onMounted, reactive, ref} from "vue";
 import {CustomCombobox, CustomButton} from "@/components/common";
 import {Trash} from "lucide-vue-next"
 import {
@@ -16,7 +16,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input'
 import CustomInputField from "@/components/common/CustomInputField.vue";
-
+import {truncateText} from "@/lib/utils";
+import {toast} from "vue-sonner";
+import ToastImage from '@/components/common/ToastImage.vue'
+import {useToastImage} from "@/composables/useToastImage";
 const formSchema = toTypedSchema(productFormSchema)
 const store = useProductStore();
 const {products, loading} = storeToRefs(store)
@@ -39,23 +42,32 @@ const handleClick = async (i: any) => {
 }
 
 const frameworks = [
-  {value: 'next.js', label: 'Next.js nef ', key: '1'},
-  {value: 'sveltekit', label: 'SvelteKit sda', key: '2'},
+  {value: '123123', label: 'Next.js nef ', key: '1'},
+  {value: 'g', label: 'SvelteKit sda', key: '2'},
   {value: 'nuxt', label: 'Nuxt', key: '3'},
   {value: 'remix', label: 'Remix', key: '4'},
-  {value: 'astro', label: 'Astro', key: '5'},
+  {value: 'huhh', label: 'Astro', key: '5'},
 ]
 
 const optionValue = ref()
 function selectOption (value:any) {
   optionValue.value = value
 }
+const imgSource ='https://www.nme.com/wp-content/uploads/2023/06/karina-aespa.jpg';
+const name = 'dadasdasssssssssssssssssssd'
 
-const testUpdate = reactive(['next.js','sveltekit','nuxt'])
+
+useToastImage({
+  data:{
+    message: 'test',
+    desc: name,
+    image: imgSource
+  }
+})
 </script>
 
 <template>
-    <div id="showTable">
+    <div id="showTable" class="mx-8 p-8">
         <div v-if=" !products">
           Loading
         </div>
@@ -88,7 +100,7 @@ const testUpdate = reactive(['next.js','sveltekit','nuxt'])
         </div>
       </div>
     <div>
-  <form class="w-1/3 space-y-6" @submit="onSubmit">
+  <form class="w-[500px]  space-y-6 mx-8 p-8" @submit="onSubmit">
       <FormField v-slot="{ componentField }" name="name">
             <FormItem>
               <FormLabel>{{ $t('pageFields.products.name') }}</FormLabel>
@@ -108,12 +120,13 @@ const testUpdate = reactive(['next.js','sveltekit','nuxt'])
               <FormMessage />
             </FormItem>
           </FormField>
-
+          :: {{optionValue}}
           <CustomCombobox
               :options="frameworks"
               placeholder="Choose"
               @select-option="selectOption"
-              :value="testUpdate"
+              search-label
+              show-clear
           />
 
 

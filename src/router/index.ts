@@ -4,6 +4,11 @@ import i18n from '@/i18n';
 import * as  Vue from 'vue';
 import {PAGE_LAYOUT} from "@/lib/constants"
 import TestView from "@/views/TestView.vue";
+/*
+*   RULE:
+*   meta key cần đối chiếu với pageMeta trong file i18n/locales/[lang].json
+*
+* */
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_PUBLIC_PATH || ''),
@@ -14,7 +19,7 @@ const router = createRouter({
       component: HomeView,
       meta: {
         key:'home',
-        layout: PAGE_LAYOUT.CLIENT
+        layout: PAGE_LAYOUT.CLIENT,
       }
     },
     {
@@ -22,7 +27,7 @@ const router = createRouter({
       name: 'test',
       component: TestView,
       meta: {
-        key:'test',
+        key:'home',
         layout: PAGE_LAYOUT.ADMIN
       }
     },

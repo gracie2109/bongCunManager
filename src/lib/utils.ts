@@ -42,3 +42,9 @@ export function getLocalStorage(key:string) {
   if(!key) return;
   return JSON.parse(JSON.stringify(localStorage.getItem(key)));
 }
+
+
+export function truncateText(text: string, maxLength: number) {
+  const newText = text.slice(0, maxLength);
+  return text.length > maxLength ? `${newText}...`: newText;
+}
