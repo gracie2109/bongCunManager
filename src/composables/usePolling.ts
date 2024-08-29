@@ -3,9 +3,10 @@ import { ref, onMounted, onUnmounted } from 'vue';
 type Props = {
     callback: () => void;
     waitTime?: number;
+    isPolling?: boolean;
 };
 
-export function usePolling({ callback, waitTime = 15000 }: Props) {
+export function usePolling({ callback, waitTime = 15000,isPolling = false }: Props) {
     const intervalId = ref<number | null>(null);
 
     const startPolling = () => {
@@ -23,7 +24,9 @@ export function usePolling({ callback, waitTime = 15000 }: Props) {
     };
 
     onMounted(() => {
-        startPolling();
+        if(isPolling){
+            startPolling();
+        }
     });
 
     onUnmounted(() => {

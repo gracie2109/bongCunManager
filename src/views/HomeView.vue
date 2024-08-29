@@ -68,7 +68,9 @@ useToastImage({
 usePolling({
   callback: () => {
     console.log('hehhehe')
-  }
+  },
+  isPolling: false,
+  waitTime: 3000
 })
 </script>
 
