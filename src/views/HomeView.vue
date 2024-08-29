@@ -16,14 +16,12 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input'
 import CustomInputField from "@/components/common/CustomInputField.vue";
-import {truncateText} from "@/lib/utils";
-import {toast} from "vue-sonner";
-import ToastImage from '@/components/common/ToastImage.vue'
+
 import {useToastImage} from "@/composables/useToastImage";
 const formSchema = toTypedSchema(productFormSchema)
 const store = useProductStore();
 const {products, loading} = storeToRefs(store)
-
+import {onRestSetTime, usePolling} from "@/composables/usePolling"
 const {handleSubmit, resetForm} = useForm({
   validationSchema: formSchema,
 })
@@ -62,6 +60,14 @@ useToastImage({
     message: 'test',
     desc: name,
     image: imgSource
+  }
+})
+
+
+
+usePolling({
+  callback: () => {
+    console.log('hehhehe')
   }
 })
 </script>

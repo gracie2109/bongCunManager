@@ -8,7 +8,7 @@
     </router-view>
   </div>
   <div class="absolute right-0 top-36 z-[9999] border">
-    <Toaster :duration="200000" position="top-left" rich-colors/>
+    <Toaster  position="top-left" rich-colors/>
   </div>
 </template>
 
