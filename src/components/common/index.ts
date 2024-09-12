@@ -3,3 +3,5 @@ export {default as AppLogo} from "./AppLogo.vue";
 export {default as CustomButton} from "./CustomButton.vue";
 export {default as AdminPageHeader} from "./AdminPageHeader.vue";
 export {default as CustomCombobox} from "./CustomCombobox.vue";
+export {default as LoadingIndicator} from "./LoadingIndicator.vue";
+export {default as MenuLink} from "./Link.vue"

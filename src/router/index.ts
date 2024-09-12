@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue';
 import i18n from '@/i18n';
 import * as  Vue from 'vue';
-import {PAGE_LAYOUT} from "@/lib/constants"
-import TestView from "@/views/TestView.vue";
+import { PAGE_LAYOUT } from "@/lib/constants"
+import LoginView from '@/views/auth/LoginView.vue';
 /*
 *   RULE:
 *   meta key cần đối chiếu với pageMeta trong file i18n/locales/[lang].json
@@ -18,17 +18,17 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       meta: {
-        key:'home',
+        key: 'home',
         layout: PAGE_LAYOUT.CLIENT,
       }
     },
     {
-      path: '/test',
-      name: 'test',
-      component: TestView,
+      path: '/login',
+      name: 'login',
+      component: LoginView,
       meta: {
-        key:'home',
-        layout: PAGE_LAYOUT.ADMIN
+        key: 'login',
+        layout: PAGE_LAYOUT.NO_LAYOUT
       }
     },
   ]

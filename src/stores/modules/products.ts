@@ -31,9 +31,7 @@ export const useProductStore = defineStore('product', () => {
     async function getListProducts() {
         try {
             loading.value = true;
-            unsubscribe.value = getCollectionList(COLLECTION.PRODUCTS, (data) => {
-                products.value = data;
-              });
+            unsubscribe.value = getCollectionList(COLLECTION.PRODUCTS, (data) => { products.value = data});
         } catch (error) {
             console.log('error', error)
         } finally {

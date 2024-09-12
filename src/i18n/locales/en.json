@@ -19,9 +19,11 @@
   },
   "pageMeta": {
     "home": "HOME",
-    "product_list": "List Products"
+    "product_list": "List Products",
+    "login": "Login",
+    "register": "Register"
   },
-  "validation":{
+  "validation": {
     "min": "{name} must be at least {min} characters"
   },
   "pageFields": {

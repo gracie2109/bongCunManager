@@ -48,3 +48,15 @@ export function truncateText(text: string, maxLength: number) {
   const newText = text.slice(0, maxLength);
   return text.length > maxLength ? `${newText}...`: newText;
 }
+
+
+export function formatPrice(
+  price: number | string,
+) {
+  if (price == "undefined") return
+  return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+      notation: 'standard',
+  }).format(Number(price))
+}
