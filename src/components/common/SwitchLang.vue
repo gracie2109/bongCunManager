@@ -2,7 +2,7 @@
 
   <div class="flex gap-4 items-center  cursor-pointer">
 
-    <div :class="{'disable': !locale || locale !=='en'}"  @click="switchLanguage('en')">
+    <div :class="{'disable':  locale !=='en'}"  @click="switchLanguage('en')">
       <img alt="" class="w-7 h-7 object-cover inline-block " src="../../assets/flags/uk.png">
     </div>
     <div :class="{'disable': locale !== 'vi'}" @click="switchLanguage('vi')">
@@ -17,7 +17,7 @@ import Tr from "@/i18n/translation"
 import { useRouter } from "vue-router";
 import {nextTick, ref} from "vue";
 
-const locale = ref(Tr.getPersistedLocale());
+const locale = ref(Tr.getPersistedLocale() || Tr.defaultLocale);
 const router = useRouter();
 
 const switchLanguage = async (newLocale: string) => {
