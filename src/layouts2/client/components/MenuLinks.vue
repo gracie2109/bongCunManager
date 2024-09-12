@@ -1,12 +1,12 @@
 <template>
-  <ul
-    :class="
-      clsx(`flex relative font-semibold list-none ${navLinksClass}`, {
-        'text-black': route.name === 'home',
-        'text-primary': route.name !== 'home',
-      })
-    "
-  >
+  <ul :class="clsx(`flex relative font-semibold list-none ${navLinksClass}`, {
+    'text-black': route.name === 'home',
+    'text-primary': route.name !== 'home',
+  })
+    ">
+    <li :class="langClass">
+      <SwitchLang />
+    </li>
     <MenuLink v-for="link in navigation.clientNav" :key="link.text" :link="link" />
   </ul>
 </template>
@@ -17,6 +17,7 @@ import { MenuLink } from "@/components/common";
 import clsx from "clsx";
 import { useRoute } from "vue-router";
 import { navigation } from "@/lib/constants";
+import SwitchLang from "@/components/common/SwitchLang.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -34,4 +35,8 @@ const navLinksClass = computed<string>(() => {
     ? "flex-col space-y-6 h-screen px-8 py-28 landscape:justify-around"
     : "items-center gap-x-8 xl:gap-x-14";
 });
+
+const langClass = computed(() => {
+  return props.type === "mobile" ? "block" : 'hidden'
+})
 </script>

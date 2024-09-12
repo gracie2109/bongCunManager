@@ -23,14 +23,7 @@
         <div
           class="bg-[rgb(255, 255, 255)] fixed backdrop-blur  right-0 top-0 w-full transition-transform duration-500 md:w-2/4 lg:hidden"
           :class="[isOpen ? 'translate-x-0' : 'translate-x-full']">
-          <div class="grid  gap-y-3 ">
-            <div id="lang_mobile" class="relative top-[5rem] left-[2rem]">
-              <SwitchLang />
-
-            </div>
             <MenuLinks />
-
-          </div>
         </div>
       </div>
     </div>
@@ -48,7 +41,6 @@ import { clsx } from "clsx";
 
 import { useRoute } from "vue-router";
 import AppLogo from "@/components/common/AppLogo.vue";
-import SwitchLang from "@/components/common/SwitchLang.vue";
 import MenuLinks from "./components/MenuLinks.vue";
 import MenuExtras from "./components/MenuExtras.vue";
 const isOpen = ref<boolean>(false);
