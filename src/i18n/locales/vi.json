@@ -30,6 +30,13 @@
     "products": {
       "name": "Tên sản phẩm",
       "description": "Mô tả"
+    },
+    "authen":{
+      "prefSignup": "Nhập thông tin của bạn để tạo tài khoản",
+      "prefLogin":"Nhập thông tin để đăng nhập vào tài khoản của bạn",
+      "alreadyHasAccount": "Đã có tài khoản?",
+      "dontHaveAccount" :"Không có tài khoản?",
+      "createAcc": "Tạo tài khoản"
     }
   }
 }

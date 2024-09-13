@@ -5,7 +5,8 @@ export const USER_LOCALE = getStorageValue('user-locale');
 export const CURRENT_DATE = getCurrentDateTime();
 
 export const COLLECTION = {
-    PRODUCTS: 'products'
+    PRODUCTS: 'products',
+    USERS:'users'
 }
 
 export const DEFINE_PRODUCT_CATEGORIES =[
@@ -25,6 +26,7 @@ export const PAGE_LAYOUT = {
     'ADMIN': 'admin',
     'CLIENT': 'client',
     'NO_LAYOUT': 'empty',
+    'AUTH': 'auth'
 }
 
 export const LOCAL_STORAGE_KEY = {

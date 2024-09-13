@@ -30,6 +30,13 @@
     "products": {
       "name": "Product Name",
       "description": "Description"
+    }, 
+    "authen":{
+      "prefSignup": "Enter your information to create an account",
+      "prefLogin":"Enter your email below to login to your account",
+      "alreadyHasAccount": "Already have an account?",
+      "dontHaveAccount" :"Don't have an account?",
+      "createAcc": "Create an account"
     }
   }
 }

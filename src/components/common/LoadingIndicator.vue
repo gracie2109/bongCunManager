@@ -3,25 +3,45 @@ console.log("loading");
 </script>
 
 <template>
-  <div class="wrap_loading">
-    <div class="loader">
-      <span class="loader-text">loading</span>
-      <span class="load"></span>
+  <div id="overlay">
+    <div id="text">
+      <div class="wrap_loading">
+        <div class="loader">
+          <span class="loader-text">loading</span>
+          <span class="load"></span>
+        </div>
+      </div>
+
     </div>
+
   </div>
 </template>
 
 <style scoped>
-/* From Uiverse.io by alexruix */
-.wrap_loading {
-  position: absolute;
-  height: 100%;
+#overlay {
+  position: fixed;
+  display: block;
   width: 100%;
-  /* background-color: #fcfcfc; */
-  z-index: 998;
-  display: grid;
-  place-items: center;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  cursor: pointer;
 }
+
+#text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 50px;
+  color: white;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
 .loader {
   width: 80px;
   height: 50px;

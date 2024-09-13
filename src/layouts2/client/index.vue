@@ -12,7 +12,7 @@
       hidden: route.name !== 'home',
     })
       "></div>
-    <div class="relative container md:px-12 lg:px-20">
+    <div class="relative  md:px-12 lg:px-20">
       <div class="flex items-center justify-between">
         <AppLogo />
         <nav class="hidden lg:block">
