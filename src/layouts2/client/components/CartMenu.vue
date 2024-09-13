@@ -26,7 +26,7 @@
         class="absolute top-3 font-semibold text-sm hover:underline hover:cursor-pointer"
         @click="
           () => {
-            $router.push('/cart');
+            $router.push('/home');
             closeSheet();
           }
         "
@@ -68,7 +68,7 @@
 
           <Button>
             <router-link
-              :to="$router.resolve({ name: 'checkout' })"
+              :to="$router.resolve({ name: 'home' })"
               class="flex gap-x-2 items-center"
             >
               Checkout<ChevronsRight class="w-4 h-4" />
@@ -82,7 +82,7 @@
           </div>
           <div>
             <router-link
-              :to="$router.resolve({ name: 'cart' })"
+              :to="$router.resolve({ name: 'home' })"
               class="hover:text-custom-primary hover:underline"
               >Cart Page</router-link
             >
@@ -95,6 +95,8 @@
 <script setup lang="ts">
 import { ChevronsRight, X } from "lucide-vue-next";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet";
+import { Dialog, DialogClose, DialogContent,DialogDescription,DialogFooter, DialogHeader, DialogScrollContent,  } from "@/components/ui/dialog";
+
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import { onMounted, ref, watchEffect } from "vue";
