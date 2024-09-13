@@ -13,7 +13,7 @@
     })
       "></div>
     <div class="relative  md:px-12 lg:px-20">
-      <div class="flex items-center justify-between">
+      <div class="flex items-start justify-between">
         <AppLogo />
         <nav class="hidden lg:block">
           <MenuLinks type="desktop" />

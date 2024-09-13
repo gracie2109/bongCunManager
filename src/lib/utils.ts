@@ -35,12 +35,12 @@ export function sendMessageToast(status: ResponseStatus, method: RestfullMethod,
 
 export function setLocalStorage (key: string, data:any) {
   if(!key) return;
-  localStorage.setItem(key, JSON.stringify(data));
+  sessionStorage.setItem(key, JSON.stringify(data));
 }
 
 export function getLocalStorage(key:string) {
   if(!key) return;
-  return JSON.parse(JSON.stringify(localStorage.getItem(key)));
+  return JSON.parse(JSON.stringify(sessionStorage.getItem(key)));
 }
 
 

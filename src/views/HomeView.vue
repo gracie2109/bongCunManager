@@ -16,6 +16,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input'
 import CustomInputField from "@/components/common/CustomInputField.vue";
+import { auth } from '@/plugins/firebase';
+import { useAuthStore } from '@/stores';
 
 const formSchema = toTypedSchema(productFormSchema)
 const store = useProductStore();

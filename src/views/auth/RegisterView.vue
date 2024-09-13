@@ -58,8 +58,8 @@
               id="password"
               type="password"
               required
-              name="passWord"
-              @update:model-value="(vl) => onChangeData('passWord', vl)"
+              name="password"
+              @update:model-value="(vl) => onChangeData('password', vl)"
             />
           </div>
           <Button class="w-full" @click="handleSubmit()" :disabled="loading">
@@ -101,14 +101,14 @@ type IForm = {
   email: string;
   firstName: string;
   lastName: string;
-  passWord: string;
+  password: string;
 };
 
 const formSchema = ref<IForm>({
   email: "",
   firstName: "",
   lastName: "",
-  passWord: "",
+  password: "",
 });
 
 async function handleSubmit() {

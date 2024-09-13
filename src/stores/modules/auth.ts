@@ -1,25 +1,27 @@
 import { onUnmounted, ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
-import { checkItemExist, createCollection, getCollectionList, deleteItem, checkItemNotExist } from "@/lib/firebaseFn";
+import { checkItemExist, createCollection, getCollectionList, deleteItem, checkItemNotExist, getDetailData } from "@/lib/firebaseFn";
 import { v7 as uuidv7 } from 'uuid';
 import { toast } from "vue-sonner";
 import { useI18n } from "vue-i18n";
 import { COLLECTION } from "@/lib/constants"
-import { sendMessageToast } from "@/lib/utils";
+import { getLocalStorage, sendMessageToast, setLocalStorage } from "@/lib/utils";
 import { auth } from '@/plugins/firebase'
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 
 
 export const useAuthStore = defineStore('auth', () => {
     const users: Ref<any[]> = ref([]);
+    const currentUser = ref((getLocalStorage('auth')))
     const loading = ref(false);
     const unsubscribe = ref<null | (() => void)>(null);
     type IForm = {
         email: string;
-        firstName: string;
-        lastName: string;
-        passWord: string;
+        firstName?: string;
+        lastName?: string;
+        password: string;
+        role?: string
     };
 
     const errors = ref<{
@@ -27,23 +29,25 @@ export const useAuthStore = defineStore('auth', () => {
         mess: string;
     }>();
 
-   
-    const saveUser = ref()
+
     async function signUp(payload: IForm) {
         try {
             loading.value = true;
-          
-            const userCredential = await createUserWithEmailAndPassword(auth, payload.email, payload.passWord)
+
+            const userCredential = await createUserWithEmailAndPassword(auth, payload.email, payload.password)
+
 
             const user = userCredential.user;
             if (user) {
                 const payloadVl = {
                     ...payload,
                     userId: user.uid,
-                    displayName: user.displayName,
+                    displayName: `${payload.firstName} ${payload.lastName}`,
                     emailVerified: user.emailVerified,
                     photoURL: user.photoURL,
-                    phoneNumber:user.phoneNumber
+                    phoneNumber: user.phoneNumber,
+                    providerData: user?.providerData,
+                    role: payload?.role || 'Customer'
                 }
                 await createCollection(COLLECTION.USERS, payloadVl);
             }
@@ -57,8 +61,24 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    async function login(payload: IForm) {
+        try {
+            loading.value = true;
 
-    console.log('save', saveUser)
+            const userCredential = await signInWithEmailAndPassword(auth, payload.email, payload.password)
+
+            const user = userCredential.user;
+            if (user) {
+                const res = await getDetailData(COLLECTION.USERS, 'userId', user.uid);
+                setLocalStorage('auth', res?.docs[0].data())
+            }
+
+        } catch (error: any) {
+            sendMessageToast('fail', 'create', 'error', error.message)
+        } finally {
+            loading.value = false;
+        }
+    }
     async function getListUsers() {
         try {
             loading.value = true;
@@ -76,5 +96,5 @@ export const useAuthStore = defineStore('auth', () => {
     });
 
 
-    return { loading, signUp, errors, getListUsers, users }
+    return { loading, signUp, errors, getListUsers, users, login, currentUser }
 })

@@ -11,7 +11,7 @@
 
     <Separator class="hidden !h-5 lg:block  z-[10]" orientation="vertical" />
     <div v-if="user" class=" z-[10]">
-      <BaseAvatar />
+      <BaseAvatar :user="user" />
     </div>
     <div v-else class=" z-[10]">
       <router-link :to="$router.resolve({ name: 'login' })">Login</router-link>
@@ -29,10 +29,12 @@ import { Search } from "lucide-vue-next"
 import MenuButton from "../components/MenuButton.vue";
 import CartMenu from "./CartMenu.vue";
 import Separator from "@/components/ui/separator/Separator.vue";
-
+import { getLocalStorage } from "@/lib/utils";
+import {BaseAvatar} from "@/components/common"
 
 const emit = defineEmits(["toggleMenu"]);
 const route = useRoute();
 
-const user = ref();
+const user = JSON.parse(getLocalStorage('auth'));
+
 </script>
