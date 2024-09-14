@@ -54,7 +54,7 @@ const Trans = {
 
   getPersistedLocale() {
     const persistedLocale = localStorage.getItem('user-locale')
-
+    if(!persistedLocale) return Trans.defaultLocale
     if (Trans.isLocaleSupported(persistedLocale)) {
       return persistedLocale
     }

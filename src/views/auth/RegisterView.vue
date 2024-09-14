@@ -8,7 +8,6 @@
         {{ $t("pageFields.authen.prefSignup") }}
       </p>
     </div>
-    {{ users }}
     <div class="h-full">
       <div class="mt-5">
         <div class="grid gap-4">
@@ -16,51 +15,25 @@
             <div class="grid gap-2">
               <Label for="password">First name</Label>
 
-              <Input
-                id="password"
-                type="text"
-                required
-                placeholder="Max"
-                name="firstName"
-                @update:model-value="(vl) => onChangeData('firstName', vl)"
-              />
+              <Input id="password" type="text" required placeholder="Max" name="firstName"
+                @update:model-value="(vl) => onChangeData('firstName', vl)" />
             </div>
             <div class="grid gap-2">
               <Label for="password">Last name</Label>
 
-              <Input
-                id="password"
-                type="text"
-                required
-                placeholder="Robinson"
-                :disabled="isCheckStt"
-                name="lastName"
-                @update:model-value="(vl) => onChangeData('lastName', vl)"
-              />
+              <Input id="password" type="text" required placeholder="Robinson" :disabled="isCheckStt" name="lastName"
+                @update:model-value="(vl) => onChangeData('lastName', vl)" />
             </div>
           </div>
           <div class="grid gap-2">
             <Label for="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              name="email"
-              placeholder="m@example.com"
-              required
-              @update:model-value="(vl) => onChangeData('email', vl)"
-              :disabled="isCheckStt"
-            />
+            <Input id="email" type="email" name="email" placeholder="m@example.com" required
+              @update:model-value="(vl) => onChangeData('email', vl)" :disabled="isCheckStt" />
           </div>
           <div class="grid gap-2">
             <Label for="password">Password</Label>
-
-            <Input
-              id="password"
-              type="password"
-              required
-              name="password"
-              @update:model-value="(vl) => onChangeData('password', vl)"
-            />
+            <InputPassword id="password" name="password" @update-value="(vl:string) => onChangeData('password', vl)"
+              placeholder="********" />
           </div>
           <Button class="w-full" @click="handleSubmit()" :disabled="loading">
             {{ $t("pageFields.authen.createAcc") }}
@@ -71,9 +44,9 @@
         </div>
         <div class="mt-4 text-center text-sm">
           {{ $t("pageFields.authen.alreadyHasAccount") }}
-          <router-link :to="$router.resolve({ name: 'login' })" class="underline">
+          <p @click="redirectPath" class="underline cursor-pointer">
             {{ $t("pageMeta.login") }}
-          </router-link>
+          </p>
         </div>
       </div>
     </div>
@@ -87,39 +60,40 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RouterLink } from "vue-router";
 import { onMounted, ref } from "vue";
-import { watchDebounced } from "@vueuse/core";
 import { useAuthStore } from "@/stores";
 import { storeToRefs } from "pinia";
 import LoadingIndicator from "@/components/common/LoadingIndicator.vue";
+import type { IRegisterPayload } from "@/types/user.type"
+import { InputPassword } from "@/components/common";
+
 const isCheckStt = ref(false);
 const authStore = useAuthStore();
-const { loading, errors, users } = storeToRefs(authStore);
+const { loading, isSuccess } = storeToRefs(authStore);
 
-type IForm = {
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-};
-
-const formSchema = ref<IForm>({
+const formSchema = ref<IRegisterPayload>({
   email: "",
   firstName: "",
   lastName: "",
   password: "",
 });
 
-async function handleSubmit() {
-  // if (!loading) {
-  await authStore.signUp(formSchema.value);
-  // }
-}
-function onChangeData(key: keyof IForm, value: any) {
+function onChangeData(key: keyof IRegisterPayload, value: any) {
   const update = { [key]: typeof value === "string" ? value.trim() : value };
   const dataVl = { ...formSchema.value, ...update };
   formSchema.value = dataVl;
+}
+const emits = defineEmits(['directPath'])
+
+function redirectPath() {
+  emits('directPath', 'login')
+}
+
+async function handleSubmit() {
+  await authStore.signUp(formSchema.value);
+  if(isSuccess.value){
+    redirectPath()
+  }
 }
 
 onMounted(async () => {

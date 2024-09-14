@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import {useForm} from 'vee-validate'
-import {toTypedSchema} from '@vee-validate/zod'
-import {useProductStore} from "@/stores/modules/products"
-import {type InferProductFormInfo, productFormSchema} from "@/validations/products";
-import {storeToRefs} from "pinia";
-import {h, onMounted, reactive, ref} from "vue";
-import {CustomCombobox, CustomButton,LoadingIndicator} from "@/components/common";
-import {Trash} from "lucide-vue-next"
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import { useProductStore } from "@/stores/modules/products"
+import { type InferProductFormInfo, productFormSchema } from "@/validations/products";
+import { storeToRefs } from "pinia";
+import { onMounted, ref } from "vue";
+import { CustomCombobox, CustomButton, LoadingIndicator } from "@/components/common";
+import { Trash } from "lucide-vue-next"
 import {
   FormControl,
   FormField,
@@ -16,16 +16,15 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input'
 import CustomInputField from "@/components/common/CustomInputField.vue";
-import { auth } from '@/plugins/firebase';
-import { useAuthStore } from '@/stores';
+import InputPassword from '@/components/common/InputPassword.vue';
 
 const formSchema = toTypedSchema(productFormSchema)
 const store = useProductStore();
-const {products, loading} = storeToRefs(store)
+const { products, loading } = storeToRefs(store)
 
 
 
-const {handleSubmit, resetForm} = useForm({
+const { handleSubmit, resetForm } = useForm({
   validationSchema: formSchema,
 })
 
@@ -43,23 +42,26 @@ const handleClick = async (i: any) => {
 }
 
 const frameworks = [
-  {value: '123123', label: 'Next.js nef ', key: '1'},
-  {value: 'g', label: 'SvelteKit sda', key: '2'},
-  {value: 'nuxt', label: 'Nuxt', key: '3'},
-  {value: 'remix', label: 'Remix', key: '4'},
-  {value: 'huhh', label: 'Astro', key: '5'},
+  { value: '123123', label: 'Next.js nef ', key: '1' },
+  { value: 'g', label: 'SvelteKit sda', key: '2' },
+  { value: 'nuxt', label: 'Nuxt', key: '3' },
+  { value: 'remix', label: 'Remix', key: '4' },
+  { value: 'huhh', label: 'Astro', key: '5' },
 ]
 
 const optionValue = ref()
-function selectOption (value:any) {
+function selectOption(value: any) {
   optionValue.value = value
 }
-
-
+const password = ref('')
+const updateValue = (value: string) => {
+  console.log('updateValue', value)
+  password.value = value
+}
 </script>
 
 <template>
-  <div id="showTable" >
+  <div id="showTable">
     <table class="table-auto">
       <thead>
         <tr>
@@ -79,14 +81,8 @@ function selectOption (value:any) {
           <td>{{ i["name"] }}</td>
           <td>{{ i["desc"] || i["description"] }}</td>
           <td>
-            <CustomButton
-              variant="destructive"
-              :disabled="loading"
-              :size="'icon'"
-              button-text=""
-              type="button"
-              @click="handleClick(i)"
-            >
+            <CustomButton variant="destructive" :disabled="loading" :size="'icon'" button-text="" type="button"
+              @click="handleClick(i)">
               <template #icon>
                 <Trash class="w-4 h-4" />
               </template>
@@ -97,6 +93,13 @@ function selectOption (value:any) {
     </table>
   </div>
   <div>
+    password::::{{ password }}
+    <div class="w-[250px]">
+      <InputPassword placeholder="******" @update-value="updateValue" />
+    </div>
+
+
+
     <form class="w-[500px] space-y-6 mx-8 p-8" @submit="onSubmit">
       <FormField v-slot="{ componentField }" name="name">
         <FormItem>
@@ -117,18 +120,12 @@ function selectOption (value:any) {
           <FormMessage />
         </FormItem>
       </FormField>
-      :: {{ optionValue }}
-      <CustomCombobox
-        :options="frameworks"
-        placeholder="Choose"
-        @select-option="selectOption"
-        search-label
-        show-clear
-      />
+      <CustomCombobox :options="frameworks" placeholder="Choose" @select-option="selectOption" search-label
+        show-clear />
 
       <CustomInputField label="name" />
       <CustomButton :button-text="$t('common.submit')" :loading="loading" type="submit" />
     </form>
   </div>
-  
+
 </template>

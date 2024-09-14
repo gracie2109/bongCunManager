@@ -1,6 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, limit, onSnapshot, orderBy, query, QueryDocumentSnapshot, startAfter, where, type DocumentData } from "firebase/firestore";
 import { db } from "@/plugins/firebase"
-import { CURRENT_DATE } from "@/lib/constants";
+import { COLLECTION, CURRENT_DATE } from "@/lib/constants";
 import i18n from "@/i18n"
 
 

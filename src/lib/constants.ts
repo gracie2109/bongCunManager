@@ -1,15 +1,15 @@
-import {getStorageValue, getCurrentDateTime} from "@/lib/utils";
+import { getLocalStorage, getCurrentDateTime } from "@/lib/utils";
 
-export const USER_LOCALE = getStorageValue('user-locale');
+export const USER_LOCALE = getLocalStorage('user-locale');
 
 export const CURRENT_DATE = getCurrentDateTime();
 
 export const COLLECTION = {
     PRODUCTS: 'products',
-    USERS:'users'
+    USERS: 'users'
 }
 
-export const DEFINE_PRODUCT_CATEGORIES =[
+export const DEFINE_PRODUCT_CATEGORIES = [
     {
         value: 'food_n_beverage',
         vi_name: "Đồ ăn & Đồ uống",
@@ -27,27 +27,42 @@ export const PAGE_LAYOUT = {
     'CLIENT': 'client',
     'NO_LAYOUT': 'empty',
     'AUTH': 'auth'
-}
+} as const;
+
+export const PAGE_THEME = {
+    'LIGHT': 'light',
+    'DARK': 'dark',
+    'SYSTEM': 'system',
+} as const;
+
+export const DEFAULT_ROLE = {
+    'CUSTOMER': 'customer',
+    'ADMIN': 'admin',
+    'SUPER_ADMIN': 'superAdmin',
+    'CASHIER': 'cashier'
+} as const;
+
+
 
 export const LOCAL_STORAGE_KEY = {
     'LAYOUT': 'layout',
-    'THEME':'theme'
+    'THEME': 'theme'
 }
 
 
 export const navigation = {
-    adminNav:[
+    adminNav: [
         {
             path: 'dashboard',
-            name:'dashboardOverview'
+            name: 'dashboardOverview'
         },
         {
             path: 'orders',
-            name:'orders'
+            name: 'orders'
         },
         {
             path: 'vouchers',
-            name:'vouchers'
+            name: 'vouchers'
         },
         {
             path: 'brands',
@@ -63,39 +78,39 @@ export const navigation = {
         },
         {
             path: 'settings',
-            name:'adminSetting'
+            name: 'adminSetting'
         }
     ],
-    settingNav :[
+    settingNav: [
         {
             path: 'roles',
             name: 'adminSettingRoleList',
-            icon:'',
+            icon: '',
         },
         {
             path: 'permissions',
             name: 'adminSettingPermissionList',
-            icon:''
+            icon: ''
         }
     ],
-    profileNav:[
+    profileNav: [
         {
             path: 'general',
             name: 'general',
-            icon:''
+            icon: ''
         },
         {
             path: 'address',
             name: 'address',
-            icon:''
+            icon: ''
         },
         {
             path: 'transactions',
             name: 'transactions',
-            icon:''
+            icon: ''
         }
     ],
-    clientNav:[
+    clientNav: [
         {
             text: 'Home',
             url: '/'
@@ -109,8 +124,8 @@ export const navigation = {
             url: '/contact'
         },
         {
-            text:'Coupons',
-            url:'/coupons'
+            text: 'Coupons',
+            url: '/coupons'
         }
     ]
 }

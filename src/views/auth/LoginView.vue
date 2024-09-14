@@ -1,6 +1,5 @@
 <template>
   <section class="mx-auto grid gap-6">
-    {{ formSchema }}
     <div class="grid gap-2 text-center">
       <h1 class="text-3xl font-bold">
         {{ $t("pageMeta.login") }}
@@ -13,14 +12,8 @@
       <div class="grid gap-4">
         <div class="grid gap-2">
           <Label for="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="m@example.com"
-            required
-            name="email"
-            @update:model-value="(vl) => onChangeData('email', vl)"
-          />
+          <Input id="email" type="email" placeholder="m@example.com" required name="email"
+            @update:model-value="(vl) => onChangeData('email', vl)" />
         </div>
         <div class="grid gap-2">
           <div class="flex items-center">
@@ -29,13 +22,9 @@
               Forgot your password?
             </a>
           </div>
-          <Input
-            id="password"
-            type="password"
-            required
-            name="password"
-            @update:model-value="(vl) => onChangeData('password', vl)"
-          />
+
+          <InputPassword id="password" name="password" @update-value="(vl) => onChangeData('password', vl)"
+            placeholder="********" />
         </div>
         <Button type="submit" class="w-full" @click="handleSubmit()">
           {{ $t("pageMeta.login") }}
@@ -44,9 +33,9 @@
       </div>
       <div class="mt-4 text-center text-sm">
         {{ $t("pageFields.authen.dontHaveAccount") }}
-        <router-link :to="$router.resolve({ name: 'register' })" class="underline">
+        <p @click="redirectPath()" class="underline cursor-pointer">
           {{ $t("pageMeta.register") }}
-        </router-link>
+        </p>
       </div>
     </div>
   </section>
@@ -59,26 +48,28 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RouterLink, useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores";
 import { storeToRefs } from "pinia";
 import LoadingIndicator from "@/components/common/LoadingIndicator.vue";
 const authStore = useAuthStore();
 const router = useRouter();
-type IForm = {
-  email: string;
-  password: string;
-};
+import type { ILoginPayload } from "@/types/user.type"
+import InputPassword from "@/components/common/InputPassword.vue";
 
-const { loading, currentUser } = storeToRefs(authStore);
+const emits = defineEmits(['directPath', 'closeDialog'])
+const { loading, isSuccess } = storeToRefs(authStore);
 
-function onChangeData(key: keyof IForm, value: any) {
+function onChangeData(key: keyof ILoginPayload, value: any) {
   const update = { [key]: typeof value === "string" ? value.trim() : value };
   const dataVl = { ...formSchema.value, ...update };
   formSchema.value = dataVl;
 }
 
+function redirectPath() {
+  emits('directPath', 'register')
+}
 const formSchema = ref({
   email: "",
   password: "",
@@ -86,10 +77,9 @@ const formSchema = ref({
 
 async function handleSubmit() {
   await authStore.login(formSchema.value);
-
-  if (currentUser) {
-    console.log("login success", currentUser);
-    router.push({ name: "home" });
+  if (isSuccess.value) {
+    router.go(0);
+    emits('closeDialog')
   }
 }
 </script>

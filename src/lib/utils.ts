@@ -8,11 +8,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function getStorageValue (key: string) {
-  if(!key) return null;
-  return JSON.parse(JSON.stringify(localStorage.getItem(key)));
-}
-
 export function getCurrentDateTime() {
   const now = new Date();
   const day = now.getDate();
@@ -41,6 +36,22 @@ export function setLocalStorage (key: string, data:any) {
 export function getLocalStorage(key:string) {
   if(!key) return;
   return JSON.parse(JSON.stringify(sessionStorage.getItem(key)));
+}
+
+export function removeStorage(keysToKeep: string[]): void {
+  const savedItems: { [key: string]: string } = {};
+  
+  keysToKeep.forEach(key => {
+    const value = sessionStorage.getItem(key);
+    if (value !== null) {
+      savedItems[key] = value;
+    }
+  });
+
+  sessionStorage.clear();
+  Object.keys(savedItems).forEach(key => {
+    sessionStorage.setItem(key, savedItems[key]);
+  });
 }
 
 
