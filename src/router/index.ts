@@ -1,15 +1,23 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, useRouter } from 'vue-router';
 import HomeView from '@/views/HomeView.vue';
 import i18n from '@/i18n';
 import * as  Vue from 'vue';
+import { useAuthStore } from "@/stores"
 import { PAGE_LAYOUT } from "@/lib/constants"
 import LoginView from '@/views/auth/LoginView.vue';
-import  RegisterView from '@/views/auth/RegisterView.vue';
+import RegisterView from '@/views/auth/RegisterView.vue';
+
+import DashboardView from '@/views/admin/dashboard/DashboardView.vue';
+import ListUserView from '@/views/admin/users/ListView.vue';
+import ForgotPassView from '@/views/auth/ForgotPassView.vue';
+
 /*
 *   RULE:
 *   meta key cần đối chiếu với pageMeta trong file i18n/locales/[lang].json
 *
 * */
+
+const AUTH_PATH = ['login', 'register']
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_PUBLIC_PATH || ''),
@@ -41,6 +49,37 @@ const router = createRouter({
         layout: PAGE_LAYOUT.AUTH
       }
     },
+    {
+      path: '/forgot-password',
+      name: 'forgotPw',
+      component: ForgotPassView,
+      meta: {
+        key: 'forgotPw',
+        layout: PAGE_LAYOUT.AUTH
+      }
+    },
+   
+    {
+      path: '/admin/',
+      name: 'admin',
+      meta: {
+        layout: PAGE_LAYOUT.ADMIN,
+        requiresAuth: true
+      },
+      children: [
+        {
+          path: '',
+          name: 'dashboard',
+          component: DashboardView,
+
+        },
+        {
+          path: 'users',
+          name: 'users',
+          component: ListUserView,
+        }
+      ]
+    }
   ]
 })
 router.afterEach((to, from) => {
@@ -48,4 +87,19 @@ router.afterEach((to, from) => {
     document.title = i18n.global.t(`pageMeta.${to.meta.key}`);
   });
 });
+router.beforeEach((to, from, next) => {
+  const userStore = useAuthStore();
+  const nav = useRouter();
+
+  if (AUTH_PATH.includes((to.meta.key) as string) && userStore.currentUser) {
+    nav.go(-1)
+  }
+
+  if (to.meta.requiresAuth && !userStore.currentUser) {
+    nav.replace({ name: 'home' })
+  }
+  else next()
+
+})
+
 export default router

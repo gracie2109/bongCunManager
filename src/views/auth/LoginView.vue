@@ -9,22 +9,36 @@
       </p>
     </div>
     <div>
+      {{ formSchema }}
       <div class="grid gap-4">
         <div class="grid gap-2">
           <Label for="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required name="email"
-            @update:model-value="(vl) => onChangeData('email', vl)" />
+          <Input
+            id="email"
+            type="email"
+            placeholder="m@example.com"
+            required
+            name="email"
+            v-model:model-value="formSchema.email"
+          />
         </div>
         <div class="grid gap-2">
           <div class="flex items-center">
             <Label for="password">Password</Label>
-            <a href="/forgot-password" class="ml-auto inline-block text-sm underline">
+            <span
+              @click="redirectPath('forgotPw')"
+              class="ml-auto inline-block text-sm underline cursor-pointer"
+            >
               Forgot your password?
-            </a>
+            </span>
           </div>
 
-          <InputPassword id="password" name="password" @update-value="(vl) => onChangeData('password', vl)"
-            placeholder="********" />
+          <InputPassword
+            id="password"
+            name="password"
+            v-model:model-value="formSchema.password"
+            placeholder="********"
+          />
         </div>
         <Button type="submit" class="w-full" @click="handleSubmit()">
           {{ $t("pageMeta.login") }}
@@ -33,9 +47,11 @@
       </div>
       <div class="mt-4 text-center text-sm">
         {{ $t("pageFields.authen.dontHaveAccount") }}
-        <p @click="redirectPath()" class="underline cursor-pointer">
+
+        <p @click="redirectPath('register')" class="underline cursor-pointer">
           {{ $t("pageMeta.register") }}
         </p>
+
       </div>
     </div>
   </section>
@@ -48,37 +64,47 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter} from "vue-router";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores";
 import { storeToRefs } from "pinia";
 import LoadingIndicator from "@/components/common/LoadingIndicator.vue";
-const authStore = useAuthStore();
-const router = useRouter();
-import type { ILoginPayload } from "@/types/user.type"
 import InputPassword from "@/components/common/InputPassword.vue";
 
-const emits = defineEmits(['directPath', 'closeDialog'])
-const { loading, isSuccess } = storeToRefs(authStore);
+const authStore = useAuthStore();
+const route = useRoute();
+const router = useRouter();
 
-function onChangeData(key: keyof ILoginPayload, value: any) {
-  const update = { [key]: typeof value === "string" ? value.trim() : value };
-  const dataVl = { ...formSchema.value, ...update };
-  formSchema.value = dataVl;
-}
-
-function redirectPath() {
-  emits('directPath', 'register')
-}
 const formSchema = ref({
   email: "",
   password: "",
 });
 
+
+const emits = defineEmits(['directPath', 'closeDialog'])
+const { loading, isSuccess } = storeToRefs(authStore);
+
+function redirectPath(name: 'register' | 'forgotPw') {
+  if (route.fullPath?.includes('login')) {
+    router.push({ name })
+  }
+  else {
+    emits('directPath', name)
+  }
+}
+
 async function handleSubmit() {
   await authStore.login(formSchema.value);
   if (isSuccess.value) {
-    router.go(0);
+    if (route.fullPath?.includes('login')) {
+      router.push({ name: 'home' });
+      setTimeout(() => {
+        router.go(0);
+      }, 500)
+    } else {
+      router.go(0);
+    }
+
     emits('closeDialog')
   }
 }

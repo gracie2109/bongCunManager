@@ -6,4 +6,5 @@ export {default as CustomCombobox} from "./CustomCombobox.vue";
 export {default as LoadingIndicator} from "./LoadingIndicator.vue";
 export {default as MenuLink} from "./Link.vue";
 export {default as BaseAvatar} from "./BaseAvatar.vue";
-export {default as InputPassword} from "./InputPassword.vue"
+export {default as InputPassword} from "./InputPassword.vue";
+export {default as Notification} from "./Notification.vue"

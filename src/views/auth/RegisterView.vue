@@ -1,5 +1,5 @@
 <template>
-  <section class="mx-auto w-[350px]">
+  <section class="mx-auto min-w-[350px] w-96">
     <div class="grid gap-2 text-center">
       <h1 class="text-3xl font-bold">
         {{ $t("pageMeta.register") }}
@@ -11,30 +11,32 @@
     <div class="h-full">
       <div class="mt-5">
         <div class="grid gap-4">
-          <div class="grid grid-cols-2 gap-3">
-            <div class="grid gap-2">
-              <Label for="password">First name</Label>
-
-              <Input id="password" type="text" required placeholder="Max" name="firstName"
-                @update:model-value="(vl) => onChangeData('firstName', vl)" />
-            </div>
-            <div class="grid gap-2">
-              <Label for="password">Last name</Label>
-
-              <Input id="password" type="text" required placeholder="Robinson" :disabled="isCheckStt" name="lastName"
-                @update:model-value="(vl) => onChangeData('lastName', vl)" />
-            </div>
-          </div>
-          <div class="grid gap-2">
+     
+<div class="grid gap-2">
             <Label for="email">Email</Label>
             <Input id="email" type="email" name="email" placeholder="m@example.com" required
-              @update:model-value="(vl) => onChangeData('email', vl)" :disabled="isCheckStt" />
+              v-model:model-value="formSchema.email" :disabled="isCheckStt" />
           </div>
+            <div class="grid gap-2">
+              <Label for="password">displayName</Label>
+              <Input id="password" type="text" required placeholder="Robinson" :disabled="isCheckStt" name="displayName"
+                v-model:model-value="formSchema.displayName" />
+            </div>
+          
+     <div class="grid grid-cols-2 gap-3">
           <div class="grid gap-2">
             <Label for="password">Password</Label>
-            <InputPassword id="password" name="password" @update-value="(vl:string) => onChangeData('password', vl)"
+            <InputPassword id="password" name="password" v-model:model-value="formSchema.password"
               placeholder="********" />
           </div>
+          <div class="grid gap-2">
+            <Label for="password">Reset Password</Label>
+            <InputPassword id="password" name="password" v-model:model-value="resetPass" placeholder="********" />
+          </div>
+</div>
+
+          
+
           <Button class="w-full" @click="handleSubmit()" :disabled="loading">
             {{ $t("pageFields.authen.createAcc") }}
           </Button>
@@ -64,35 +66,42 @@ import { onMounted, ref } from "vue";
 import { useAuthStore } from "@/stores";
 import { storeToRefs } from "pinia";
 import LoadingIndicator from "@/components/common/LoadingIndicator.vue";
-import type { IRegisterPayload } from "@/types/user.type"
+import type { IRegisterPayload } from "@/types/user.type";
 import { InputPassword } from "@/components/common";
+import { useRoute, useRouter } from "vue-router";
+
+const route = useRoute();
+const router = useRouter();
+const emits = defineEmits(["directPath"]);
 
 const isCheckStt = ref(false);
 const authStore = useAuthStore();
 const { loading, isSuccess } = storeToRefs(authStore);
-
+const resetPass = ref('')
 const formSchema = ref<IRegisterPayload>({
   email: "",
-  firstName: "",
-  lastName: "",
+  displayName: '',
   password: "",
 });
 
-function onChangeData(key: keyof IRegisterPayload, value: any) {
-  const update = { [key]: typeof value === "string" ? value.trim() : value };
-  const dataVl = { ...formSchema.value, ...update };
-  formSchema.value = dataVl;
-}
-const emits = defineEmits(['directPath'])
 
 function redirectPath() {
-  emits('directPath', 'login')
+  if (route.fullPath?.includes("register")) {
+    router.push({ name: "login" });
+  } else {
+    emits("directPath", "login");
+  }
 }
 
 async function handleSubmit() {
   await authStore.signUp(formSchema.value);
-  if(isSuccess.value){
-    redirectPath()
+  if (isSuccess.value) {
+    redirectPath();
+    if (route.fullPath?.includes("login")) {
+      router.resolve({ name: "login" });
+    } else {
+      redirectPath();
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 import { getLocalStorage, getCurrentDateTime } from "@/lib/utils";
 
-export const USER_LOCALE = getLocalStorage('user-locale');
-
+export const USER_LOCALE = JSON.parse(getLocalStorage('user-locale'));
+console.log('USER_LOCALE', USER_LOCALE)
 export const CURRENT_DATE = getCurrentDateTime();
 
 export const COLLECTION = {
@@ -48,6 +48,13 @@ export const LOCAL_STORAGE_KEY = {
     'LAYOUT': 'layout',
     'THEME': 'theme'
 }
+
+
+
+export const PROVIDER_KEYS = {
+    'IS_COLLAPSE':'isCollapsed',
+}
+
 
 
 export const navigation = {

@@ -1,13 +1,19 @@
-import { onUnmounted, ref, type Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { createCollection, getCollectionList, getDetailData } from "@/lib/firebaseFn";
 import { COLLECTION, DEFAULT_ROLE } from "@/lib/constants"
-import { getLocalStorage, sendMessageToast, setLocalStorage } from "@/lib/utils";
+import { getLocalStorage, removeStorage, sendMessageToast, setLocalStorage } from "@/lib/utils";
 import { auth } from '@/plugins/firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {
+    createUserWithEmailAndPassword, signInWithEmailAndPassword, updatePassword, sendPasswordResetEmail, confirmPasswordReset,
+    type Auth, verifyPasswordResetCode, applyActionCode, onAuthStateChanged, updateProfile, signOut
+
+
+} from "firebase/auth";
 import type { IUser, ILoginPayload, IRegisterPayload } from "@/types/user.type";
 import { toast } from 'vue-sonner';
 import { FirebaseError } from 'firebase/app';
+import { useRoute, useRouter } from 'vue-router';
 
 export const useAuthStore = defineStore('auth', () => {
     const users: Ref<IUser[]> = ref([]);
@@ -15,6 +21,8 @@ export const useAuthStore = defineStore('auth', () => {
     const loading = ref(false);
     const unsubscribe = ref<null | (() => void)>(null);
     const isSuccess = ref(false);
+    const route = useRoute()
+    const router = useRouter();
 
 
     async function signUp(payload: IRegisterPayload | IUser) {
@@ -25,13 +33,13 @@ export const useAuthStore = defineStore('auth', () => {
                 if (user) {
                     const payloadVl = {
                         ...payload,
+                        password: null,
                         userId: user.uid,
-                        displayName: `${payload.firstName} ${payload.lastName}`,
                         emailVerified: user.emailVerified,
                         photoURL: user.photoURL,
                         phoneNumber: user.phoneNumber,
                         providerData: user?.providerData,
-                        role: DEFAULT_ROLE.CUSTOMER
+                        role: null
                     }
                     await createCollection(COLLECTION.USERS, payloadVl);
                     isSuccess.value = true
@@ -61,16 +69,14 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function login(payload: ILoginPayload) {
-
         loading.value = true;
-
         await signInWithEmailAndPassword(auth, payload.email, payload.password)
-
             .then(async (userCredential) => {
                 const user = userCredential.user;
                 if (user) {
                     const res = await getDetailData(COLLECTION.USERS, 'userId', user.uid);
-                    setLocalStorage('auth', res?.docs[0].data())
+                    setLocalStorage('auth', res?.docs[0].data());
+
                 }
                 isSuccess.value = true
             })
@@ -103,6 +109,50 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    async function sendResetPassMail(email: string) {
+        loading.value = true;
+        await sendPasswordResetEmail(auth, email)
+            .then(() => {
+                isSuccess.value = true;
+                sendMessageToast('success', 'create', 'success')
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log('send fauk', errorCode, errorMessage)
+            })
+            .finally(() => {
+                loading.value = false
+            })
+    }
 
-    return { loading, signUp, getListUsers, users, login, currentUser, isSuccess }
+    async function updatePassHdl(password: string) {
+
+
+        //    await confirmPasswordReset(FIREBASE_USER, password).then(() => {
+        //         console.log('sendPasswSuccess')
+        //         // Update successful.
+        //       }).catch((error) => {
+        //         console.log('error',error)
+        //         // An error ocurred
+        //         // ...
+        //       });
+
+        console.log('adad', password)
+
+    }
+
+
+    function signoutHdl() {
+        removeStorage([]);
+        signOut(auth)
+        if (route.fullPath?.includes('admin')) {
+            setTimeout(() => router.push('/'), 1000)
+        } else {
+            router.go(0)
+        }
+        toast.success('Logout success!')
+    }
+
+    return { loading, updatePassHdl, signUp, getListUsers, sendResetPassMail, users, login, currentUser, isSuccess, signoutHdl }
 })

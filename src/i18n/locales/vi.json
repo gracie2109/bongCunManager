@@ -21,7 +21,9 @@
     "home": "Trang chủ ",
     "product_list": "Danh sách sản phẩm",
     "login": "Đăng nhập",
-    "register": "Tạo tài khoản"
+    "register": "Tạo tài khoản",
+    "forgotPw": "Quên mật khẩu"
+
   },
   "validation": {
     "min": "{name} cần tối thiểu {min} ký tự"
@@ -36,7 +38,9 @@
       "prefLogin":"Nhập thông tin để đăng nhập vào tài khoản của bạn",
       "alreadyHasAccount": "Đã có tài khoản?",
       "dontHaveAccount" :"Không có tài khoản?",
-      "createAcc": "Tạo tài khoản"
+      "createAcc": "Tạo tài khoản",
+      "prefForgotPw": "Nhập email của bạn để nhận mail lấy lại mật khẩu"
+
     }
   }
 }

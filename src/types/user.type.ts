@@ -20,11 +20,12 @@ export interface IUser extends BasicInfo {
     firstName: string,
     updatedAt: Date | string,
     createdAt: Date | string,
-    providerData: ProvideData[]
+    providerData: ProvideData[],
+    [key: string] : any
 }
 
 
 
-export type IRegisterPayload = Pick<IUser, 'email' | 'firstName' | 'lastName' | 'password'>
+export type IRegisterPayload = Pick<IUser, 'email' | 'displayName' | 'password'>
 
 export type ILoginPayload = Pick<IUser, 'email' | 'password'>

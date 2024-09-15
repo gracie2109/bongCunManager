@@ -19,6 +19,7 @@
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.0.0-beta.1",
     "firebase": "^10.12.5",
     "lucide-vue-next": "^0.427.0",
     "pinia": "^2.1.7",
@@ -35,6 +36,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@iconify-json/radix-icons": "^1.2.0",
+    "@iconify/vue": "^4.1.2",
     "@tsconfig/node20": "^20.1.4",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^20.14.5",

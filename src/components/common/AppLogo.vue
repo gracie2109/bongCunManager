@@ -28,8 +28,12 @@
         </clipPath>
       </defs>
     </svg>
-    <span class="font-bold"> shadcn-vue </span>
+    <span class="font-bold" v-if="!props.isCollapsed"> shadcn-vue </span>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  const props = defineProps<{
+    isCollapsed?: boolean
+  }>()
+</script>

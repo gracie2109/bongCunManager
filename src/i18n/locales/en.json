@@ -21,7 +21,8 @@
     "home": "HOME",
     "product_list": "List Products",
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "forgotPw": "Forgot Password"
   },
   "validation": {
     "min": "{name} must be at least {min} characters"
@@ -36,7 +37,8 @@
       "prefLogin":"Enter your email below to login to your account",
       "alreadyHasAccount": "Already have an account?",
       "dontHaveAccount" :"Don't have an account?",
-      "createAcc": "Create an account"
+      "createAcc": "Create an account",
+      "prefForgotPw": "Enter your email to receive password recovery mail"
     }
   }
 }

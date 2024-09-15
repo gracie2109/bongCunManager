@@ -48,15 +48,18 @@ import { computed } from 'vue';
 import { useAuthStore } from "@/stores";
 import { storeToRefs } from 'pinia';
 import { removeStorage } from '@/lib/utils';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { toast } from 'vue-sonner';
 
 const store = useAuthStore();
-const router = useRouter()
+const router = useRouter();
+const route = useRoute()
 const { currentUser } = storeToRefs(store)
 const fallName = computed(() => currentUser ? `${currentUser.value.firstName?.split('')[0]}${currentUser.value.lastName?.split('')[0]}` : "YN");
+
+
 function handleLogout() {
-    removeStorage([]);
-    router.go(0)
+    store.signoutHdl()
 }
 
 </script>
