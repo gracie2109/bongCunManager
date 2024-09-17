@@ -1,5 +1,6 @@
-import { nextTick } from 'vue'
+import { nextTick} from 'vue'
 import i18n from './index'
+import { getLocalStorage, setLocalStorage } from '@/lib/utils'
 
 const Trans = {
   get defaultLocale() {
@@ -18,15 +19,15 @@ const Trans = {
     i18n.global.locale.value = newLocale
   },
 
-  async switchLanguage(newLocale:any) {
+  async switchLanguage(newLocale: any) {
     await Trans.loadLocaleMessages(newLocale);
     Trans.currentLocale = newLocale;
 
-    (document.querySelector('html') as HTMLElement).setAttribute('lang', newLocale)
-    localStorage.setItem('user-locale', newLocale)
+    (document.querySelector('html') as HTMLElement).setAttribute('lang', newLocale);
+    setLocalStorage('user-locale', newLocale)
   },
 
-  async loadLocaleMessages(locale:any) {
+  async loadLocaleMessages(locale: any) {
     if (!i18n.global.availableLocales.includes(locale)) {
       const messages = await import(`@/i18n/locales/${locale}.json`)
       i18n.global.setLocaleMessage(locale, messages.default)
@@ -35,14 +36,13 @@ const Trans = {
     return nextTick()
   },
 
-  isLocaleSupported(locale:any) {
+  isLocaleSupported(locale: any) {
     return Trans.supportedLocales.includes(locale)
   },
 
   getUserLocale() {
-
     const locale = window.navigator.language
-        //@ts-ignore
+      //@ts-ignore
       || window.navigator.userLanguage
       || Trans.defaultLocale
 
@@ -53,8 +53,9 @@ const Trans = {
   },
 
   getPersistedLocale() {
-    const persistedLocale = localStorage.getItem('user-locale')
-
+    const a = getLocalStorage('user-locale');
+    const persistedLocale = JSON.parse(a)
+    if (!persistedLocale) return Trans.defaultLocale
     if (Trans.isLocaleSupported(persistedLocale)) {
       return persistedLocale
     }
@@ -82,9 +83,10 @@ const Trans = {
     return Trans.defaultLocale
   },
 
-  async routeMiddleware(to:any, _from:any, next:any) {
-    const paramLocale = to.params.locale
-
+  async routeMiddleware(to: any, _from: any, next: any) {
+    const a = getLocalStorage('user-locale');
+    const paramLocale = JSON.parse(a)
+    
     if (!Trans.isLocaleSupported(paramLocale)) {
       return next(Trans.guessDefaultLocale())
     }
@@ -94,7 +96,7 @@ const Trans = {
     return next()
   },
 
-  i18nRoute(to:any) {
+  i18nRoute(to: any) {
     return {
       ...to,
       params: {

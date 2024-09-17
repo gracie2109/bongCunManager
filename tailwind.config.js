@@ -5,14 +5,14 @@ module.exports = {
   darkMode: ["class"],
   safelist: ["dark"],
   prefix: "",
-  
+
   content: [
     './pages/**/*.{ts,tsx,vue}',
     './components/**/*.{ts,tsx,vue}',
     './app/**/*.{ts,tsx,vue}',
     './src/**/*.{ts,tsx,vue}',
-	],
-  
+  ],
+
   theme: {
     container: {
       center: true,
@@ -56,9 +56,21 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "custom-bg": "#0f0e17",
+        "custom-foreground": "#fffffe",
+        "custom-primary": "#ff8906",
+        "custom-secondary": "#a7a9be",
+        "custom-tertiary": "#e53170",
+        "custom-accent": "#f25f4c",
+        "custom-success": '#22C55E',
+        "cara-secondary": "#112035",
+        "cara-primary": "#0f172a",
+        "cara-blue": "#38bdf8",
+        'cara-border': '#2d364a',
+        'custom-red': '#e70505'
       },
       borderRadius: {
-      	xl: "calc(var(--radius) + 4px)",
+        xl: "calc(var(--radius) + 4px)",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",

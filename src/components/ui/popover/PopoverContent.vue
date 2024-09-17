@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from 'vue'
 import {
+  PopoverArrow,
   PopoverContent,
   type PopoverContentEmits,
   type PopoverContentProps,

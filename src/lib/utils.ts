@@ -8,11 +8,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function getStorageValue (key: string) {
-  if(!key) return null;
-  return JSON.parse(JSON.stringify(localStorage.getItem(key)));
-}
-
 export function getCurrentDateTime() {
   const now = new Date();
   const day = now.getDate();
@@ -31,4 +26,48 @@ export function sendMessageToast(status: ResponseStatus, method: RestfullMethod,
   if(toastType === 'success') return toast.success(i18n.global.t(`common.success`, {action: i18n.global.t(`common.${method}`)}));
   else if (toastType === 'error') return toast.error(i18n.global.t('common.fail', {action: i18n.global.t(`common.${method}`), mess: message}));
   else toast(i18n.global.t(`common.${status}`, {action: i18n.global.t(`common.${method}`)}))
+}
+
+export function setLocalStorage (key: string, data:any) {
+  if(!key) return;
+  sessionStorage.setItem(key, JSON.stringify(data));
+}
+
+export function getLocalStorage(key:string) {
+  if(!key) return;
+  return JSON.parse(JSON.stringify(sessionStorage.getItem(key)));
+}
+
+export function removeStorage(keysToKeep: string[]): void {
+  const savedItems: { [key: string]: string } = {};
+  
+  keysToKeep.forEach(key => {
+    const value = sessionStorage.getItem(key);
+    if (value !== null) {
+      savedItems[key] = value;
+    }
+  });
+
+  sessionStorage.clear();
+  Object.keys(savedItems).forEach(key => {
+    sessionStorage.setItem(key, savedItems[key]);
+  });
+}
+
+
+export function truncateText(text: string, maxLength: number) {
+  const newText = text.slice(0, maxLength);
+  return text.length > maxLength ? `${newText}...`: newText;
+}
+
+
+export function formatPrice(
+  price: number | string,
+) {
+  if (price == "undefined") return
+  return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+      notation: 'standard',
+  }).format(Number(price))
 }

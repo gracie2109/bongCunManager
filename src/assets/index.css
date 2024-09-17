@@ -1,78 +1,189 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
- 
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
- 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
- 
+    --foreground: 20 14.3% 4.1%;
+  
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
- 
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
- 
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
- 
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
- 
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
- 
+    --card-foreground: 20 14.3% 4.1%;
+  
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 14.3% 4.1%;
+  
+    --primary: 24.6 95% 53.1%;
+    --primary-foreground: 60 9.1% 97.8%;
+  
+    --secondary: 60 4.8% 95.9%;
+    --secondary-foreground: 24 9.8% 10%;
+  
+    --muted: 60 4.8% 95.9%;
+    --muted-foreground: 25 5.3% 44.7%;
+  
+    --accent: 60 4.8% 95.9%;
+    --accent-foreground: 24 9.8% 10%;
+  
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
- 
-    --ring: 0 0% 3.9%;
- 
+    --destructive-foreground: 60 9.1% 97.8%;
+  
+    --border:20 5.9% 90%;
+    --input:20 5.9% 90%;
+    --ring:24.6 95% 53.1%;
     --radius: 0.5rem;
   }
- 
+   
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
- 
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
- 
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
- 
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
- 
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
- 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
- 
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
- 
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
- 
-    --ring: 0 0% 83.1%;
+    --background:20 14.3% 4.1%;
+    --foreground:60 9.1% 97.8%;
+  
+    --card:20 14.3% 4.1%;
+    --card-foreground:60 9.1% 97.8%;
+  
+    --popover:20 14.3% 4.1%;
+    --popover-foreground:60 9.1% 97.8%;
+  
+    --primary:20.5 90.2% 48.2%;
+    --primary-foreground:60 9.1% 97.8%;
+  
+    --secondary:12 6.5% 15.1%;
+    --secondary-foreground:60 9.1% 97.8%;
+  
+    --muted:12 6.5% 15.1%;
+    --muted-foreground:24 5.4% 63.9%;
+  
+    --accent:12 6.5% 15.1%;
+    --accent-foreground:60 9.1% 97.8%;
+  
+    --destructive:0 72.2% 50.6%;
+    --destructive-foreground:60 9.1% 97.8%;
+  
+    --border:12 6.5% 15.1%;
+    --input:12 6.5% 15.1%;
+    --ring:20.5 90.2% 48.2%;
   }
 }
- 
-@layer base {
-  * {
-    @apply border-border;
+
+
+@layer components {
+
+  .hamburger {
+    @apply relative z-20 m-0 inline-block cursor-pointer overflow-visible border-0 bg-transparent transition-all;
   }
-  body {
-    @apply bg-background text-foreground;
+
+  .hamburger:hover {
+    @apply opacity-70;
   }
+
+  .hamburger.is-active:hover {
+    @apply opacity-70;
+  }
+
+  .hamburger.is-active .hamburger-inner,
+  .hamburger.is-active .hamburger-inner::before,
+  .hamburger.is-active .hamburger-inner::after {
+    @apply bg-custom-bg;
+  }
+
+  .hamburger-box {
+    @apply relative inline-block h-3.5 w-[25px];
+  }
+
+  .hamburger--slider.is-active .hamburger-box {
+    @apply h-4;
+  }
+
+  .hamburger-inner {
+    @apply top-2/4 -mt-[2px] block;
+  }
+
+  .hamburger-inner,
+  .hamburger-inner::before,
+  .hamburger-inner::after {
+    @apply absolute h-[2px] w-[25px] rounded bg-custom-bg transition-transform;
+  }
+
+  .hamburger-inner::before,
+  .hamburger-inner::after {
+    @apply block content-[''];
+  }
+
+  .hamburger-inner::before {
+    @apply -top-[10px];
+  }
+
+  .hamburger-inner::after {
+    @apply -bottom-[10px];
+  }
+
+  .hamburger--slider .hamburger-inner {
+    @apply top-[2px] before:top-[8px] before:transition-all after:top-4;
+  }
+
+  .hamburger--slider.is-active .hamburger-inner {
+    transform: translate3d(0, 10px, 0) rotate(45deg);
+  }
+
+  .hamburger--slider.is-active .hamburger-inner::before {
+    top: 10px;
+    transform: rotate(-45deg) translate3d(-5.71429px, -6px, 0);
+    opacity: 0;
+  }
+
+  .hamburger--slider.is-active .hamburger-inner::after {
+    top: 20px;
+    transform: translate3d(0, -20px, 0) rotate(-90deg);
+  }
+
+  .dots-container {
+    @apply !bottom-0.5 sm: !bottom-3;
+  }
+}
+
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.page-enter-active,
+.page-leave-active {
+  @apply transition-opacity duration-300 ease-in-out;
+}
+
+.page-enter-from,
+.page-leave-to {
+  @apply opacity-0;
+}
+
+
+
+
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.root,
+html,
+body {
+  max-width: 100%;
+  font-family: "Quicksand", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  scroll-behavior: smooth;
+  will-change: contents;
+  box-sizing: border-box;
 }
