@@ -21,7 +21,7 @@ import Tr from "@/i18n/translation"
 import { useRouter } from "vue-router";
 import { nextTick, ref } from "vue";
 
-const locale = ref(Tr.getPersistedLocale());
+const locale = ref(Tr.getPersistedLocale() || Tr.defaultLocale);
 const router = useRouter();
 
 const switchLanguage = async (newLocale: string) => {
