@@ -12,8 +12,16 @@
       <div class="grid gap-4">
         <div class="grid gap-2">
           <Label for="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required name="email"
-            v-model:model-value="formVl" />
+          <Input
+            id="email"
+            type="email"
+            placeholder="m@example.com"
+            required
+            name="email"
+            v-model:model-value="formVl.email"
+            :class="{ 'p-invalid': !!getError('email') }"
+          />
+          <div class="error">{{ getError("email") }}</div>
         </div>
 
         <Button type="submit" class="w-full" @click="submitHdl()">
@@ -36,38 +44,57 @@ import { useAuthStore } from "@/stores";
 import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { LoadingIndicator } from "@/components/common";
-const formVl = ref("");
+import useValidation from "@/composables/useValidation";
+import { EmailSChema } from "@/validations";
+
+const formVl = ref({
+  email: "",
+});
 const store = useAuthStore();
-const { isSuccess, loading } = storeToRefs(store)
-const emit = defineEmits(['directPath', 'closeDialog']);
+const { isSuccess, loading } = storeToRefs(store);
+const emit = defineEmits(["directPath", "closeDialog"]);
 const route = useRoute();
 const router = useRouter();
 
-
 function redirectPath() {
-  if (route.fullPath?.includes('forgot-password')) {
-    router.push({ name: 'login' })
-  }
-  else {
-    emit('directPath', 'login')
+  if (route.fullPath?.includes("forgot-password")) {
+    router.push({ name: "login" });
+  } else {
+    emit("directPath", "login");
   }
 }
+
+const { validate, isValid, getError, scrolltoError, errors } = useValidation(
+  EmailSChema,
+  formVl,
+  {
+    mode: "lazy",
+  }
+);
 
 async function submitHdl() {
-  await store.sendResetPassMail(formVl.value.trim());
+  await validate();
+  if (isValid.value) {
+    const mail = formVl.value.email;
+    await store.sendResetPassMail(mail.trim());
 
-  if (isSuccess) {
-    emit('closeDialog');
-    if (route.fullPath?.includes('forgot-password')) {
-      router.push({ name: 'home' })
+    if (isSuccess) {
+      emit("closeDialog");
+      if (route.fullPath?.includes("forgot-password")) {
+        router.push({ name: "home" });
+      } else {
+        redirectPath();
+      }
     }
-    else {
-      redirectPath()
-    }
+  } else {
+    scrolltoError(".p-invalid", { offset: 24 });
   }
-
-
-
 }
-
 </script>
+<style scoped>
+.error {
+  font-size: 14px;
+  color: red;
+  margin-top: 4px;
+}
+</style>

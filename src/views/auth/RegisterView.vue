@@ -11,31 +11,64 @@
     <div class="h-full">
       <div class="mt-5">
         <div class="grid gap-4">
-     
-<div class="grid gap-2">
+          <div class="grid gap-2">
             <Label for="email">Email</Label>
-            <Input id="email" type="email" name="email" placeholder="m@example.com" required
-              v-model:model-value="formSchema.email" :disabled="isCheckStt" />
-          </div>
-            <div class="grid gap-2">
-              <Label for="password">displayName</Label>
-              <Input id="password" type="text" required placeholder="Robinson" :disabled="isCheckStt" name="displayName"
-                v-model:model-value="formSchema.displayName" />
-            </div>
-          
-     <div class="grid grid-cols-2 gap-3">
-          <div class="grid gap-2">
-            <Label for="password">Password</Label>
-            <InputPassword id="password" name="password" v-model:model-value="formSchema.password"
-              placeholder="********" />
+            <Input
+              id="email"
+              type="email"
+              name="email"
+              placeholder="m@example.com"
+              required
+              v-model:model-value="formSchema.email"
+              :disabled="isCheckStt"
+              :class="{ 'p-invalid': !!getError('email') }"
+            />
+            <div class="error">{{ getError("email") }}</div>
           </div>
           <div class="grid gap-2">
-            <Label for="password">Reset Password</Label>
-            <InputPassword id="password" name="password" v-model:model-value="resetPass" placeholder="********" />
+            <Label for="password">displayName</Label>
+            <Input
+              id="password"
+              type="text"
+              required
+              placeholder="Robinson"
+              :disabled="isCheckStt"
+              name="displayName"
+              v-model:model-value="formSchema.displayName"
+              :class="{ 'p-invalid': !!getError('displayName') }"
+            />
+            <div class="error">{{ getError("displayName") }}</div>
           </div>
-</div>
 
-          
+          <div class="grid grid-cols-2 gap-3">
+            <div class="grid gap-2">
+              <Label for="password">Password</Label>
+              <InputPassword
+                id="password"
+                name="password"
+                placeholder="********"
+                @update-value="(vl) => (formSchema.password = vl)"
+                :class="{ 'p-invalid': !!getError('password') }"
+              />
+             
+            </div>
+            <div class="grid gap-2">
+              <Label for="password">Reset Password</Label>
+              <InputPassword
+                id="password"
+                name="password"
+                @update-value="(vl) => (formSchema.confirm = vl)"
+                placeholder="********"
+                :class="{ 'p-invalid': !!getError('confirm') }"
+              />
+            </div>
+          </div>
+          <div class="grid gap-y-1.5" > 
+            <div class="error">{{ getError("password") }}</div>
+            <div class="error" >{{ getError("confirm") }}</div>
+            </div>
+
+
 
           <Button class="w-full" @click="handleSubmit()" :disabled="loading">
             {{ $t("pageFields.authen.createAcc") }}
@@ -69,7 +102,8 @@ import LoadingIndicator from "@/components/common/LoadingIndicator.vue";
 import type { IRegisterPayload } from "@/types/user.type";
 import { InputPassword } from "@/components/common";
 import { useRoute, useRouter } from "vue-router";
-
+import useValidation from "@/composables/useValidation";
+import { registerSchema } from "@/validations/auth";
 const route = useRoute();
 const router = useRouter();
 const emits = defineEmits(["directPath"]);
@@ -77,13 +111,21 @@ const emits = defineEmits(["directPath"]);
 const isCheckStt = ref(false);
 const authStore = useAuthStore();
 const { loading, isSuccess } = storeToRefs(authStore);
-const resetPass = ref('')
+
 const formSchema = ref<IRegisterPayload>({
   email: "",
-  displayName: '',
+  displayName: "",
   password: "",
+  confirm: "",
 });
 
+const { validate, isValid, getError, scrolltoError, errors } = useValidation(
+  registerSchema,
+  formSchema,
+  {
+    mode: "lazy",
+  }
+);
 
 function redirectPath() {
   if (route.fullPath?.includes("register")) {
@@ -94,14 +136,19 @@ function redirectPath() {
 }
 
 async function handleSubmit() {
-  await authStore.signUp(formSchema.value);
-  if (isSuccess.value) {
-    redirectPath();
-    if (route.fullPath?.includes("login")) {
-      router.resolve({ name: "login" });
-    } else {
+  await validate();
+  if (isValid.value) {
+    await authStore.signUp(formSchema.value);
+    if (isSuccess.value) {
       redirectPath();
+      if (route.fullPath?.includes("login")) {
+        router.resolve({ name: "login" });
+      } else {
+        redirectPath();
+      }
     }
+  } else {
+    scrolltoError(".p-invalid", { offset: 24 });
   }
 }
 
@@ -109,3 +156,11 @@ onMounted(async () => {
   await authStore.getListUsers();
 });
 </script>
+
+<style scoped>
+.error {
+  font-size: 14px;
+  color: red;
+  margin-top: 4px;
+}
+</style>
