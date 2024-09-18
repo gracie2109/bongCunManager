@@ -10,7 +10,7 @@
 
 
 <script lang="ts" setup>
-import {Header, ContentWrap} from "@/views/admin/components";
+import { Header, ContentWrap } from "@/views/admin/components";
 
 
 </script>

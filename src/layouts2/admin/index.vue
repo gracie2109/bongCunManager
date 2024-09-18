@@ -133,7 +133,7 @@ provide(PROVIDER_KEYS.IS_COLLAPSE, isCollapsed)
 
 
           <ResizablePanel id="resize-panel-2" :default-size="defaultLayout[1]" :min-size="30">
-            <ScrollArea class="h-screen flex">
+            <ScrollArea class="h-screen flex  bg-[#f5f5f5]">
               <slot />
             </ScrollArea>
           </ResizablePanel>
