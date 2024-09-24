@@ -11,12 +11,9 @@ const { error, formItemId } = useFormField()
 </script>
 
 <template>
-  <Label
-    :class="cn(
-      props.class,
-    )"
-    :for="formItemId"
-  >
+  <Label :class="cn(
+    props.class,
+  )" :for="formItemId" class="font-bold">
     <slot />
   </Label>
 </template>

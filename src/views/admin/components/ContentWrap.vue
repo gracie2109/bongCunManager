@@ -10,7 +10,7 @@
 <style scoped>
 .admin_content {
     position: relative;
-    top: 2.5rem;
+    top: 8rem;
     padding: 1.25rem
 }
 </style>

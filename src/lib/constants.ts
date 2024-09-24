@@ -6,7 +6,8 @@ export const CURRENT_DATE = getCurrentDateTime();
 
 export const COLLECTION = {
     PRODUCTS: 'products',
-    USERS: 'users'
+    USERS: 'users',
+    PROVIDERS: 'service-provider'
 }
 
 export const DEFINE_PRODUCT_CATEGORIES = [

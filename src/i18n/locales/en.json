@@ -15,14 +15,20 @@
     "update": "Update",
     "delete": "Delete",
     "dataExisted": "{field} is existed!",
-    "dataNotExisted": "{field} not existed!"
+    "dataNotExisted": "{field} not existed!",
+    "addNew": "Add new {field}",
+    "name": "Name",
+    "description": "Description",
+    "phone":"Phone Number",
+    "settingView":"Setting View"
   },
   "pageMeta": {
     "home": "HOME",
     "product_list": "List Products",
     "login": "Login",
     "register": "Register",
-    "forgotPw": "Forgot Password"
+    "forgotPw": "Forgot Password",
+    "serviceProvider": "Service Providers"
   },
   "validation": {
     "min": "{name} must be at least {min} characters"
@@ -31,14 +37,17 @@
     "products": {
       "name": "Product Name",
       "description": "Description"
-    }, 
-    "authen":{
+    },
+    "authen": {
       "prefSignup": "Enter your information to create an account",
-      "prefLogin":"Enter your email below to login to your account",
+      "prefLogin": "Enter your email below to login to your account",
       "alreadyHasAccount": "Already have an account?",
-      "dontHaveAccount" :"Don't have an account?",
+      "dontHaveAccount": "Don't have an account?",
       "createAcc": "Create an account",
       "prefForgotPw": "Enter your email to receive password recovery mail"
+    },
+    "serviceProvider":{
+      "desc": "More information about the product supplier for you"
     }
   }
 }
