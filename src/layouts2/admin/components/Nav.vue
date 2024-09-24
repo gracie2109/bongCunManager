@@ -3,12 +3,13 @@ import { Icon } from "@iconify/vue";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-
+import {} from "@/components/common";
 export interface LinkProp {
   title: string;
   label?: string;
   icon: string;
   variant: "default" | "ghost";
+  name: string;
 }
 
 interface NavProps {
@@ -30,8 +31,8 @@ defineProps<NavProps>();
       <template v-for="(link, index) of links">
         <Tooltip v-if="isCollapsed" :key="`1-${index}`" :delay-duration="0">
           <TooltipTrigger as-child>
-            <a
-              href="#"
+            <router-link
+              :to="{ name: link.name }"
               :class="
                 cn(
                   buttonVariants({ variant: link.variant, size: 'icon' }),
@@ -43,7 +44,7 @@ defineProps<NavProps>();
             >
               <Icon :icon="link.icon" class="size-4" />
               <span class="sr-only">{{ link.title }}</span>
-            </a>
+            </router-link>
           </TooltipTrigger>
           <TooltipContent side="right" class="flex items-center gap-4">
             {{ link.title }}
@@ -53,10 +54,10 @@ defineProps<NavProps>();
           </TooltipContent>
         </Tooltip>
 
-        <a
+        <router-link
+          :to="{ name: link.name }"
           v-else
           :key="`2-${index}`"
-          href="#"
           :class="
             cn(
               buttonVariants({ variant: link.variant, size: 'sm' }),
@@ -79,7 +80,7 @@ defineProps<NavProps>();
           >
             {{ link.label }}
           </span>
-        </a>
+        </router-link>
       </template>
     </nav>
   </div>

@@ -23,75 +23,14 @@ const props = withDefaults(defineProps<Props>(), {
 
 const isCollapsed = ref(props.defaultCollapsed)
 
-const links: LinkProp[] = [
-  {
-    title: 'Inbox',
-    label: '128',
-    icon: 'lucide:inbox',
-    variant: 'default',
-  },
-  {
-    title: 'Drafts',
-    label: '9',
-    icon: 'lucide:file',
-    variant: 'ghost',
-  },
-  {
-    title: 'Sent',
-    label: '',
-    icon: 'lucide:send',
-    variant: 'ghost',
-  },
-  {
-    title: 'Junk',
-    label: '23',
-    icon: 'lucide:archive',
-    variant: 'ghost',
-  },
-  {
-    title: 'Trash',
-    label: '',
-    icon: 'lucide:trash',
-    variant: 'ghost',
-  },
-  {
-    title: 'Archive',
-    label: '',
-    icon: 'lucide:archive',
-    variant: 'ghost',
-  },
-]
 
 const links2: LinkProp[] = [
   {
-    title: 'Social',
-    label: '972',
+    title: 'service providers',
+    label: 'service providers',
     icon: 'lucide:user-2',
     variant: 'ghost',
-  },
-  {
-    title: 'Updates',
-    label: '342',
-    icon: 'lucide:alert-circle',
-    variant: 'ghost',
-  },
-  {
-    title: 'Forums',
-    label: '128',
-    icon: 'lucide:message-square',
-    variant: 'ghost',
-  },
-  {
-    title: 'Shopping',
-    label: '8',
-    icon: 'lucide:shopping-cart',
-    variant: 'ghost',
-  },
-  {
-    title: 'Promotions',
-    label: '21',
-    icon: 'lucide:archive',
-    variant: 'ghost',
+    name: 'serviceProvider'
   },
 ]
 
@@ -122,8 +61,6 @@ provide(PROVIDER_KEYS.IS_COLLAPSE, isCollapsed)
               ">
               <AppLogo :is-collapsed="isCollapsed" />
             </div>
-            <Separator />
-            <Nav :is-collapsed="isCollapsed" :links="links" />
             <Separator />
             <Nav :is-collapsed="isCollapsed" :links="links2" />
           </ResizablePanel>

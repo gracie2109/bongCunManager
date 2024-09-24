@@ -4,6 +4,11 @@ import {CalendarDateTime} from "@internationalized/date";
 import type {RestfullMethod, ResponseStatus} from "@/types";
 import {toast} from "vue-sonner";
 import i18n from '@/i18n';
+import type { Updater } from '@tanstack/vue-table'
+import type { Ref } from 'vue'
+
+
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -70,4 +75,11 @@ export function formatPrice(
       currency: "VND",
       notation: 'standard',
   }).format(Number(price))
+}
+
+
+export function valueUpdater<T extends Updater<any>>(updaterOrValue: T, ref: Ref) {
+  ref.value = typeof updaterOrValue === 'function'
+    ? updaterOrValue(ref.value)
+    : updaterOrValue
 }

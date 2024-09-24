@@ -11,7 +11,8 @@ import DashboardView from '@/views/admin/dashboard/DashboardView.vue';
 import ListUserView from '@/views/admin/users/ListView.vue';
 import ForgotPassView from '@/views/auth/ForgotPassView.vue';
 import CreateStore from "@/views/admin/stores/add-store/Index.vue";
-import ListStore from "@/views/admin/stores/Index.vue"
+import ListStore from "@/views/admin/stores/Index.vue";
+import ListProvider from "@/views/admin/service-providers/Index.vue"
 /*
 *   RULE:
 *   meta key cần đối chiếu với pageMeta trong file i18n/locales/[lang].json
@@ -88,6 +89,11 @@ const router = createRouter({
           path: 'store/create-store',
           name: 'createStore',
           component: CreateStore,
+        },
+        {
+          path: 'service-providers',
+          name: 'serviceProvider',
+          component: ListProvider,
         }
       ]
     }

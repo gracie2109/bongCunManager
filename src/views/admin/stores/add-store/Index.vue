@@ -1,61 +1,47 @@
 <template>
-
-<Dialog :open="props.open" @update:open="$emit('changeOpen')">
-    <DialogContent class="w-[80%] min-w-[450px]">
+  <Dialog
+    :open="props.open"
+    @update:open="$emit('changeOpen')"
+    class="w-[80%] min-w-[1150px] h-auto min-h-[650px]"
+  >
+    <DialogContent>
       <DialogHeader>
-        <DialogTitle>Edit profile</DialogTitle>
-        <DialogDescription>
-          Make changes to your profile here. Click save when you're done.
-        </DialogDescription>
+        <DialogTitle>Add new</DialogTitle>
+        <DialogDescription> Make a new store </DialogDescription>
       </DialogHeader>
 
-      <ScrollArea class="h-72">
-        <LoginView />
-
-        <div>
-          What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and
-          typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only five
-          centuries, but also the leap into electronic typesetting, remaining essentially
-          unchanged. It was popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum passages, and more recently with desktop publishing
-          software like Aldus PageMaker including versions of Lorem Ipsum. Why do we use
-          it? It is a long established fact that a reader will be distracted by the
-          readable content of a page when looking at its layout. The point of using Lorem
-          Ipsum is that it has a more-or-less normal distribution of letters, as opposed
-          to using 'Content here, content here', making it look like readable English.
-          Many desktop publishing packages and web page editors now use Lorem Ipsum as
-          their default model text, and a search for 'lorem ipsum' will uncover many web
-          sites still in their infancy. Various versions have evolved over the years,
-          sometimes by accident, sometimes on purpose (injected humour and the like).
-          Where does it come from? Contrary to popular belief, Lorem Ipsum is not simply
-          random text. It has roots in a piece of classical Latin literature from 45 BC,
-          making it over 2000 years old. Richard McClintock, a Latin professor at
-          Hampden-Sydney College in Virginia, looked up one of the more obscure Latin
-          words, consectetur, from a Lorem Ipsum passage, and going through the cites of
-          the word in classical literature, discovered the undoubtable source. Lorem Ipsum
-          comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The
-          Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise
-          on the theory of ethics, very popular during the Renaissance. The first line of
-          Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section
-          1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced
-          below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus
-          Bonorum et Malorum" by Cicero are also reproduced in their exact original form,
-          accompanied by English versions from the 1914 translation by H. Rackham.
-        </div>
-      </ScrollArea>
+      <div>
+        <form class="" @submit="onSubmit">
+          <FormField v-slot="{ componentField }" name="username">
+            <FormItem>
+              <FormLabel>{{ $t('common.name') }}</FormLabel>
+              <FormControl>
+                <Input type="text" placeholder="shadcn" v-bind="componentField" />
+              </FormControl>
+              <FormDescription> This is your public display name. </FormDescription>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <Button type="submit"> Submit </Button>
+        </form>
+      </div>
     </DialogContent>
   </Dialog>
-
 </template>
 
-
-
 <script lang="ts" setup>
-import Button from "@/components/ui/button/Button.vue";
+import { Button } from "@/components/ui/button";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Header, ContentWrap } from "@/views/admin/components";
-import {defineProps, withDefaults} from "vue";
+import { defineProps, withDefaults } from "vue";
 import {
   Dialog,
   DialogClose,
@@ -68,15 +54,24 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useForm } from "vee-validate";
+import { StoreSchema } from "@/validations/store";
+const props = withDefaults(
+  defineProps<{
+    open: boolean;
+  }>(),
+  {
+    open: false,
+  }
+);
 
+defineEmits(["changeOpen"]);
 
-const props = withDefaults(defineProps<{
-    open: boolean
-}>(), {
-    open: false 
-})
+const form = useForm({
+  validationSchema: StoreSchema,
+});
 
-
-defineEmits(['changeOpen'])
-
+const onSubmit = form.handleSubmit((values) => {
+  console.log("handleSb", values);
+});
 </script>

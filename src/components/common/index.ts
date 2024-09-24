@@ -7,4 +7,7 @@ export {default as LoadingIndicator} from "./LoadingIndicator.vue";
 export {default as MenuLink} from "./Link.vue";
 export {default as BaseAvatar} from "./BaseAvatar.vue";
 export {default as InputPassword} from "./InputPassword.vue";
-export {default as Notification} from "./Notification.vue"
+export {default as Notification} from "./Notification.vue";
+export {default as InputNumberCs} from "./CustomInputField.vue";
+export {default as DialogConfirm} from "./ConfirmDialog.vue";
+export {default as ActionRow} from "./ActionRow.vue";
