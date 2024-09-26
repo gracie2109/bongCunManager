@@ -1,7 +1,6 @@
 import { getLocalStorage, getCurrentDateTime } from "@/lib/utils";
 
 export const USER_LOCALE = JSON.parse(getLocalStorage('user-locale'));
-console.log('USER_LOCALE', USER_LOCALE)
 export const CURRENT_DATE = getCurrentDateTime();
 
 export const COLLECTION = {

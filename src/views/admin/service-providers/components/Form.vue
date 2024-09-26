@@ -40,7 +40,9 @@
                     </FormField>
 
                     <DialogFooter class="p-6 pt-0">
+                        <Button type="button" variant="outline" @click="$emit('changeOpen')" > Cancel </Button>
                         <Button type="submit" > Save changes </Button>
+
                     </DialogFooter>
                 </form>
             </div>
@@ -60,7 +62,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { defineProps, withDefaults } from "vue";
+import { defineProps, watch, withDefaults } from "vue";
 import {
     Dialog,
     DialogContent,
@@ -74,7 +76,7 @@ import { ServiceProvider } from "@/validations/service-provider";
 import { toTypedSchema } from "@vee-validate/zod";
 import {useServiceProvider} from "@/stores";
 
-const props = withDefaults(defineProps<{ open: boolean }>(), {
+const props = withDefaults(defineProps<{ open: boolean, rowEditting: any }>(), {
     open: false,
 });
 
@@ -86,8 +88,17 @@ const form = useForm({
 });
 
 const onSubmit = form.handleSubmit(async (values) => {
-    // await store.createProvider(values);
-    // form.resetForm();
-    // emit('changeOpen')
+    await store.createProvider(values);
+    form.resetForm();
+    emit('changeOpen')
 });
+
+
+watch(() => props.rowEditting, (newVal) => {
+    if (newVal) {
+        form.resetForm();
+        form.setValues({ ...newVal }, true);
+    }
+});
+
 </script>
