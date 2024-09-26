@@ -16,7 +16,7 @@ defineProps<{
   desc?: string;
 }>();
 
-defineEmits(["delete", "cancel", "openChange"]);
+defineEmits([ "cancel", "openChange","handleOk"]);
 </script>
 
 <template>
@@ -33,7 +33,7 @@ defineEmits(["delete", "cancel", "openChange"]);
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel @click="$emit('cancel')">Cancel</AlertDialogCancel>
-        <AlertDialogAction @click="$emit('delete')">Continue</AlertDialogAction>
+        <AlertDialogAction @click="$emit('handleOk')">Continue</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>
