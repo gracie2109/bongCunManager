@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import { provide, ref } from 'vue'
+import { provide, ref, withDefaults, defineProps} from 'vue'
 import Nav, { type LinkProp } from './components/Nav.vue'
 import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator';

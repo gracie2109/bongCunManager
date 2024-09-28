@@ -12,6 +12,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { watchEffect } from 'vue'
 
 interface DataTableColumnHeaderProps {
     column: Column<any, any>
@@ -19,9 +20,13 @@ interface DataTableColumnHeaderProps {
 }
 
 defineProps<DataTableColumnHeaderProps>()
+
+
+
 </script>
 
 <script lang="ts">
+
 export default {
     inheritAttrs: false,
 }
@@ -39,7 +44,8 @@ export default {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-                <DropdownMenuItem @click="column.toggleSorting(false)">
+                <template v-if="column.id !== 'function'">
+                    <DropdownMenuItem @click="column.toggleSorting(false)">
                     <ArrowUpIcon class="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                     Asc
                 </DropdownMenuItem>
@@ -48,6 +54,8 @@ export default {
                     Desc
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
+                
+                </template>
                 <DropdownMenuItem @click="column.toggleVisibility(false)">
                     <EyeOff class="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                     Hide

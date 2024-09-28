@@ -10,24 +10,25 @@
     </div>
     <div>
       <div class="grid gap-4">
-        <div class="grid gap-2">
-          <Label for="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="m@example.com"
-            required
-            name="email"
-            v-model:model-value="formVl.email"
-            :class="{ 'p-invalid': !!getError('email') }"
-          />
-          <div class="error">{{ getError("email") }}</div>
-        </div>
-
-        <Button type="submit" class="w-full" @click="submitHdl()">
-          {{ $t("common.submit") }}
-        </Button>
-        <Button variant="outline" class="w-full" @click="redirectPath()"> Back </Button>
+        <form @submit.prevent="submitHdl">
+          <div class="grid gap-2">
+            <Label for="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="m@example.com"
+              required
+              name="email"
+              v-model:model-value="formVl.email"
+              :class="{ 'p-invalid': !!getError('email') }"
+            />
+            <div class="error">{{ getError("email") }}</div>
+          </div>
+          <Button type="submit" class="w-full" @click="submitHdl()">
+            {{ $t("common.submit") }}
+          </Button>
+          <Button variant="outline" class="w-full" @click="redirectPath()"> Back </Button>
+        </form>
       </div>
     </div>
   </section>

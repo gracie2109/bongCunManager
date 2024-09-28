@@ -55,6 +55,15 @@ export const PROVIDER_KEYS = {
     'IS_COLLAPSE':'isCollapsed',
 }
 
+export const GLOBAL_FUNCTION_TYPE = {
+    'DELETE': 'Delete',
+    'EDIT': 'Edit'
+}
+
+export const INITIAL_PAGE_INDEX = 1
+export const INITIAL_PAGE_SIZE = 5
+
+export const PAGE_SIZES = [2, 5, 10, 20, 30, 40, 50]
 
 
 export const navigation = {
@@ -124,15 +133,15 @@ export const navigation = {
         },
         {
             text: 'About Us',
-            url: '/about-us'
+            url: '#'
         },
         {
             text: 'Contact',
-            url: '/contact'
+            url: '#'
         },
         {
             text: 'Coupons',
-            url: '/coupons'
+            url: '#'
         }
     ]
 }

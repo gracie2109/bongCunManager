@@ -113,10 +113,9 @@ router.beforeEach((to, from, next) => {
   }
 
   if (to.meta.requiresAuth && !userStore.currentUser) {
-    nav.replace({ name: 'home' })
+    nav.replace({ name: 'serviceProvider' })
   }
   else next()
-
 })
 
 export default router

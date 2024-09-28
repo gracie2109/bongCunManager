@@ -4,88 +4,81 @@
       <InputSearch :placeholder="props.placeholder" class="w-[1350px]" size="sm" />
     </div>
 
-    <div class="flex items-center gap-2">
-      <div id="filter">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Button variant="outline">
-                <Filter color="hsl(var(--primary))" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent> filter </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
-      <div id="eraser">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Button variant="outline" @click="$emit('clearFilter')">
-                <Eraser color="hsl(var(--primary))" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent> Eraser filter </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
-      <div id="setting_column">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Button
-                variant="outline"
-                @click="
-                  () => {
-                    openSettingView = !openSettingView;
-                  }
-                "
-              >
-                <Columns2 color="hsl(var(--primary))" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>View({{ openSettingView }}) </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
-      <div id="eraser">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Button variant="outline" @click="clickAddNew">
-                <Plus color="hsl(var(--primary))" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent> Add new </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
+    <div>
+      <TooltipProvider>
+        <div class="flex items-center gap-2">
+          <div id="filter">
+            <Tooltip>
+              <TooltipTrigger as-child>
+                <Button variant="outline">
+                  <Filter color="hsl(var(--primary))" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent> filter </TooltipContent>
+            </Tooltip>
+          </div>
+          <div id="eraser">
+            <Tooltip>
+              <TooltipTrigger as-child>
+                <Button variant="outline" @click="$emit('clearFilter')">
+                  <Eraser color="hsl(var(--primary))" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent> Eraser filter </TooltipContent>
+            </Tooltip>
+          </div>
+          <div id="setting_column">
+            <Tooltip>
+              <TooltipTrigger as-child>
+                <Button
+                  variant="outline"
+                  @click="
+                    () => {
+                      openSettingView = !openSettingView;
+                    }
+                  "
+                >
+                  <Columns2 color="hsl(var(--primary))" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>View({{ openSettingView }}) </TooltipContent>
+            </Tooltip>
+          </div>
+          <div id="eraser">
+            <Tooltip>
+              <TooltipTrigger as-child>
+                <Button variant="outline" @click="clickAddNew">
+                  <Plus color="hsl(var(--primary))" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent> Add new </TooltipContent>
+            </Tooltip>
+          </div>
 
-      <div id="eraser">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Button variant="outline">
-                <CloudUpload color="hsl(var(--primary))" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent> Export </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
-      <div id="eraser">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <Button variant="outline">
-                <CloudDownload color="hsl(var(--primary))" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent> Import </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
+          <div id="eraser">
+            <Tooltip>
+              <TooltipTrigger as-child>
+                <Button variant="outline">
+                  <CloudUpload color="hsl(var(--primary))" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent> Export </TooltipContent>
+            </Tooltip>
+          </div>
+          <div id="eraser">
+            <Tooltip>
+              <TooltipTrigger as-child>
+                <Button variant="outline">
+                  <CloudDownload color="hsl(var(--primary))" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent> Import </TooltipContent>
+            </Tooltip>
+          </div>
+        </div>
+      </TooltipProvider>
     </div>
+
     <Dialog
       :open="openSettingView"
       @update:open="() => (openSettingView = !openSettingView)"
@@ -122,12 +115,7 @@ import {
   CloudDownload,
   Columns2,
 } from "lucide-vue-next";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 import {
   Tooltip,

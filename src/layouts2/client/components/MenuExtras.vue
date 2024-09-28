@@ -7,7 +7,7 @@
     <Separator class="hidden !h-5 lg:block z-[10]" orientation="vertical" />
     <CartMenu :type="String(route.name)" />
     <div v-if="user" class="z-[10]">
-      <BaseAvatar :user="user" />
+      <BaseAvatar />
     </div>
     <div v-else class="z-[10] cursor-pointer">
       <p @click="open = !open">Login</p>

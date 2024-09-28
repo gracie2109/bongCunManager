@@ -1,71 +1,23 @@
 <template>
   <Header> list store header </Header>
-
-  <SearchWrap>
-  
-    <SearchView
-      placeholder="Search by store"
-      @reset="onReset"
-      @clear-filter="clearFilter"
-      @setOpen="setOpen"
-      :addNew="{
-        type: 'function',
-        content: null,
-      }"
-      :table="table"
-    />
-  </SearchWrap>
   <ContentWrap>
-
-    <div id="showTable">
-      <div class="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow
-              v-for="headerGroup in table.getHeaderGroups()"
-              :key="headerGroup.id"
-            >
-              <TableHead v-for="header in headerGroup.headers" :key="header.id">
-                <FlexRender
-                  v-if="!header.isPlaceholder"
-                  :props="header.getContext()"
-                  :render="header.column.columnDef.header"
-                />
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody class="w-full">
-            <template v-if="table.getRowModel().rows?.length">
-              <TableRow
-                v-for="row in table.getRowModel().rows"
-                :key="row.id"
-                :data-state="row.getIsSelected() && 'selected'"
-              >
-                <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
-                  <FlexRender
-                    :props="cell.getContext()"
-                    :render="cell.column.columnDef.cell"
-                  />
-                </TableCell>
-              </TableRow>
-            </template>
-
-            <TableRow v-else>
-              <TableCell :colspan="columns.length" class="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
-    </div>
+    <DataTable
+      :data="providers"
+      :columns="columns"
+      :page-count="pageCount"
+      :page-data="pageData"
+      @clear-filter="clearFilter"
+      @on-reset="onReset"
+      @clearFilter="clearFilter"
+      @set-open="setOpen"
+      @handle-page-change="loadDataForPage"
+    />
   </ContentWrap>
   <ServiceForm
-     @change-open="() => (open = !open)" 
-     :open="open && !selectedItem"
-     :rowEditting="rowEditSelected"
-     
-      />
+    @change-open="() => (open = !open)"
+    :open="open && !selectedItem"
+    :rowEditting="rowEditSelected"
+  />
   <DialogConfirm
     @change-open="
       () => {
@@ -87,55 +39,35 @@
 
 <script lang="ts" setup>
 import { Header, ContentWrap } from "@/views/admin/components";
-import SearchView from "@/components/common/SearchView.vue";
-import SearchWrap from "../components/SearchWrap.vue";
 import ServiceForm from "./components/Form.vue";
-import { h, onMounted, reactive, ref, watch, watchEffect } from "vue";
+import { h, onMounted, reactive, ref } from "vue";
 import { useServiceProvider } from "@/stores";
-import {
-  FlexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-  getExpandedRowModel,
-  useVueTable,
-} from "@tanstack/vue-table";
+import { formatDateTime } from "@/lib/utils"
+import { type T_ROW_FUNCTION } from "@/types"
 
 import type {
   ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  ExpandedState,
+  PaginationState
 } from "@tanstack/vue-table";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
-import { useProductStore } from "@/stores";
 import { storeToRefs } from "pinia";
-import { valueUpdater } from "@/lib/utils";
-import { CustomButton, DialogConfirm, ActionRow } from "@/components/common";
-import { Trash } from "lucide-vue-next";
+import { DialogConfirm, ActionRow, DataTable } from "@/components/common";
 import { Checkbox } from "@/components/ui/checkbox";
-
 import DataTableColumnHeader from "@/components/common/DataTable/DataTableColumnHeader.vue";
+import { INITIAL_PAGE_INDEX } from "@/lib/constants";
+
 const store = useServiceProvider();
-const { loading, providers } = storeToRefs(store);
+const { providers, pageCount } = storeToRefs(store);
 const selectedItem = ref();
-const sorting = ref<SortingState>([]);
-const columnFilters = ref<ColumnFiltersState>([]);
-const columnVisibility = ref<VisibilityState>({});
-const rowSelection = ref({});
-const mode = ref()
-const productStore = useProductStore();
-const rowEditSelected = ref()
+
+const mode = ref();
+const rowEditSelected = ref();
+
+
+const pageData = ref<PaginationState>({
+  pageIndex: INITIAL_PAGE_INDEX,
+  pageSize: 5,
+});
 
 
 const columns: ColumnDef<any>[] = reactive([
@@ -161,10 +93,8 @@ const columns: ColumnDef<any>[] = reactive([
     enableSorting: false,
   },
   {
-    id: "index",
-    enableHiding: false,
-
-    header: ({ column }) => h(DataTableColumnHeader, { column, title: "INDEX" }),
+    accessorKey: "index",
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "#" }),
 
     cell: ({ row }) => {
       return h(
@@ -173,7 +103,6 @@ const columns: ColumnDef<any>[] = reactive([
         row.getValue("index")
       );
     },
-    enableSorting: false,
   },
   {
     accessorKey: "name",
@@ -209,8 +138,20 @@ const columns: ColumnDef<any>[] = reactive([
     },
   },
   {
+    accessorKey: "createdAt",
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Created At" }),
+    cell: ({ row }) => {
+      return h(
+        "span",
+        { class: "max-w-[500px] truncate font-medium" },
+        formatDateTime(row.getValue("createdAt"))
+      );
+    },
+  },
+  {
     id: "function",
-    header: "",
+    accessorKey: "function",
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Function" }),
     cell: ({ row }) =>
       h(ActionRow, {
         row,
@@ -222,80 +163,40 @@ const columns: ColumnDef<any>[] = reactive([
   },
 ]);
 
-type RowType = {
-  id: string;
-  isShow: boolean;
-};
-const type = reactive<RowType[]>([
+const type = reactive<T_ROW_FUNCTION[]>([
   {
-    id: "Delete",
+    id: "DELETE",
     isShow: true,
   },
   {
-    id: "Edit",
+    id: "EDIT",
     isShow: true,
   },
 ]);
 const open = ref(false);
 
-function handleActionRow({ action, row }: { action: RowType; row: any }) {
+function handleActionRow({ action, row }: { action: T_ROW_FUNCTION; row: any }) {
   if (action.isShow) {
-    if (action.id === "Delete") {
+    if (action.id === "DELETE") {
       deleteItem(row);
     }
 
-    if(action.id === "Edit"){
-        open.value = true;
-        rowEditSelected.value = row
+    if (action.id === "EDIT") {
+      open.value = true;
+      rowEditSelected.value = row;
     }
   }
 }
 
-const table = useVueTable({
-  get data() {
-    return providers;
-  },
-  get columns() {
-    return columns;
-  },
-  getCoreRowModel: getCoreRowModel(),
-  getPaginationRowModel: getPaginationRowModel(),
-  getSortedRowModel: getSortedRowModel(),
-  getFilteredRowModel: getFilteredRowModel(),
-  getExpandedRowModel: getExpandedRowModel(),
-  onSortingChange: (updaterOrValue) => valueUpdater(updaterOrValue, sorting),
-  onColumnFiltersChange: (updaterOrValue) => valueUpdater(updaterOrValue, columnFilters),
-  onColumnVisibilityChange: (updaterOrValue) =>
-    valueUpdater(updaterOrValue, columnVisibility),
-  onRowSelectionChange: (updaterOrValue) => valueUpdater(updaterOrValue, rowSelection),
-  state: {
-    get sorting() {
-      return sorting.value;
-    },
-    get columnFilters() {
-      return columnFilters.value;
-    },
-    get columnVisibility() {
-      return columnVisibility.value;
-    },
-    get rowSelection() {
-      return rowSelection.value;
-    },
-  },
-});
-
-
-
 function deleteItem(val: any) {
   selectedItem.value = val;
   open.value = true;
-  mode.value="delete";
-
+  mode.value = "delete";
 }
 async function handleDelete() {
   await store.deleteServiceProvider(selectedItem.value.id);
   setOpen();
-  selectedItem.value = null
+  selectedItem.value = null;
 }
 
 function onReset() {
@@ -308,7 +209,18 @@ function setOpen() {
   open.value = !open.value;
 }
 
+const loadDataForPage = async (page: number) => {
+  await store.getListServiceProvider({
+    pageIndex: page,
+    pageSize: pageData.value.pageSize
+  });
+};
+
+
 onMounted(async () => {
-  await store.getListServiceProvider();
+  await store.getListServiceProvider({
+    pageIndex: pageData.value.pageIndex,
+    pageSize: pageData.value.pageSize
+  });
 });
 </script>
