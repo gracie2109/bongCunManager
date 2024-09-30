@@ -11,6 +11,7 @@
           content: null,
         }"
         :table="table"
+        :saveColumnVisible="props.saveColumnVisible"
       />
     </SearchWrap>
     <div id="showTable" class="relative bg-white">
@@ -81,6 +82,7 @@ import {
   getSortedRowModel,
   getExpandedRowModel,
   useVueTable,
+  _getVisibleLeafColumns,
 } from "@tanstack/vue-table";
 
 import type {
@@ -99,9 +101,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { valueUpdater } from "@/lib/utils";
+import { setLocalStorage, valueUpdater } from "@/lib/utils";
 import { CustomPagination } from "@/components/common";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import SearchWrap from "@/views/admin/components/SearchWrap.vue";
 import SearchView from "../SearchView.vue";
 
@@ -115,6 +117,10 @@ const props = defineProps<{
   columns: ColumnDef<any>[];
   pageCount: number;
   pageData: PaginationState;
+  saveColumnVisible: {
+    name: string;
+    isRemeber: boolean;
+  };
 }>();
 
 const emits = defineEmits(["handlePageChange", "onReset", "clearFilter", "setOpen"]);
@@ -154,7 +160,7 @@ const table = useVueTable({
 
 async function handleChangePage(vl: number) {
   table.setPageIndex(vl);
-  props.pageData.pageIndex= vl;
+  props.pageData.pageIndex = vl;
   emits("handlePageChange", vl);
 }
 

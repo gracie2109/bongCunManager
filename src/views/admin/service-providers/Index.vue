@@ -6,6 +6,10 @@
       :columns="columns"
       :page-count="pageCount"
       :page-data="pageData"
+      :saveColumnVisible="{
+        name: 'service_providers',
+        isRemeber:true
+      }"
       @clear-filter="clearFilter"
       @on-reset="onReset"
       @clearFilter="clearFilter"

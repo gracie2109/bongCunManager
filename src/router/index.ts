@@ -113,7 +113,7 @@ router.beforeEach((to, from, next) => {
   }
 
   if (to.meta.requiresAuth && !userStore.currentUser) {
-    nav.replace({ name: 'serviceProvider' })
+    nav.replace({ name: 'home' })
   }
   else next()
 })

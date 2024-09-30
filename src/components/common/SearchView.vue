@@ -79,27 +79,12 @@
       </TooltipProvider>
     </div>
 
-    <Dialog
-      :open="openSettingView"
-      @update:open="() => (openSettingView = !openSettingView)"
-    >
-      <DialogContent class="w-96 p-0 max-h-[90dvh]">
-        <DialogHeader class="p-6 pb-0">
-          <DialogTitle> {{ $t("common.settingView") }}</DialogTitle>
-        </DialogHeader>
-
-        <div class="grid gap-4 py-4 overflow-y-auto px-6">
-          <div v-for="(i, j) in columns" :key="j" class="flex gap-3 items-center">
-            <Checkbox
-              :id="i.id"
-              :checked="i.getIsVisible()"
-              @update:checked="(value) => i.toggleVisibility(!!value)"
-            />
-            <label :for="i.id" class="cursor-pointer capitalize">{{ i.id }}</label>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+    <SettingColumnVisible
+      :table="props.table"
+      :openSettingView="openSettingView"
+      @changeOpenSettingView="() => (openSettingView = !openSettingView)"
+      
+    />
   </div>
 </template>
 
@@ -107,7 +92,6 @@
 import { useRouter } from "vue-router";
 import InputSearch from "./InputSearch.vue";
 import {
-  RefreshCcw,
   Filter,
   Eraser,
   Plus,
@@ -127,7 +111,7 @@ import { Button } from "@/components/ui/button";
 import { ref } from "vue";
 import type { Table } from "@tanstack/vue-table";
 import { computed } from "vue";
-import { Checkbox } from "@/components/ui/checkbox";
+import { SettingColumnVisible } from "@/components/common";
 
 const router = useRouter();
 const openSettingView = ref(false);
@@ -146,7 +130,6 @@ const props = defineProps<Props>();
 const emit = defineEmits(["reset", "clearFilter", "addNew", "setOpen"]);
 const columns = computed(() =>
   props.table.getAllColumns().filter((column) => {
-    console.log("column", column);
     return typeof column.accessorFn !== "undefined" && column.getCanHide();
   })
 );
