@@ -23,7 +23,7 @@ export const useAuthStore = defineStore('auth', () => {
     const isSuccess = ref(false);
     const route = useRoute()
     const router = useRouter();
-
+    const pageCount = ref()
 
     async function signUp(payload: IRegisterPayload | IUser) {
         loading.value = true;
@@ -101,7 +101,10 @@ export const useAuthStore = defineStore('auth', () => {
     async function getListUsers() {
         try {
             loading.value = true;
-            unsubscribe.value = getCollectionList(COLLECTION.USERS, (data) => { users.value = data });
+            unsubscribe.value = getCollectionList(COLLECTION.USERS, ({data,  totalRecord}) => { 
+                users.value = data;
+                pageCount.value = totalRecord
+             });
         } catch (error) {
             console.log('error', error)
         } finally {

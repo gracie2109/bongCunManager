@@ -6,6 +6,7 @@ import {toast} from "vue-sonner";
 import i18n from '@/i18n';
 import type { Updater } from '@tanstack/vue-table'
 import type { Ref } from 'vue'
+import {format} from "date-fns";
 
 
 
@@ -82,4 +83,10 @@ export function valueUpdater<T extends Updater<any>>(updaterOrValue: T, ref: Ref
   ref.value = typeof updaterOrValue === 'function'
     ? updaterOrValue(ref.value)
     : updaterOrValue
+}
+
+export function formatDateTime (date: string | Date | number) {
+  if(!date) return;
+  return format(date,"dd-MM-yyyy HH:mm:ss");
+
 }

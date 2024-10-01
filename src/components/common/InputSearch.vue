@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { Search } from "lucide-vue-next";
 import { Input, type InputVariants } from "@/components/ui/input";
-
+import { defineProps, withDefaults} from "vue"
 type SearchProps = {
   placeholder: string,
   size: InputVariants['size']

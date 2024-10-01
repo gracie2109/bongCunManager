@@ -1,6 +1,5 @@
 <template>
-
-   <section class="mx-auto grid gap-6">
+  <section class="mx-auto grid gap-6">
     <div class="grid gap-2 text-center">
       <h1 class="text-3xl font-bold">
         {{ $t("pageMeta.login") }}
@@ -10,46 +9,48 @@
       </p>
     </div>
     <div>
-      <div class="grid gap-4">
-        <div class="grid gap-2">
-          <Label for="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="m@example.com"
-            required
-            name="email"
-            v-model:model-value="formSchema.email"
-            :class="{ 'p-invalid': !!getError('email') }"
-          />
-          <div class="error">{{ getError("email") }}</div>
-        </div>
-        <div class="grid gap-2">
-          <div class="flex items-center">
-            <Label for="password">Password</Label>
-            <span
-              @click="redirectPath('forgotPw')"
-              class="ml-auto inline-block text-sm underline cursor-pointer"
-            >
-              Forgot your password?
-            </span>
+      <form action="" @submit.prevent="handleSubmit">
+        <div class="grid gap-4">
+          <div class="grid gap-2">
+            <Label for="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="m@example.com"
+              required
+              name="email"
+              v-model:model-value="formSchema.email"
+              :class="{ 'p-invalid': !!getError('email') }"
+            />
+            <div class="error">{{ getError("email") }}</div>
           </div>
+          <div class="grid gap-2">
+            <div class="flex items-center">
+              <Label for="password">Password</Label>
+              <span
+                @click="redirectPath('forgotPw')"
+                class="ml-auto inline-block text-sm underline cursor-pointer"
+              >
+                Forgot your password?
+              </span>
+            </div>
 
-          <InputPassword
-            id="password"
-            name="password"
-            @update-value="(vl) => (formSchema.password = vl)"
-            placeholder="********"
-            :class="{ 'p-invalid': !!getError('password') }"
+            <InputPassword
+              id="password"
+              name="password"
+              @update-value="(vl) => (formSchema.password = vl)"
+              placeholder="********"
+              :class="{ 'p-invalid': !!getError('password') }"
               class="w-full"
-          />
-          <div class="error">{{ getError("password") }}</div>
+            />
+            <div class="error">{{ getError("password") }}</div>
+          </div>
+          <Button type="submit" class="w-full" @click="handleSubmit()">
+            {{ $t("pageMeta.login") }}
+          </Button>
+          <Button variant="outline" class="w-full"> Login with Google </Button>
         </div>
-        <Button type="submit" class="w-full" @click="handleSubmit()">
-          {{ $t("pageMeta.login") }}
-        </Button>
-        <Button variant="outline" class="w-full"> Login with Google </Button>
-      </div>
+      </form>
       <div class="mt-4 text-center text-sm">
         {{ $t("pageFields.authen.dontHaveAccount") }}
 
@@ -62,8 +63,6 @@
   <div v-if="loading">
     <LoadingIndicator />
   </div>
-  
- 
 </template>
 
 <script setup lang="ts">

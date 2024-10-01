@@ -3,10 +3,7 @@
         <DropdownMenuTrigger as-child class="cursor-pointer">
             <Avatar size="xs">
                 <AvatarImage :src="currentUser.photoURL || 'https://github.com/radix-vue.png'" alt="@radix-vue" />
-                <AvatarFallback>
-                    <span class="capitalize">{{ fallName }}</span>
-
-                </AvatarFallback>
+                <AvatarFallback>YN</AvatarFallback>
             </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent class="w-56">
@@ -44,22 +41,13 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { computed } from 'vue';
 import { useAuthStore } from "@/stores";
 import { storeToRefs } from 'pinia';
-import { removeStorage } from '@/lib/utils';
-import { useRoute, useRouter } from 'vue-router';
-import { toast } from 'vue-sonner';
+import LoadingIndicator from './LoadingIndicator.vue';
 
 const store = useAuthStore();
-const router = useRouter();
-const route = useRoute()
 const { currentUser } = storeToRefs(store)
-const fallName = computed(() => currentUser ? `${currentUser.value.firstName?.split('')[0]}${currentUser.value.lastName?.split('')[0]}` : "YN");
-
-
 function handleLogout() {
     store.signoutHdl()
 }
-
 </script>

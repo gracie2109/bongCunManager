@@ -11,7 +11,8 @@ export const useProductStore = defineStore('product', () => {
     const products: Ref<any[]> = ref([]);
     const loading = ref(false);
     const unsubscribe = ref<null | (() => void)>(null);
-
+    const pageCount = ref();
+    
     async function createProduct(payload: any) {
         try {
             loading.value = true;
@@ -31,7 +32,11 @@ export const useProductStore = defineStore('product', () => {
     async function getListProducts() {
         try {
             loading.value = true;
-            unsubscribe.value = getCollectionList(COLLECTION.PRODUCTS, (data) => { products.value = data});
+            unsubscribe.value = getCollectionList(COLLECTION.PRODUCTS, ({data, totalRecord}) =>  {
+                products.value = data;
+                pageCount.value = +totalRecord
+            });
+            
         } catch (error) {
             console.log('error', error)
         } finally {
@@ -63,5 +68,5 @@ export const useProductStore = defineStore('product', () => {
       });
 
 
-    return {products, loading, createProduct, getListProducts, deleteProduct}
+    return {products, loading, createProduct, getListProducts, deleteProduct, pageCount}
 })

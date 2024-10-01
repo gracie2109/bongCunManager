@@ -116,7 +116,6 @@ router.beforeEach((to, from, next) => {
     nav.replace({ name: 'home' })
   }
   else next()
-
 })
 
 export default router

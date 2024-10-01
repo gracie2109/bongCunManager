@@ -2,8 +2,6 @@ import { onUnmounted, ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { checkItemExist, createCollection, getCollectionList, deleteItem, checkItemNotExist } from "@/lib/firebaseFn";
 import { v7 as uuidv7 } from 'uuid';
-import { toast } from "vue-sonner";
-import { useI18n } from "vue-i18n";
 import { COLLECTION } from "@/lib/constants"
 import { sendMessageToast } from "@/lib/utils";
 
@@ -11,6 +9,10 @@ export const useServiceProvider = defineStore('serviceProvider', () => {
     const providers: Ref<any[]> = ref([]);
     const loading = ref(false);
     const unsubscribe = ref<null | (() => void)>(null);
+    const pageCount = ref();
+    const lastVisibleDoc = ref(null);
+    const lastVisibleDocsCache = ref<Record<number, any>>({});
+
 
     async function createProvider(payload: any) {
         try {
@@ -28,16 +30,47 @@ export const useServiceProvider = defineStore('serviceProvider', () => {
         }
     }
 
-    async function getListServiceProvider() {
+    const getIndex = ({ dataPage, index }: { index: number, dataPage: { page: number, page_size: number } }) => {
+        const stt = (dataPage.page - 1) * dataPage.page_size + index + 1;
+        return stt;
+    };
+
+    async function getListServiceProvider({ pageIndex, pageSize }: { pageIndex: number, pageSize: number }) {
+        loading.value = true;
         try {
-            loading.value = true;
-            unsubscribe.value = getCollectionList(COLLECTION.PROVIDERS, (data) => { providers.value = data });
+            let lastVisibleDocForPage = null;
+
+            if (pageIndex > 1) {
+                lastVisibleDocForPage = lastVisibleDocsCache.value[pageIndex - 1];
+            }
+
+            await getCollectionList(
+                COLLECTION.PROVIDERS,
+                ({ data, totalRecord, lastVisibleDoc: lastDoc }) => {
+                    providers.value = data?.map((i, j) => {
+                        return {
+                            ...i,
+                            index: getIndex({dataPage:{page: pageIndex, page_size:pageSize}, index: j})
+                        }
+                    });
+                    pageCount.value = totalRecord;
+                    lastVisibleDoc.value = lastDoc;
+                    lastVisibleDocsCache.value[pageIndex] = lastDoc;
+                    loading.value = false;
+                },
+                false,
+                pageSize,
+                lastVisibleDocForPage
+            );
         } catch (error) {
-            console.log('error', error)
-        } finally {
-            loading.value = false
+            loading.value = false;
+            console.error(error);
+        }
+        finally {
+            loading.value = false;
         }
     }
+
 
     async function deleteServiceProvider(id: string) {
         try {
@@ -62,6 +95,5 @@ export const useServiceProvider = defineStore('serviceProvider', () => {
         }
     });
 
-
-    return { providers, loading, createProvider, getListServiceProvider, deleteServiceProvider }
+    return { providers, loading, pageCount, lastVisibleDoc, createProvider, getListServiceProvider, deleteServiceProvider }
 })

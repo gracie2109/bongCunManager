@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, limit, onSnapshot, orderBy, query, QueryDocumentSnapshot, startAfter, where, type DocumentData } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, limit, onSnapshot, orderBy, query, QueryDocumentSnapshot, QuerySnapshot, startAfter, where, type DocumentData } from "firebase/firestore";
 import { db } from "@/plugins/firebase"
 import { COLLECTION, CURRENT_DATE } from "@/lib/constants";
 import i18n from "@/i18n"
@@ -22,32 +22,89 @@ export async function checkItemNotExist(collectionName: string, field: string, d
 }
 
 
-export function getCollectionList(collectionName: string, callback: (data: any[]) => void, isAll?: boolean, limitNumb?: number) {
+// export async function getCollectionList(
+//     collectionName: string,
+//     callback: ({ data, totalRecord }: { data: any[], totalRecord: any }) => void,
+//     isAll?: boolean,
+//     limitNumb?: number
+// ) {
+//     try {
+//         const colRef = collection(db, collectionName);
+//         const qData = (!isAll && limitNumb) ? query(colRef, limit(limitNumb), orderBy('createdAt', 'desc')) : query(colRef, orderBy('createdAt', 'desc'));
+//         const qRecord = query(collection(db, collectionName));
+//         const doc = await getDocs(qRecord);
+
+//         return onSnapshot(qData, (snapshot) => {
+//             let response: any[] = [];
+//             if (!snapshot.empty) {
+//                 snapshot.forEach(doc => {
+//                     response = [...response, {
+//                         ...doc.data(),
+//                         id: doc.id,
+//                     }];
+//                 });
+//             }
+//             callback({
+//                 data: response,
+//                 totalRecord: doc.size
+//             });
+//         });
+
+//     } catch (error) {
+//         throw new Error('something went wrong');
+//     }
+// }
+export async function getCollectionList(
+    collectionName: string,
+    callback: ({ data, totalRecord, lastVisibleDoc }: { data: any[], totalRecord: number, lastVisibleDoc:any}) => void,
+    isAll?: boolean,
+    limitNumb?: number,
+    startAfterDoc?: any
+) {
     try {
         const colRef = collection(db, collectionName);
-        const q = (!isAll && limitNumb) ? query(colRef, limit(limitNumb)) : query(colRef);
+        let qData;
 
-        return onSnapshot(q, (snapshot) => {
+        // Tạo query cho dữ liệu
+        if (!isAll && limitNumb) {
+            if (startAfterDoc) {
+                qData = query(colRef, orderBy('createdAt', 'desc'), startAfter(startAfterDoc), limit(limitNumb));
+            } else {
+                qData = query(colRef, orderBy('createdAt', 'desc'), limit(limitNumb));
+            }
+        } else {
+            qData = query(colRef, orderBy('createdAt', 'desc'));
+        }
+
+        const qRecord = query(collection(db, collectionName));
+        const documentSnapshots = await getDocs(qRecord) as any
+        return onSnapshot(qData, (snapshot) => {
             let response: any[] = [];
+            let lastVisibleDoc: any = null;
 
             if (!snapshot.empty) {
                 snapshot.forEach(doc => {
-                    response = [...response, {
+                    response.push({
                         ...doc.data(),
                         id: doc.id,
-                    }];
+                    });
+                    lastVisibleDoc= doc
                 });
+                //@ts-ignore
+              
             }
-            callback(response);
+            
+            callback({
+                data: response,
+                totalRecord: documentSnapshots.size,
+                lastVisibleDoc:lastVisibleDoc
+            });
         });
 
     } catch (error) {
-        throw new Error('something went wrong');
+        throw new Error('Something went wrong: ' + error);
     }
 }
-
-
-
 export async function createCollection(collectionName: string, payload: any) {
     const collectionRef = collection(db, collectionName);
     await addDoc(collectionRef, convertBefore(payload, 'CREATE'))
