@@ -151,7 +151,7 @@
   </div>
 </template>
 
-<style scoped>
+<style>
 .server_off {
   background: hsl(var(--primary));
   background: linear-gradient(

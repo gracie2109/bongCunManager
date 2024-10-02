@@ -11,6 +11,7 @@ import DashboardView from '@/views/admin/dashboard/DashboardView.vue';
 import ListUserView from '@/views/admin/users/ListView.vue';
 import ForgotPassView from '@/views/auth/ForgotPassView.vue';
 import ListProvider from "@/views/admin/service-providers/Index.vue"
+import NotFoundPage from '@/components/NotFoundPage.vue';
 /*
 *   RULE:
 *   meta key cần đối chiếu với pageMeta trong file i18n/locales/[lang].json
@@ -88,6 +89,14 @@ const router = createRouter({
           }
         }
       ]
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      meta: {
+        layout: PAGE_LAYOUT.NO_LAYOUT,
+        requiresAuth: true
+      },
+      component: NotFoundPage
     }
   ]
 })
