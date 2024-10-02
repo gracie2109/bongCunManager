@@ -31,6 +31,7 @@ module.exports = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          subb: "hsl(var(--primary-subb))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -67,7 +68,7 @@ module.exports = {
         "cara-primary": "#0f172a",
         "cara-blue": "#38bdf8",
         'cara-border': '#2d364a',
-        'custom-red': '#e70505'
+        'custom-red': '#e70505',
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",
