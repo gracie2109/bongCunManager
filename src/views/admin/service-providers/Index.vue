@@ -1,9 +1,13 @@
 <template>
   <Header>
-   <h1 class="font-semibold">Suppliers ({{ pageCount }})</h1> 
+    <h1 class="font-semibold flex items-center gap-2">
+      <Container class="size-4 text-primary" />
+      Suppliers ({{ pageCount }})
+    </h1>
   </Header>
   <ContentWrap>
     <DataTable
+      :headerAdvanced="headerAdvanced"
       :data="providers"
       :columns="columns"
       :page-count="pageCount"
@@ -17,6 +21,7 @@
       @clearFilter="clearFilter"
       @set-open="setOpen"
       @handle-page-change="loadDataForPage"
+
     />
   </ContentWrap>
   <ServiceForm
@@ -41,6 +46,10 @@
     "
     @handleOk="handleDelete"
   />
+
+
+
+
 </template>
 
 <script lang="ts" setup>
@@ -49,7 +58,7 @@ import ServiceForm from "./components/Form.vue";
 import { h, onMounted, reactive, ref } from "vue";
 import { useServiceProvider } from "@/stores";
 import { formatDateTime } from "@/lib/utils";
-import { type T_ROW_FUNCTION } from "@/types";
+import { type IHeaderAdvanced, type T_ROW_FUNCTION } from "@/types";
 
 import type { ColumnDef, PaginationState } from "@tanstack/vue-table";
 
@@ -57,7 +66,8 @@ import { storeToRefs } from "pinia";
 import { DialogConfirm, ActionRow, DataTable } from "@/components/common";
 import { Checkbox } from "@/components/ui/checkbox";
 import DataTableColumnHeader from "@/components/common/DataTable/DataTableColumnHeader.vue";
-import { INITIAL_PAGE_INDEX } from "@/lib/constants";
+import { HEADER_ADVANCE_FUNCTION, INITIAL_PAGE_INDEX } from "@/lib/constants";
+import { Container } from "lucide-vue-next";
 
 const store = useServiceProvider();
 const { providers, pageCount } = storeToRefs(store);
@@ -156,6 +166,13 @@ const type = reactive<T_ROW_FUNCTION[]>([
     isShow: true,
   },
 ]);
+
+const headerAdvanced = reactive<IHeaderAdvanced[]>([
+  HEADER_ADVANCE_FUNCTION.ADD_NEW,
+  HEADER_ADVANCE_FUNCTION.SETTING_COLUMN,
+])
+
+
 const open = ref(false);
 
 function handleActionRow({

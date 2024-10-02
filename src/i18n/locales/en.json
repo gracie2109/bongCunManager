@@ -28,7 +28,7 @@
     "login": "Login",
     "register": "Register",
     "forgotPw": "Forgot Password",
-    "serviceProvider": "Service Providers"
+    "suppliers":"Suppliers"
   },
   "validation": {
     "min": "{name} must be at least {min} characters"

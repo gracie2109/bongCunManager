@@ -11,7 +11,10 @@
     <div>
       <TooltipProvider>
         <div class="flex items-center gap-2">
-          <div id="filter">
+          <div
+            id="filter"
+            v-if="props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.FILTER)"
+          >
             <Tooltip>
               <TooltipTrigger as-child>
                 <Button variant="outline">
@@ -21,7 +24,10 @@
               <TooltipContent> filter </TooltipContent>
             </Tooltip>
           </div>
-          <div id="eraser">
+          <div
+            id="eraser"
+            v-if="props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.RESET)"
+          >
             <Tooltip>
               <TooltipTrigger as-child>
                 <Button variant="outline" @click="$emit('clearFilter')">
@@ -31,7 +37,14 @@
               <TooltipContent> Eraser filter </TooltipContent>
             </Tooltip>
           </div>
-          <div id="setting_column">
+          <div
+            id="setting_column"
+            v-if="
+              props.headerAdvanced.includes(
+                HEADER_ADVANCE_FUNCTION.SETTING_COLUMN
+              )
+            "
+          >
             <Tooltip>
               <TooltipTrigger as-child>
                 <Button
@@ -48,7 +61,12 @@
               <TooltipContent>View({{ openSettingView }}) </TooltipContent>
             </Tooltip>
           </div>
-          <div id="eraser">
+          <div
+            id="addNew"
+            v-if="
+              props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.ADD_NEW)
+            "
+          >
             <Tooltip>
               <TooltipTrigger as-child>
                 <Button variant="outline" @click="clickAddNew">
@@ -58,8 +76,10 @@
               <TooltipContent> Add new </TooltipContent>
             </Tooltip>
           </div>
-
-          <div id="eraser">
+          <div
+            id="export"
+            v-if="props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.EXPORT)"
+          >
             <Tooltip>
               <TooltipTrigger as-child>
                 <Button variant="outline">
@@ -69,7 +89,10 @@
               <TooltipContent> Export </TooltipContent>
             </Tooltip>
           </div>
-          <div id="eraser">
+          <div
+            id="import"
+            v-if="props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.IMPORT)"
+          >
             <Tooltip>
               <TooltipTrigger as-child>
                 <Button variant="outline">
@@ -121,6 +144,8 @@ import { ref } from "vue";
 import type { Table } from "@tanstack/vue-table";
 import { computed } from "vue";
 import { SettingColumnVisible } from "@/components/common";
+import { type IHeaderAdvanced } from "@/types";
+import { HEADER_ADVANCE_FUNCTION } from "@/lib/constants";
 
 const router = useRouter();
 const openSettingView = ref(false);
@@ -136,6 +161,7 @@ type Props = {
     name: string;
     isRemeber: boolean;
   };
+  headerAdvanced: IHeaderAdvanced[];
 };
 
 const props = defineProps<Props>();

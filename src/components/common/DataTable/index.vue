@@ -12,6 +12,7 @@
         }"
         :table="table"
         :saveColumnVisible="props.saveColumnVisible"
+        :headerAdvanced="props.headerAdvanced"
       />
     </SearchWrap>
     <div id="showTable" class="relative bg-white">
@@ -101,17 +102,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { setLocalStorage, valueUpdater } from "@/lib/utils";
+import { valueUpdater } from "@/lib/utils";
 import { CustomPagination } from "@/components/common";
 import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import SearchWrap from "@/views/admin/components/SearchWrap.vue";
 import SearchView from "../SearchView.vue";
+import { LOCAL_STORAGE_KEY } from "@/lib/constants";
+import { type IHeaderAdvanced } from "@/types";
 
 const sorting = ref<SortingState>([]);
 const columnFilters = ref<ColumnFiltersState>([]);
-const columnVisibility = ref<VisibilityState>({});
 const rowSelection = ref({});
-const columns2 = ref<VisibilityState>({});
+const columnVisibility = ref<VisibilityState>({});
 
 const props = defineProps<{
   data: any[];
@@ -122,6 +124,7 @@ const props = defineProps<{
     name: string;
     isRemeber: boolean;
   };
+  headerAdvanced: IHeaderAdvanced[]
 }>();
 
 const emits = defineEmits([
@@ -147,7 +150,7 @@ const table = useVueTable({
   onColumnFiltersChange: (updaterOrValue) =>
     valueUpdater(updaterOrValue, columnFilters),
   onColumnVisibilityChange: (updaterOrValue) =>
-    valueUpdater(updaterOrValue, columns2),
+    valueUpdater(updaterOrValue, columnVisibility),
   onRowSelectionChange: (updaterOrValue) =>
     valueUpdater(updaterOrValue, rowSelection),
   state: {
@@ -158,7 +161,7 @@ const table = useVueTable({
       return columnFilters.value;
     },
     get columnVisibility() {
-      return columns2.value;
+      return columnVisibility.value;
     },
     get rowSelection() {
       return rowSelection.value;
@@ -180,7 +183,7 @@ const allColumns = computed(() => {
 
 function getColumnSettingLocal() {
   if (props.saveColumnVisible.isRemeber) {
-    const resLocal = localStorage.getItem("visibleColumn");
+    const resLocal = localStorage.getItem(LOCAL_STORAGE_KEY.VISIBLE_COLUMN);
     const parseData = resLocal ? JSON.parse(resLocal) : null;
     if (parseData) {
       const savedColumns = parseData[props.saveColumnVisible.name];
@@ -194,7 +197,7 @@ function getColumnSettingLocal() {
           {}
         );
 
-        columns2.value = visibilityState;
+        columnVisibility.value = visibilityState;
         table.setColumnVisibility(visibilityState);
         return;
       }
@@ -208,7 +211,7 @@ function getColumnSettingLocal() {
       {}
     );
 
-    columns2.value = defaultVisibilityState;
+    columnVisibility.value = defaultVisibilityState;
     table.setColumnVisibility(defaultVisibilityState);
   }
 }
@@ -219,8 +222,8 @@ onMounted(async () => {
 
 watchEffect(() => {
   if (props.saveColumnVisible.isRemeber) {
-    if (Object.keys(columns2.value).length > 0) {
-      table.setColumnVisibility(columns2.value);
+    if (Object.keys(columnVisibility.value).length > 0) {
+      table.setColumnVisibility(columnVisibility.value);
     }
   }
 });

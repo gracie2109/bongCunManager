@@ -34,6 +34,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { LOCAL_STORAGE_KEY } from "@/lib/constants";
 import type { Table } from "@tanstack/vue-table";
 import { computed, ref, watch } from "vue";
 
@@ -57,7 +58,10 @@ const columns = computed(() => {
 function saveColumnSetting() {
   if (props.saveColumnVisible.isRemeber) {
     const visibleColumns = props.table.getVisibleLeafColumns();
-    const resLocal = localStorage.getItem("visibleColumn") as any;
+    const resLocal = localStorage.getItem(
+      LOCAL_STORAGE_KEY.VISIBLE_COLUMN
+    ) as any;
+
     const parseData = resLocal ? JSON.parse(resLocal) : null;
 
     if (parseData) {
@@ -65,12 +69,18 @@ function saveColumnSetting() {
         ...parseData,
         [props.saveColumnVisible.name]: visibleColumns.map((i) => i.id),
       };
-      localStorage.setItem("visibleColumn", JSON.stringify(res));
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY.VISIBLE_COLUMN,
+        JSON.stringify(res)
+      );
     } else {
       const res = {
         [props.saveColumnVisible.name]: visibleColumns.map((i) => i.id),
       };
-      localStorage.setItem("visibleColumn", JSON.stringify(res));
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY.VISIBLE_COLUMN,
+        JSON.stringify(res)
+      );
     }
   }
 }

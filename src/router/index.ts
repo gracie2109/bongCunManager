@@ -77,11 +77,15 @@ const router = createRouter({
           path: 'users',
           name: 'users',
           component: ListUserView,
+          
         },
         {
           path: 'suppliers',
           name: 'suppliers',
           component: ListProvider,
+          meta: {
+            key: 'suppliers',
+          }
         }
       ]
     }

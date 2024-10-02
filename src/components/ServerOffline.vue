@@ -1,0 +1,7 @@
+<template>
+        server offline 
+
+
+
+
+</template>

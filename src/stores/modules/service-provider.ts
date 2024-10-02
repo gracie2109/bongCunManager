@@ -29,7 +29,7 @@ export const useServiceProvider = defineStore('serviceProvider', () => {
         } finally {
             loading.value = false;
         }
-    }
+    }  
 
     const getIndex = ({ dataPage, index }: { index: number, dataPage: { page: number, page_size: number } }) => {
         const stt = (dataPage.page - 1) * dataPage.page_size + index + 1;

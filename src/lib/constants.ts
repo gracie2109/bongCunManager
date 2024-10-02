@@ -47,9 +47,19 @@ export const DEFAULT_ROLE = {
 
 export const LOCAL_STORAGE_KEY = {
     'LAYOUT': 'layout',
-    'THEME': 'theme'
+    'THEME': 'theme',
+    'VISIBLE_COLUMN':'visibleColumn'
 }
 
+
+export const HEADER_ADVANCE_FUNCTION = {
+    'FILTER': 'filter',
+    'RESET':'reset',
+    'EXPORT':"export",
+    'IMPORT':"import",
+    'ADD_NEW':'addNew',
+    'SETTING_COLUMN':'settingColumn'
+} as const;
 
 
 export const PROVIDER_KEYS = {

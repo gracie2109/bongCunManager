@@ -29,7 +29,8 @@
     "login": "Đăng nhập",
     "register": "Tạo tài khoản",
     "forgotPw": "Quên mật khẩu",
-    "serviceProvider": "Nhà cung cấp"
+    "suppliers":"Nhà cung cấp"
+
   },
   "validation": {
     "min": "{name} cần tối thiểu {min} ký tự"
