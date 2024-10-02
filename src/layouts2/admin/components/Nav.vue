@@ -2,34 +2,39 @@
 import { Icon } from "@iconify/vue";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import {} from "@/components/common";
-export interface LinkProp {
-  title: string;
-  label?: string;
-  icon: string;
-  variant: "default" | "ghost";
-  name: string;
-}
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useRoute } from "vue-router";
+import clsx from "clsx";
+import type { LinkProp } from "@/types";
 
 interface NavProps {
   isCollapsed: boolean;
   links: LinkProp[];
 }
 
-defineProps<NavProps>();
+const props = defineProps<NavProps>();
+const route = useRoute();
+
 </script>
 
 <template>
   <div
-    :data-collapsed="isCollapsed"
+    :data-collapsed="props.isCollapsed"
     class="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2"
   >
     <nav
       class="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2"
     >
-      <template v-for="(link, index) of links">
-        <Tooltip v-if="isCollapsed" :key="`1-${index}`" :delay-duration="0">
+      <template v-for="(link, index) of props.links">
+        <Tooltip
+          v-if="props.isCollapsed"
+          :key="`1-${index}`"
+          :delay-duration="0"
+        >
           <TooltipTrigger as-child>
             <router-link
               :to="{ name: link.name }"
@@ -42,15 +47,16 @@ defineProps<NavProps>();
                 )
               "
             >
-              <Icon :icon="link.icon" class="size-4" />
-              <span class="sr-only">{{ link.title }}</span>
+              <Icon
+                :icon="link.icon"
+                class="size-4"
+                :class="clsx({ 'text-primary': route.name === link.name })"
+              />
+              <span class="sr-only capitalize">{{ link.title }}</span>
             </router-link>
           </TooltipTrigger>
           <TooltipContent side="right" class="flex items-center gap-4">
             {{ link.title }}
-            <span v-if="link.label" class="ml-auto text-muted-foreground">
-              {{ link.label }}
-            </span>
           </TooltipContent>
         </Tooltip>
 
@@ -60,25 +66,27 @@ defineProps<NavProps>();
           :key="`2-${index}`"
           :class="
             cn(
-              buttonVariants({ variant: link.variant, size: 'sm' }),
+              buttonVariants({ variant: 'ghost', size: 'sm' }),
               link.variant === 'default' &&
                 'dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white',
               'justify-start'
             )
           "
         >
-          <Icon :icon="link.icon" class="mr-2 size-4" />
-          {{ link.title }}
+          <Icon
+            :icon="link.icon"
+            class="mr-2 size-4"
+            :class="clsx({ 'text-primary': route.name === link.name })"
+          />
           <span
-            v-if="link.label"
             :class="
-              cn(
-                'ml-auto',
-                link.variant === 'default' && 'text-background dark:text-white'
+              clsx(
+                'capitalize',
+                route.name === link.name ? 'text-primary font-semibold' : ''
               )
             "
           >
-            {{ link.label }}
+            {{ link.title }}
           </span>
         </router-link>
       </template>

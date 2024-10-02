@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-full">
     <SearchWrap>
       <SearchView
         placeholder="Search by store"
@@ -59,8 +59,8 @@
           </TableBody>
         </Table>
       </div>
-      <div class="h-20 bg-white bottom-0 w-auto max-w-[90vw] fixed">
-        <div class="mx-auto h-full grid justify-end">
+      <div class="h-20 bg-white pl-5 bottom-0 max-w-[95vw] w-full fixed">
+        <div class=" h-full grid justify-start">
           <CustomPagination
             :total-record="pageCount"
             :page-current="pageData.pageIndex"
@@ -111,6 +111,7 @@ const sorting = ref<SortingState>([]);
 const columnFilters = ref<ColumnFiltersState>([]);
 const columnVisibility = ref<VisibilityState>({});
 const rowSelection = ref({});
+const columns2 = ref<VisibilityState>({});
 
 const props = defineProps<{
   data: any[];
@@ -123,7 +124,12 @@ const props = defineProps<{
   };
 }>();
 
-const emits = defineEmits(["handlePageChange", "onReset", "clearFilter", "setOpen"]);
+const emits = defineEmits([
+  "handlePageChange",
+  "onReset",
+  "clearFilter",
+  "setOpen",
+]);
 
 const table = useVueTable({
   get data() {
@@ -138,10 +144,12 @@ const table = useVueTable({
   getFilteredRowModel: getFilteredRowModel(),
   getExpandedRowModel: getExpandedRowModel(),
   onSortingChange: (updaterOrValue) => valueUpdater(updaterOrValue, sorting),
-  onColumnFiltersChange: (updaterOrValue) => valueUpdater(updaterOrValue, columnFilters),
+  onColumnFiltersChange: (updaterOrValue) =>
+    valueUpdater(updaterOrValue, columnFilters),
   onColumnVisibilityChange: (updaterOrValue) =>
-    valueUpdater(updaterOrValue, columnVisibility),
-  onRowSelectionChange: (updaterOrValue) => valueUpdater(updaterOrValue, rowSelection),
+    valueUpdater(updaterOrValue, columns2),
+  onRowSelectionChange: (updaterOrValue) =>
+    valueUpdater(updaterOrValue, rowSelection),
   state: {
     get sorting() {
       return sorting.value;
@@ -150,7 +158,7 @@ const table = useVueTable({
       return columnFilters.value;
     },
     get columnVisibility() {
-      return columnVisibility.value;
+      return columns2.value;
     },
     get rowSelection() {
       return rowSelection.value;
@@ -164,7 +172,56 @@ async function handleChangePage(vl: number) {
   emits("handlePageChange", vl);
 }
 
+const allColumns = computed(() => {
+  return table.getAllColumns().filter((column) => {
+    return typeof column.accessorFn !== "undefined" && column.getCanHide();
+  });
+});
+
+function getColumnSettingLocal() {
+  if (props.saveColumnVisible.isRemeber) {
+    const resLocal = localStorage.getItem("visibleColumn");
+    const parseData = resLocal ? JSON.parse(resLocal) : null;
+    if (parseData) {
+      const savedColumns = parseData[props.saveColumnVisible.name];
+
+      if (savedColumns) {
+        const visibilityState = allColumns.value.reduce(
+          (acc: any, column: any) => {
+            acc[column.id] = savedColumns.includes(column.id);
+            return acc;
+          },
+          {}
+        );
+
+        columns2.value = visibilityState;
+        table.setColumnVisibility(visibilityState);
+        return;
+      }
+    }
+  } else {
+    const defaultVisibilityState = allColumns.value.reduce(
+      (acc: any, column: any) => {
+        acc[column.id] = true;
+        return acc;
+      },
+      {}
+    );
+
+    columns2.value = defaultVisibilityState;
+    table.setColumnVisibility(defaultVisibilityState);
+  }
+}
 onMounted(async () => {
+  getColumnSettingLocal();
   table.setPageSize(Number(props.pageData.pageSize));
+});
+
+watchEffect(() => {
+  if (props.saveColumnVisible.isRemeber) {
+    if (Object.keys(columns2.value).length > 0) {
+      table.setColumnVisibility(columns2.value);
+    }
+  }
 });
 </script>

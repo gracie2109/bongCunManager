@@ -12,7 +12,9 @@
             :checked="i.getIsVisible()"
             @update:checked="(value) => i.toggleVisibility(!!value)"
           />
-          <label :for="i.id" class="cursor-pointer capitalize">{{ i.id }}</label>
+          <label :for="i.id" class="cursor-pointer capitalize">{{
+            i.id
+          }}</label>
         </div>
       </div>
     </DialogContent>
@@ -20,12 +22,20 @@
 </template>
 
 <script lang="ts" setup>
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-
 import { Checkbox } from "@/components/ui/checkbox";
-
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogScrollContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import type { Table } from "@tanstack/vue-table";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
 const props = defineProps<{
   table: Table<any>;
@@ -39,11 +49,10 @@ const props = defineProps<{
 const emits = defineEmits(["changeOpenSettingView"]);
 
 const columns = computed(() => {
-    return props.table.getAllColumns().filter((column) => {
-        return typeof column.accessorFn !== "undefined" && column.getCanHide();
-      });
-})
-const columns2 = ref();
+  return props.table.getAllColumns().filter((column) => {
+    return typeof column.accessorFn !== "undefined" && column.getCanHide();
+  });
+});
 
 function saveColumnSetting() {
   if (props.saveColumnVisible.isRemeber) {
@@ -66,36 +75,12 @@ function saveColumnSetting() {
   }
 }
 
-function getColumnSettingLocal() {
-  const visibleColumns = props.table.getVisibleLeafColumns();
-  const resLocal = localStorage.getItem("visibleColumn") as any;
-  const parseData = resLocal ? JSON.parse(resLocal) : null;
-  if (parseData) {
-    const oldValue = parseData[props.saveColumnVisible.name];
-    console.log("oldValue", oldValue);
-
-    if (oldValue) {
-      columns2.value = oldValue;
-    } else {
-      columns2.value = props.table.getAllColumns().filter((column) => {
-        return typeof column.accessorFn !== "undefined" && column.getCanHide();
-      });
-    }
-  }
-}
-
 watch(
   () => props.table.getVisibleLeafColumns(),
   () => {
-    if (props.saveColumnVisible.isRemeber) {
+    if (props.saveColumnVisible?.isRemeber) {
       saveColumnSetting();
     }
   }
 );
-
-onMounted(() => {
-  if (props.saveColumnVisible?.isRemeber) {
-    getColumnSettingLocal();
-  }
-});
 </script>

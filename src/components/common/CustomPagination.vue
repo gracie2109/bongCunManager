@@ -1,6 +1,7 @@
 <template>
   <div class="flex gap-3 items-center" v-if="totalPage > 1">
     <Button
+      size="xss"
       v-for="(i, j) in totalPage"
       :key="j"
       v-if="totalPage"

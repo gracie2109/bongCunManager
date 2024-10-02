@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 
 import { provide, ref, withDefaults, defineProps} from 'vue'
-import Nav, { type LinkProp } from './components/Nav.vue'
+import Nav from './components/Nav.vue'
 import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator';
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -9,7 +9,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 import AppLogo from '@/components/common/AppLogo.vue';
 import { PROVIDER_KEYS } from '@/lib/constants';
 import { ScrollArea } from '@/components/ui/scroll-area';
-
+import {ADMIN_NAVIGATOR} from "@/lib/navigations"
 interface Props {
   defaultLayout?: number[]
   defaultCollapsed?: boolean
@@ -22,17 +22,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const isCollapsed = ref(props.defaultCollapsed)
-
-
-const links2: LinkProp[] = [
-  {
-    title: 'service providers',
-    label: 'service providers',
-    icon: 'lucide:user-2',
-    variant: 'ghost',
-    name: 'serviceProvider'
-  },
-]
 
 function onCollapse() {
   isCollapsed.value = true
@@ -62,7 +51,7 @@ provide(PROVIDER_KEYS.IS_COLLAPSE, isCollapsed)
               <AppLogo :is-collapsed="isCollapsed" />
             </div>
             <Separator />
-            <Nav :is-collapsed="isCollapsed" :links="links2" />
+            <Nav :is-collapsed="isCollapsed" :links="ADMIN_NAVIGATOR" />
           </ResizablePanel>
 
 

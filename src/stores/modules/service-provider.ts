@@ -19,7 +19,8 @@ export const useServiceProvider = defineStore('serviceProvider', () => {
             loading.value = true;
             const notExist = await checkItemExist(COLLECTION.PROVIDERS, 'name', payload.name);
             if (notExist) {
-                await createCollection(COLLECTION.PROVIDERS, { ...payload, uid: uuidv7() });
+                const totalRecord = await createCollection(COLLECTION.PROVIDERS, { ...payload, uid: uuidv7() });
+                pageCount.value = totalRecord
                 sendMessageToast('success', 'create', 'success')
             }
         } catch (error: any) {
@@ -77,7 +78,8 @@ export const useServiceProvider = defineStore('serviceProvider', () => {
             loading.value = true;
             const exist = await checkItemNotExist(COLLECTION.PROVIDERS, '__name__', id);
             if (exist) {
-                await deleteItem(COLLECTION.PROVIDERS, id);
+                 const totalRecord = await deleteItem(COLLECTION.PROVIDERS, id);
+                 pageCount.value = totalRecord
                 sendMessageToast('success', 'delete', 'success');
             }
         }

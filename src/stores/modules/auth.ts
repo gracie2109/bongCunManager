@@ -101,10 +101,10 @@ export const useAuthStore = defineStore('auth', () => {
     async function getListUsers() {
         try {
             loading.value = true;
-            unsubscribe.value = getCollectionList(COLLECTION.USERS, ({data,  totalRecord}) => { 
-                users.value = data;
-                pageCount.value = totalRecord
-             });
+            // unsubscribe.value = getCollectionList(COLLECTION.USERS, ({data,  totalRecord}) => { 
+            //     users.value = data;
+            //     pageCount.value = totalRecord
+            //  });
         } catch (error) {
             console.log('error', error)
         } finally {

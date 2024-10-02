@@ -1,7 +1,11 @@
 <template>
   <div class="search-view grid grid-cols-3 gap-3">
     <div id="search_view--search" class="w-full col-span-2">
-      <InputSearch :placeholder="props.placeholder" class="w-[1350px]" size="sm" />
+      <InputSearch
+        :placeholder="props.placeholder"
+        class="w-[1350px]"
+        size="sm"
+      />
     </div>
 
     <div>
@@ -83,7 +87,7 @@
       :table="props.table"
       :openSettingView="openSettingView"
       @changeOpenSettingView="() => (openSettingView = !openSettingView)"
-      
+      :saveColumnVisible="props.saveColumnVisible"
     />
   </div>
 </template>
@@ -99,7 +103,12 @@ import {
   CloudDownload,
   Columns2,
 } from "lucide-vue-next";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 import {
   Tooltip,
@@ -123,6 +132,10 @@ type Props = {
     content: any;
   };
   table: Table<any>;
+  saveColumnVisible: {
+    name: string;
+    isRemeber: boolean;
+  };
 };
 
 const props = defineProps<Props>();

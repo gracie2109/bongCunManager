@@ -32,10 +32,10 @@ export const useProductStore = defineStore('product', () => {
     async function getListProducts() {
         try {
             loading.value = true;
-            unsubscribe.value = getCollectionList(COLLECTION.PRODUCTS, ({data, totalRecord}) =>  {
-                products.value = data;
-                pageCount.value = +totalRecord
-            });
+            // unsubscribe.value = getCollectionList(COLLECTION.PRODUCTS, ({data, totalRecord}) =>  {
+            //     products.value = data;
+            //     pageCount.value = +totalRecord
+            // });
             
         } catch (error) {
             console.log('error', error)

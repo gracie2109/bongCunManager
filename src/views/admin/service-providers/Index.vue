@@ -1,5 +1,7 @@
 <template>
-  <Header> list store header </Header>
+  <Header>
+   <h1 class="font-semibold">Suppliers ({{ pageCount }})</h1> 
+  </Header>
   <ContentWrap>
     <DataTable
       :data="providers"
@@ -8,7 +10,7 @@
       :page-data="pageData"
       :saveColumnVisible="{
         name: 'service_providers',
-        isRemeber:true
+        isRemeber: false,
       }"
       @clear-filter="clearFilter"
       @on-reset="onReset"
@@ -46,13 +48,10 @@ import { Header, ContentWrap } from "@/views/admin/components";
 import ServiceForm from "./components/Form.vue";
 import { h, onMounted, reactive, ref } from "vue";
 import { useServiceProvider } from "@/stores";
-import { formatDateTime } from "@/lib/utils"
-import { type T_ROW_FUNCTION } from "@/types"
+import { formatDateTime } from "@/lib/utils";
+import { type T_ROW_FUNCTION } from "@/types";
 
-import type {
-  ColumnDef,
-  PaginationState
-} from "@tanstack/vue-table";
+import type { ColumnDef, PaginationState } from "@tanstack/vue-table";
 
 import { storeToRefs } from "pinia";
 import { DialogConfirm, ActionRow, DataTable } from "@/components/common";
@@ -67,35 +66,12 @@ const selectedItem = ref();
 const mode = ref();
 const rowEditSelected = ref();
 
-
 const pageData = ref<PaginationState>({
   pageIndex: INITIAL_PAGE_INDEX,
   pageSize: 5,
 });
 
-
 const columns: ColumnDef<any>[] = reactive([
-  {
-    id: "select",
-    enableHiding: false,
-    header: ({ table }) =>
-      h(Checkbox, {
-        checked:
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate"),
-        "onUpdate:checked": (value) => table.toggleAllPageRowsSelected(!!value),
-        ariaLabel: "Select all",
-        class: "translate-y-0.5",
-      }),
-    cell: ({ row }) =>
-      h(Checkbox, {
-        checked: row.getIsSelected(),
-        "onUpdate:checked": (value) => row.toggleSelected(!!value),
-        ariaLabel: "Select row",
-        class: "translate-y-0.5",
-      }),
-    enableSorting: false,
-  },
   {
     accessorKey: "index",
     header: ({ column }) => h(DataTableColumnHeader, { column, title: "#" }),
@@ -132,7 +108,8 @@ const columns: ColumnDef<any>[] = reactive([
   },
   {
     accessorKey: "phone",
-    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Phone Number" }),
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "Phone Number" }),
     cell: ({ row }) => {
       return h(
         "span",
@@ -143,7 +120,8 @@ const columns: ColumnDef<any>[] = reactive([
   },
   {
     accessorKey: "createdAt",
-    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Created At" }),
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "Created At" }),
     cell: ({ row }) => {
       return h(
         "span",
@@ -155,7 +133,8 @@ const columns: ColumnDef<any>[] = reactive([
   {
     id: "function",
     accessorKey: "function",
-    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Function" }),
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "Function" }),
     cell: ({ row }) =>
       h(ActionRow, {
         row,
@@ -179,7 +158,13 @@ const type = reactive<T_ROW_FUNCTION[]>([
 ]);
 const open = ref(false);
 
-function handleActionRow({ action, row }: { action: T_ROW_FUNCTION; row: any }) {
+function handleActionRow({
+  action,
+  row,
+}: {
+  action: T_ROW_FUNCTION;
+  row: any;
+}) {
   if (action.isShow) {
     if (action.id === "DELETE") {
       deleteItem(row);
@@ -216,15 +201,14 @@ function setOpen() {
 const loadDataForPage = async (page: number) => {
   await store.getListServiceProvider({
     pageIndex: page,
-    pageSize: pageData.value.pageSize
+    pageSize: pageData.value.pageSize,
   });
 };
-
 
 onMounted(async () => {
   await store.getListServiceProvider({
     pageIndex: pageData.value.pageIndex,
-    pageSize: pageData.value.pageSize
+    pageSize: pageData.value.pageSize,
   });
 });
 </script>
