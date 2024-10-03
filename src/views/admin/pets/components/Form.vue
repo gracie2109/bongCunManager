@@ -33,7 +33,7 @@
                             >
                             <template #singleLabel="props">
                                 <div class="flex items-center gap-3">
-                                    <Icon :icon="props.option.icon" class="size-4" />
+                                    <Icon :icon="props.option.icon || iconValue" class="size-4" />
                                     <span class="option__desc">
                                         <span class="option__title">{{ props.option.label }}</span>
                                     </span>
@@ -41,7 +41,7 @@
                             </template>
                             <template #option="props">
                                 <div class="flex items-center gap-3">
-                                    <Icon :icon="props.option.icon" class="size-4" />
+                                    <Icon :icon="props.option.icon || iconValue" class="size-4" />
                                     <div class="option__desc">
                                         <span class="option__title">{{ props.option.label }}</span>
                                     </div>
@@ -133,14 +133,17 @@ const onSubmit = form.handleSubmit(async (values: z.infer<typeof PetsValid>) => 
     await store.createNewPet(values);
     form.resetForm();
     emit("changeOpen");
+    iconValue.value = ""
 });
 
 watch(
     () => props.rowEditting,
-    (newVal) => {
+    (newVal:z.infer<typeof PetsValid>) => {
+        console.log('newVal',newVal)
         if (newVal) {
             form.resetForm();
             form.setValues({ ...newVal }, true);
+            iconValue.value = options.value.find((i) => i.value === newVal.icon)
         }
     }
 );
