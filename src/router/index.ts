@@ -10,7 +10,9 @@ import RegisterView from '@/views/auth/RegisterView.vue';
 import DashboardView from '@/views/admin/dashboard/DashboardView.vue';
 import ListUserView from '@/views/admin/users/ListView.vue';
 import ForgotPassView from '@/views/auth/ForgotPassView.vue';
-import ListProvider from "@/views/admin/service-providers/Index.vue"
+import ListProvider from "@/views/admin/service-providers/Index.vue";
+import ListPets from "@/views/admin/pets/Index.vue"
+
 import NotFoundPage from '@/components/NotFoundPage.vue';
 /*
 *   RULE:
@@ -87,7 +89,15 @@ const router = createRouter({
           meta: {
             key: 'suppliers',
           }
-        }
+        },
+        {
+          path: 'pets',
+          name: 'pets',
+          component: ListPets,
+          meta: {
+            key: 'pets',
+          }
+        } 
       ]
     },
     {

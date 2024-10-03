@@ -13,5 +13,48 @@ export const ADMIN_NAVIGATOR: LinkProp[] = [
       variant: 'ghost',
       name: 'users'
     },
+    {
+      title: 'pets',
+      icon: 'lucide:paw-print',
+      variant: 'ghost',
+      name: 'pets'
+    },
   ]
   
+  export const navigation = {
+    profileNav: [
+        {
+            path: 'general',
+            name: 'general',
+            icon: ''
+        },
+        {
+            path: 'address',
+            name: 'address',
+            icon: ''
+        },
+        {
+            path: 'transactions',
+            name: 'transactions',
+            icon: ''
+        }
+    ],
+    clientNav: [
+        {
+            text: 'Home',
+            url: '/'
+        },
+        {
+            text: 'About Us',
+            url: '#'
+        },
+        {
+            text: 'Contact',
+            url: '#'
+        },
+        {
+            text: 'Coupons',
+            url: '#'
+        }
+    ]
+}

@@ -111,6 +111,8 @@ export async function getCollectionList(
     throw new Error("Something went wrong: " + error);
   }
 }
+
+
 export async function createCollection(collectionName: string, payload: any) {
   try {
     const collectionRef = collection(db, collectionName);

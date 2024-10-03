@@ -20,7 +20,8 @@
     "name": "Tên",
     "description": "Mô tả",
     "phone":"Số điện thoại",
-    "settingView":"Cài đặt hiển thị cột"
+    "settingView":"Cài đặt hiển thị cột",
+    "icon": "Biểu tượng"
 
   },
   "pageMeta": {
@@ -29,7 +30,8 @@
     "login": "Đăng nhập",
     "register": "Tạo tài khoản",
     "forgotPw": "Quên mật khẩu",
-    "suppliers":"Nhà cung cấp"
+    "suppliers":"Nhà cung cấp",
+    "pets": "Thú cưng"
 
   },
   "validation": {

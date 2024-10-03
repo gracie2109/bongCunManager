@@ -20,7 +20,8 @@
     "name": "Name",
     "description": "Description",
     "phone":"Phone Number",
-    "settingView":"Setting View"
+    "settingView":"Setting View",
+    "icon": "Icon"
   },
   "pageMeta": {
     "home": "HOME",
@@ -28,7 +29,8 @@
     "login": "Login",
     "register": "Register",
     "forgotPw": "Forgot Password",
-    "suppliers":"Suppliers"
+    "suppliers":"Suppliers",
+    "pets": "Pets"
   },
   "validation": {
     "min": "{name} must be at least {min} characters"

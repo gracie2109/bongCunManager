@@ -16,7 +16,7 @@ import { computed, ref } from "vue";
 import { MenuLink } from "@/components/common";
 import clsx from "clsx";
 import { useRoute } from "vue-router";
-import { navigation } from "@/lib/constants";
+import { navigation } from "@/lib/navigations";
 import SwitchLang from "@/components/common/SwitchLang.vue";
 
 const props = withDefaults(
