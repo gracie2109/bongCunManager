@@ -21,8 +21,8 @@
     "description": "Mô tả",
     "phone":"Số điện thoại",
     "settingView":"Cài đặt hiển thị cột",
-    "icon": "Biểu tượng"
-
+    "icon": "Biểu tượng",
+    "row_per_page": "Hàng trên mỗi trang"
   },
   "pageMeta": {
     "home": "Trang chủ ",
@@ -31,8 +31,8 @@
     "register": "Tạo tài khoản",
     "forgotPw": "Quên mật khẩu",
     "suppliers":"Nhà cung cấp",
-    "pets": "Thú cưng"
-
+    "pets": "Thú cưng",
+    "settingPetServicePrice":"Quản lý giá dịch vụ thú cưng"
   },
   "validation": {
     "min": "{name} cần tối thiểu {min} ký tự"
@@ -52,6 +52,9 @@
     },
     "serviceProvider":{
       "desc": "Thêm thông tin về nhà cung cấp sản phẩm cho bạn"
+    },
+    "pets":{
+      "placeholder": "Chọn biểu tượng đại diện"
     }
   }
 }

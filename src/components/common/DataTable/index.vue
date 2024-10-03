@@ -16,7 +16,6 @@
       />
     </SearchWrap>
     <div id="showTable" class="relative bg-white">
-      {{ props.pageData }}
       <div class="bg-white space-y-6 relative">
         <Table>
           <TableHeader class="p-4 bg-primary">

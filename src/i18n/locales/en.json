@@ -21,7 +21,9 @@
     "description": "Description",
     "phone":"Phone Number",
     "settingView":"Setting View",
-    "icon": "Icon"
+    "icon": "Icon",
+    "row_per_page": "Rows per page"
+
   },
   "pageMeta": {
     "home": "HOME",
@@ -30,7 +32,9 @@
     "register": "Register",
     "forgotPw": "Forgot Password",
     "suppliers":"Suppliers",
-    "pets": "Pets"
+    "pets": "Pets",
+    "settingPetServicePrice":"Setting Pet's service price"
+
   },
   "validation": {
     "min": "{name} must be at least {min} characters"
@@ -50,6 +54,9 @@
     },
     "serviceProvider":{
       "desc": "More information about the product supplier for you"
+    },
+    "pets":{
+      "placeholder": "Select the representative icon"
     }
   }
 }
