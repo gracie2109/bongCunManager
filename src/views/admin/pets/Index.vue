@@ -1,20 +1,20 @@
 <template>
   <Header>
     <h1 class="font-semibold flex items-center gap-2">
-      <Container class="size-4 text-primary" />
-      {{ $t('pageMeta.suppliers') }} ({{ pageCount }})
+      <PawPrint class="size-4 text-primary" />
+      {{ $t('pageMeta.pets') }} ({{ pageCount }})
     </h1>
   </Header>
   <ContentWrap>
     <DataTable
       :headerAdvanced="headerAdvanced"
-      :data="providers"
+      :data="pets"
       :columns="columns"
       :page-count="pageCount"
       :page-data="pageData"
     
       :saveColumnVisible="{
-        name: 'service_providers',
+        name: 'pets',
         isRemeber: false,
       }"
       @clear-filter="clearFilter"
@@ -57,7 +57,7 @@
 import { Header, ContentWrap } from "@/views/admin/components";
 import ServiceForm from "./components/Form.vue";
 import { h, onMounted, reactive, ref, watchEffect } from "vue";
-import { useServiceProvider } from "@/stores";
+import { usePets } from "@/stores";
 import { formatDateTime } from "@/lib/utils";
 import { type IHeaderAdvanced, type T_ROW_FUNCTION } from "@/types";
 
@@ -68,11 +68,12 @@ import { DialogConfirm, ActionRow, DataTable } from "@/components/common";
 import { Checkbox } from "@/components/ui/checkbox";
 import DataTableColumnHeader from "@/components/common/DataTable/DataTableColumnHeader.vue";
 import { HEADER_ADVANCE_FUNCTION, INITIAL_PAGE_INDEX } from "@/lib/constants";
-import { Container } from "lucide-vue-next";
+import { Container, PawPrint } from "lucide-vue-next";
 import { watch } from "vue";
+import { Icon } from "@iconify/vue";
 
-const store = useServiceProvider();
-const { providers, pageCount } = storeToRefs(store);
+const store = usePets();
+const { pets, pageCount } = storeToRefs(store);
 const selectedItem = ref();
 
 const mode = ref();
@@ -119,16 +120,14 @@ const columns: ColumnDef<any>[] = reactive([
     },
   },
   {
-    accessorKey: "phone",
+    accessorKey: "icon",
     header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "Phone Number" }),
-    cell: ({ row }) => {
-      return h(
-        "span",
-        { class: "max-w-[500px] truncate font-medium" },
-        row.getValue("phone")
-      );
-    },
+      h(DataTableColumnHeader, { column, title: "Icon" }),
+      cell: ({ row }) =>
+      h(Icon, {
+        row,
+        icon: (row.getValue('icon') as string)
+      }),
   },
   {
     accessorKey: "createdAt",

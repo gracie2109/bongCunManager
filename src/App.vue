@@ -33,7 +33,7 @@ const layouts = new Map();
 function getLayout(name: string) {
   if (layouts.get(name)) return layouts.get(name);
   const layout = markRaw(
-    defineAsyncComponent(() => import(`@/layouts2/${name}/index.vue`))
+    defineAsyncComponent(() => import(`@/layouts/${name}/index.vue`))
   );
   layouts.set(name, layout);
   return layout;
