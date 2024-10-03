@@ -12,6 +12,7 @@
       :columns="columns"
       :page-count="pageCount"
       :page-data="pageData"
+    
       :saveColumnVisible="{
         name: 'service_providers',
         isRemeber: false,
@@ -21,7 +22,7 @@
       @clearFilter="clearFilter"
       @set-open="setOpen"
       @handle-page-change="loadDataForPage"
-
+      @update-page-size="updatePageSize"
     />
   </ContentWrap>
   <ServiceForm
@@ -55,7 +56,7 @@
 <script lang="ts" setup>
 import { Header, ContentWrap } from "@/views/admin/components";
 import ServiceForm from "./components/Form.vue";
-import { h, onMounted, reactive, ref } from "vue";
+import { h, onMounted, reactive, ref, watchEffect } from "vue";
 import { useServiceProvider } from "@/stores";
 import { formatDateTime } from "@/lib/utils";
 import { type IHeaderAdvanced, type T_ROW_FUNCTION } from "@/types";
@@ -68,6 +69,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import DataTableColumnHeader from "@/components/common/DataTable/DataTableColumnHeader.vue";
 import { HEADER_ADVANCE_FUNCTION, INITIAL_PAGE_INDEX } from "@/lib/constants";
 import { Container } from "lucide-vue-next";
+import { watch } from "vue";
 
 const store = useServiceProvider();
 const { providers, pageCount } = storeToRefs(store);
@@ -215,6 +217,11 @@ function setOpen() {
   open.value = !open.value;
 }
 
+
+function updatePageSize (newPs:number) {
+  pageData.value.pageSize = +newPs
+}
+
 const loadDataForPage = async (page: number) => {
   await store.getListServiceProvider({
     pageIndex: page,
@@ -228,4 +235,12 @@ onMounted(async () => {
     pageSize: pageData.value.pageSize,
   });
 });
+
+watch(() => pageData.value.pageSize, async () => {
+ await store.getListServiceProvider({
+    pageIndex: pageData.value.pageIndex,
+    pageSize: pageData.value.pageSize,
+  });
+})
+
 </script>

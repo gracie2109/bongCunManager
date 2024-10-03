@@ -16,6 +16,7 @@
       />
     </SearchWrap>
     <div id="showTable" class="relative bg-white">
+      {{ props.pageData }}
       <div class="bg-white space-y-6 relative">
         <Table>
           <TableHeader class="p-4 bg-primary">
@@ -60,13 +61,14 @@
           </TableBody>
         </Table>
       </div>
-      <div class="h-20 bg-white pl-5 bottom-0 max-w-[95vw] w-full fixed">
-        <div class=" h-full grid justify-start">
+      <div class="h-12 bg-white pl-5 bottom-0 max-w-[90vw] w-full fixed">
+        <div class="w-full h-full grid place-items-center">
           <CustomPagination
             :total-record="pageCount"
             :page-current="pageData.pageIndex"
             :page-size="pageData.pageSize"
             @onChange="(vl) => handleChangePage(vl)"
+            @update-page-size="(vl: number) => $emit('updatePageSize', vl)"
           />
         </div>
       </div>
@@ -124,7 +126,7 @@ const props = defineProps<{
     name: string;
     isRemeber: boolean;
   };
-  headerAdvanced: IHeaderAdvanced[]
+  headerAdvanced: IHeaderAdvanced[];
 }>();
 
 const emits = defineEmits([
@@ -132,6 +134,7 @@ const emits = defineEmits([
   "onReset",
   "clearFilter",
   "setOpen",
+  "updatePageSize",
 ]);
 
 const table = useVueTable({
