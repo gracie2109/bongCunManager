@@ -24,6 +24,17 @@
         <h1 class="font-semibold flex items-center gap-2 text-muted-foreground">
           {{ $t("pageMeta.settingPetServicePrice") }}
         </h1>
+        <div v-if="petInfo" class="flex items-center">
+          <ChevronRight class="size-4 mr-2" />
+          <div class="flex items-center h-full gap-2">
+            <Icon :icon="petInfo.icon" />
+            <h1
+              class="font-semibold flex items-center gap-2 text-muted-foreground"
+            >
+              {{ petInfo.name }}
+            </h1>
+          </div>
+        </div>
       </div>
     </div>
   </Header>
@@ -31,16 +42,18 @@
 
 <script setup lang="ts">
 import { COLLECTION } from "@/lib/constants";
-import { getTotalRecord } from "@/lib/firebaseFn";
+import { getDetailData, getTotalRecord } from "@/lib/firebaseFn";
 import router from "@/router";
 import { Header } from "@/views/admin/components";
 import clsx from "clsx";
 import { PawPrint, ChevronRight } from "lucide-vue-next";
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+import { Icon } from "@iconify/vue";
+
 const petRecords = ref(0);
 const route = useRoute();
-
+const petInfo = ref();
 const isShowAllPets = computed(() => {
   if (route.name === "pets") return true;
   else return false;
@@ -48,6 +61,19 @@ const isShowAllPets = computed(() => {
 
 onMounted(async () => {
   const data = await getTotalRecord(COLLECTION.PETS);
+
   petRecords.value = data;
+});
+onMounted(async () => {
+  if (!isShowAllPets.value) {
+    const pet = await getDetailData(
+      COLLECTION.PETS,
+      "__name__",
+      String(route.params.petId)
+    );
+    if (!pet.empty) {
+      petInfo.value = pet.docs[0].data();
+    }
+  }
 });
 </script>
