@@ -101,7 +101,7 @@ const router = createRouter({
               },
             },
             {
-              path: "setting-pet-service-price",
+              path: ":petId/setting-pet-service-price",
               name: "settingPetServicePrice",
               component: SettingPetServicePrice,
               meta: {

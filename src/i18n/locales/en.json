@@ -33,6 +33,7 @@
     "forgotPw": "Forgot Password",
     "suppliers":"Suppliers",
     "pets": "Pets",
+    "services": "Service",
     "settingPetServicePrice":"Setting Pet's service price"
 
   },
@@ -56,7 +57,8 @@
       "desc": "More information about the product supplier for you"
     },
     "pets":{
-      "placeholder": "Select the representative icon"
+      "placeholder": "Select the representative icon",
+      "dontHasService":"You do not have any services yet!"
     }
   }
 }

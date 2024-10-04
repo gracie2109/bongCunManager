@@ -2,7 +2,7 @@
     <ActionRow :type="type" :row="props.row" @click="$emit('click')">
         <Tooltip>
             <TooltipTrigger as-child>
-                <Button variant="ghost" @click="$router.push({ name: 'settingPetServicePrice' })">
+                <Button variant="ghost" @click="$router.push({ name: 'settingPetServicePrice', params: { petId: row.original.id } })">
                     <Settings class="size-6 text-primary" />
                 </Button>
             </TooltipTrigger>
@@ -10,11 +10,6 @@
                 {{ $t('pageMeta.settingPetServicePrice') }}
             </TooltipContent>
         </Tooltip>
-
-
-
-
-
     </ActionRow>
 </template>
 

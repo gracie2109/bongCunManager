@@ -32,6 +32,8 @@
     "forgotPw": "Quên mật khẩu",
     "suppliers":"Nhà cung cấp",
     "pets": "Thú cưng",
+    "services": "Dịch vụ",
+
     "settingPetServicePrice":"Quản lý giá dịch vụ thú cưng"
   },
   "validation": {
@@ -54,7 +56,9 @@
       "desc": "Thêm thông tin về nhà cung cấp sản phẩm cho bạn"
     },
     "pets":{
-      "placeholder": "Chọn biểu tượng đại diện"
+      "placeholder": "Chọn biểu tượng đại diện",
+      "dontHasService":"Bạn chưa có bất kỳ dịch vụ nào!"
+
     }
   }
 }

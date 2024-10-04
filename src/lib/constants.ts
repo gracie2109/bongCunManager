@@ -8,7 +8,8 @@ export const COLLECTION = {
   PRODUCTS: "products",
   USERS: "users",
   PROVIDERS: "service-provider",
-  PETS: "pets"
+  PETS: "pets",
+  PETS_SERVICES: "pet-services"
 };
 
 export const DEFINE_PRODUCT_CATEGORIES = [
