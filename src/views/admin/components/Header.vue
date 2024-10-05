@@ -10,9 +10,9 @@ const expand = inject(PROVIDER_KEYS.IS_COLLAPSE)
 </script>
 
 <template>
-    <div id="header" class="h-[53px] border fixed w-full bg-white  z-50">
+    <div id="header" class="h-[53px] border fixed  bg-white  z-50 w-[96.5vw]">
         <div class="h-full mx-auto flex items-center px-5">
-            <div class="flex justify-between w-full " :class="{ 'w-[80%]': !expand, 'w-[97%]': expand }">
+            <div class="flex justify-between " :class="{ 'w-[80%]': !expand, 'w-[97%]': expand }">
                 <div>
                     <slot />
                 </div>

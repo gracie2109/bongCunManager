@@ -1,24 +1,20 @@
 <template>
-  <Header>
-    <h1 class="font-semibold flex items-center gap-2">
-      <Container class="size-4 text-primary" />
-      {{ $t("pageMeta.suppliers") }} ({{ pageCount }})
-    </h1>
-  </Header>
+  <PageTitle />
+
   <ContentWrap>
     <DataTable
       :headerAdvanced="headerAdvanced"
-      :data="providers"
+      :data="petServices"
       :columns="columns"
       :page-count="pageCount"
       :page-data="pageData"
-      :add-new-handle="{
-        content: null,
-        type: 'function',
-      }"
       :saveColumnVisible="{
-        name: 'service_providers',
+        name: 'petServices',
         isRemeber: false,
+      }"
+      :add-new-handle="{
+        type: 'link',
+        content: 'petServiceCreate'
       }"
       @clear-filter="clearFilter"
       @on-reset="onReset"
@@ -26,13 +22,10 @@
       @set-open="setOpen"
       @handle-page-change="loadDataForPage"
       @update-page-size="updatePageSize"
-    />
+    >
+    </DataTable>
   </ContentWrap>
-  <ServiceForm
-    @change-open="() => (open = !open)"
-    :open="open && !selectedItem"
-    :rowEditting="rowEditSelected"
-  />
+
   <DialogConfirm
     @change-open="
       () => {
@@ -53,25 +46,24 @@
 </template>
 
 <script lang="ts" setup>
-import { Header, ContentWrap } from "@/views/admin/components";
-import ServiceForm from "./components/Form.vue";
+import { ContentWrap } from "@/views/admin/components";
+
 import { h, onMounted, reactive, ref, watchEffect } from "vue";
-import { useServiceProvider } from "@/stores";
+import { usePetServices } from "@/stores";
 import { formatDateTime } from "@/lib/utils";
 import { type IHeaderAdvanced, type T_ROW_FUNCTION } from "@/types";
-
 import type { ColumnDef, PaginationState } from "@tanstack/vue-table";
 
 import { storeToRefs } from "pinia";
 import { DialogConfirm, ActionRow, DataTable } from "@/components/common";
-import { Checkbox } from "@/components/ui/checkbox";
 import DataTableColumnHeader from "@/components/common/DataTable/DataTableColumnHeader.vue";
 import { HEADER_ADVANCE_FUNCTION, INITIAL_PAGE_INDEX } from "@/lib/constants";
-import { Container } from "lucide-vue-next";
 import { watch } from "vue";
+import RowFunction from "../components/RowFunction.vue";
+import PageTitle from "../PageTitle.vue";
 
-const store = useServiceProvider();
-const { providers, pageCount } = storeToRefs(store);
+const store = usePetServices();
+const { petServices, pageCount } = storeToRefs(store);
 const selectedItem = ref();
 
 const mode = ref();
@@ -79,7 +71,7 @@ const rowEditSelected = ref();
 
 const pageData = ref<PaginationState>({
   pageIndex: INITIAL_PAGE_INDEX,
-  pageSize: 5,
+  pageSize: 500,
 });
 
 const columns: ColumnDef<any>[] = reactive([
@@ -117,18 +109,7 @@ const columns: ColumnDef<any>[] = reactive([
       );
     },
   },
-  {
-    accessorKey: "phone",
-    header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "Phone Number" }),
-    cell: ({ row }) => {
-      return h(
-        "span",
-        { class: "max-w-[500px] truncate font-medium" },
-        row.getValue("phone")
-      );
-    },
-  },
+
   {
     accessorKey: "createdAt",
     header: ({ column }) =>
@@ -147,24 +128,12 @@ const columns: ColumnDef<any>[] = reactive([
     header: ({ column }) =>
       h(DataTableColumnHeader, { column, title: "Function" }),
     cell: ({ row }) =>
-      h(ActionRow, {
+      h(RowFunction, {
         row,
-        type: type,
         onClick: (item: any) => {
           handleActionRow(item);
         },
       }),
-  },
-]);
-
-const type = reactive<T_ROW_FUNCTION[]>([
-  {
-    id: "DELETE",
-    isShow: true,
-  },
-  {
-    id: "EDIT",
-    isShow: true,
   },
 ]);
 
@@ -200,7 +169,7 @@ function deleteItem(val: any) {
   mode.value = "delete";
 }
 async function handleDelete() {
-  await store.deleteServiceProvider(selectedItem.value.id);
+  await store.deletePetService(selectedItem.value.id);
   setOpen();
   selectedItem.value = null;
 }
@@ -220,14 +189,14 @@ function updatePageSize(newPs: number) {
 }
 
 const loadDataForPage = async (page: number) => {
-  await store.getListServiceProvider({
+  await store.getListPetService({
     pageIndex: page,
     pageSize: pageData.value.pageSize,
   });
 };
 
 onMounted(async () => {
-  await store.getListServiceProvider({
+  await store.getListPetService({
     pageIndex: pageData.value.pageIndex,
     pageSize: pageData.value.pageSize,
   });
@@ -236,7 +205,7 @@ onMounted(async () => {
 watch(
   () => pageData.value.pageSize,
   async () => {
-    await store.getListServiceProvider({
+    await store.getListPetService({
       pageIndex: pageData.value.pageIndex,
       pageSize: pageData.value.pageSize,
     });

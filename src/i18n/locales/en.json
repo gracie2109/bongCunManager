@@ -34,8 +34,8 @@
     "suppliers":"Suppliers",
     "pets": "Pets",
     "services": "Service",
-    "settingPetServicePrice":"Setting Pet's service price"
-
+    "settingPetServicePrice":"Setting Pet's service price",
+    "petService": "Pet's services"
   },
   "validation": {
     "min": "{name} must be at least {min} characters"

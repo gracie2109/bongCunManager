@@ -1,5 +1,13 @@
-import { getLocalStorage, getCurrentDateTime } from "@/lib/utils";
+import { getLocalStorage, getCurrentDateTime, valueUpdater } from "@/lib/utils";
 import type { LinkProp } from "@/types";
+import {
+  getCoreRowModel,
+  getExpandedRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useVueTable,
+} from "@tanstack/vue-table";
 
 export const USER_LOCALE = JSON.parse(getLocalStorage("user-locale"));
 export const CURRENT_DATE = getCurrentDateTime();
@@ -9,7 +17,7 @@ export const COLLECTION = {
   USERS: "users",
   PROVIDERS: "service-provider",
   PETS: "pets",
-  PETS_SERVICES: "pet-services"
+  PETS_SERVICES: "pet-services",
 };
 
 export const DEFINE_PRODUCT_CATEGORIES = [
@@ -72,7 +80,7 @@ export const GLOBAL_FUNCTION_TYPE = {
 export const INITIAL_PAGE_INDEX = 1;
 export const INITIAL_PAGE_SIZE = 5;
 
-export const PAGE_SIZES = [2, 5, 10, 20, 30, 40, 50];
+export const PAGE_SIZES = [5, 25, 50,100,200,500];
 
 export const DEFINE_PET_ICONS: { [key: string]: string } = {
   bird: "lucide:bird",

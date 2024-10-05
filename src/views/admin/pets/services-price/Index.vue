@@ -3,7 +3,7 @@
 
   <ContentWrap>
     <div
-      class="fixed top-[3.75rem] h-screen w-full"
+      class="fixed top-[3.75rem] h-screen w-[92vw]"
     >
       <div class="w-full h-full space-y-6 ml-2">
         <div class="w-full h-auto flex flex-wrap pb-5  bg-white  border border-dashed">

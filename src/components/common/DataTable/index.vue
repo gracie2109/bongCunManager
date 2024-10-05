@@ -1,15 +1,12 @@
 <template>
-  <div class="w-full">
+  <div class="w-full space-y-3">
     <SearchWrap>
       <SearchView
         placeholder="Search by store"
         @reset="() => $emit('onReset')"
         @clear-filter="() => $emit('clearFilter')"
         @setOpen="() => $emit('setOpen')"
-        :addNew="{
-          type: 'function',
-          content: null,
-        }"
+        :addNew="props.addNewHandle"
         :table="table"
         :saveColumnVisible="props.saveColumnVisible"
         :headerAdvanced="props.headerAdvanced"
@@ -115,7 +112,10 @@ const sorting = ref<SortingState>([]);
 const columnFilters = ref<ColumnFiltersState>([]);
 const rowSelection = ref({});
 const columnVisibility = ref<VisibilityState>({});
-
+type TAddNewHandle = {
+  type: "function" | "link";
+  content: null | string;
+};
 const props = defineProps<{
   data: any[];
   columns: ColumnDef<any>[];
@@ -126,6 +126,7 @@ const props = defineProps<{
     isRemeber: boolean;
   };
   headerAdvanced: IHeaderAdvanced[];
+  addNewHandle: TAddNewHandle;
 }>();
 
 const emits = defineEmits([

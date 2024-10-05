@@ -1,6 +1,20 @@
 <template>
   <PageTitle />
+
   <ContentWrap>
+    <div
+      class="w-[250px] shadow-lg border-b-primary bg-white relative -top-3 h-12"
+    >
+      <div
+        class="h-full w-full flex items-center justify-center gap-3 cursor-pointer"
+      >
+        <div @click="$router.push({ name: 'petService' })">
+          <Icon icon="carbon:settings-services" class="size-6" />
+        </div>
+        <Icon icon="iconoir:weight" class="size-6 fill-none" />
+      </div>
+    </div>
+
     <DataTable
       :headerAdvanced="headerAdvanced"
       :data="pets"
@@ -11,13 +25,18 @@
         name: 'pets',
         isRemeber: false,
       }"
+      :add-new-handle="{
+        content: null,
+        type: 'function'
+      }"
       @clear-filter="clearFilter"
       @on-reset="onReset"
       @clearFilter="clearFilter"
       @set-open="setOpen"
       @handle-page-change="loadDataForPage"
       @update-page-size="updatePageSize"
-    />
+    >
+    </DataTable>
   </ContentWrap>
   <ServiceForm
     @change-open="() => (open = !open)"

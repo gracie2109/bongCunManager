@@ -19,8 +19,8 @@
     "addNew": "Thêm mới {field}",
     "name": "Tên",
     "description": "Mô tả",
-    "phone":"Số điện thoại",
-    "settingView":"Cài đặt hiển thị cột",
+    "phone": "Số điện thoại",
+    "settingView": "Cài đặt hiển thị cột",
     "icon": "Biểu tượng",
     "row_per_page": "Hàng trên mỗi trang"
   },
@@ -30,11 +30,11 @@
     "login": "Đăng nhập",
     "register": "Tạo tài khoản",
     "forgotPw": "Quên mật khẩu",
-    "suppliers":"Nhà cung cấp",
+    "suppliers": "Nhà cung cấp",
     "pets": "Thú cưng",
     "services": "Dịch vụ",
-
-    "settingPetServicePrice":"Quản lý giá dịch vụ thú cưng"
+    "settingPetServicePrice": "Quản lý giá dịch vụ thú cưng",
+    "petService": "Quản lý các dịch vụ của thú cưng"
   },
   "validation": {
     "min": "{name} cần tối thiểu {min} ký tự"
@@ -52,13 +52,12 @@
       "createAcc": "Tạo tài khoản",
       "prefForgotPw": "Nhập email của bạn để nhận mail lấy lại mật khẩu"
     },
-    "serviceProvider":{
+    "serviceProvider": {
       "desc": "Thêm thông tin về nhà cung cấp sản phẩm cho bạn"
     },
-    "pets":{
+    "pets": {
       "placeholder": "Chọn biểu tượng đại diện",
-      "dontHasService":"Bạn chưa có bất kỳ dịch vụ nào!"
-
+      "dontHasService": "Bạn chưa có bất kỳ dịch vụ nào!"
     }
   }
 }

@@ -19,7 +19,10 @@
         {{ $t("pageMeta.pets") }} ({{ petRecords }})
       </h1>
 
-      <div v-if="!isShowAllPets" class="flex items-center">
+      <div
+        v-if="!isShowAllPets && $route.name === 'settingPetServicePrice'"
+        class="flex items-center"
+      >
         <ChevronRight class="size-4 mr-2" />
         <h1 class="font-semibold flex items-center gap-2 text-muted-foreground">
           {{ $t("pageMeta.settingPetServicePrice") }}
@@ -35,6 +38,16 @@
             </h1>
           </div>
         </div>
+      </div>
+
+      <div
+        v-if="!isShowAllPets && $route.name === 'petService'"
+        class="flex items-center"
+      >
+        <ChevronRight class="size-4 mr-2" />
+        <h1 class="font-semibold flex items-center gap-2 text-muted-foreground">
+          {{ $t("pageMeta.petService") }}
+        </h1>
       </div>
     </div>
   </Header>
@@ -61,7 +74,6 @@ const isShowAllPets = computed(() => {
 
 onMounted(async () => {
   const data = await getTotalRecord(COLLECTION.PETS);
-
   petRecords.value = data;
 });
 onMounted(async () => {

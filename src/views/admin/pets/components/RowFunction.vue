@@ -1,42 +1,100 @@
 <template>
-    <ActionRow :type="type" :row="props.row" @click="$emit('click')">
-        <Tooltip>
-            <TooltipTrigger as-child>
-                <Button variant="ghost" @click="$router.push({ name: 'settingPetServicePrice', params: { petId: row.original.id } })">
-                    <Settings class="size-6 text-primary" />
-                </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-                {{ $t('pageMeta.settingPetServicePrice') }}
-            </TooltipContent>
-        </Tooltip>
-    </ActionRow>
+  <ActionRow :type="type" :row="props.row" @click="$emit('click')">
+    <Tooltip v-if="$route.name === 'pets'">
+      <TooltipTrigger as-child>
+        <Button
+          variant="ghost"
+          @click="
+            $router.push({
+              name: 'settingPetServicePrice',
+              params: { petId: row.original.id },
+            })
+          "
+        >
+          <Settings class="size-6 text-primary" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        {{ $t("pageMeta.settingPetServicePrice") }}
+      </TooltipContent>
+    </Tooltip>
+
+    <DropdownMenu v-if="$route.name === 'petService'">
+      <DropdownMenuTrigger>
+        <EllipsisVertical class="text-primary-subb" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>Setting price</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem v-for="(i, ii) in pets" :key="ii">
+          <div
+            class="flex items-center gap-3 hover:text-primary"
+            @click="
+              $router.push({
+                name: 'settingPetServicePrice',
+                params: { petId: row.original.id },
+              })
+            "
+          >
+            <Icon :icon="i.icon" />
+            <span class="font-bold capitalize cursor-pointer">{{
+              i.name
+            }}</span>
+          </div>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </ActionRow>
 </template>
 
 <script lang="ts" setup>
 import { ActionRow } from "@/components/common";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 
 import type { T_ROW_FUNCTION } from "@/types";
 import type { Row } from "@tanstack/vue-table";
-import { reactive } from "vue";
-import { Eye } from "lucide-vue-next";
-import { Settings } from 'lucide-vue-next';
-
+import { onMounted, reactive } from "vue";
+import { EllipsisVertical, Settings } from "lucide-vue-next";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useRoute } from "vue-router";
+import { usePets } from "@/stores";
+import { storeToRefs } from "pinia";
+import { Icon } from "@iconify/vue";
 const props = defineProps<{
-    row: Row<any>;
+  row: Row<any>;
 }>();
 const emits = defineEmits(["click"]);
+const petStore = usePets();
+const { pets } = storeToRefs(petStore);
 
 const type = reactive<T_ROW_FUNCTION[]>([
-    {
-        id: "DELETE",
-        isShow: true,
-    },
-    {
-        id: "EDIT",
-        isShow: true,
-    },
+  {
+    id: "DELETE",
+    isShow: true,
+  },
+  {
+    id: "EDIT",
+    isShow: true,
+  },
 ]);
+
+const route = useRoute();
+
+onMounted(async () => {
+  if (route.name === "petService") {
+    await petStore.getListServiceProvider({ pageIndex: 1, pageSize: 500 });
+  }
+});
 </script>
