@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-stretch gap-3">
+  <div class="flex items-stretch">
     <TooltipProvider>
       <template v-for="(item, index) in props.type" :key="index">
         <Tooltip v-if="item.isShow">
@@ -13,6 +13,7 @@
           </TooltipContent>
         </Tooltip>
       </template>
+      <slot></slot>
     </TooltipProvider>
   </div>
 </template>

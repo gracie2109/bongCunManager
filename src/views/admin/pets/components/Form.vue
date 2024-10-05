@@ -23,13 +23,12 @@
                         <FormItem>
                             <FormLabel>{{ $t("common.icon") }}</FormLabel> -->
                     <div>
-                        <label>{{ $t("common.icon") }}</label>
-                        <multiselect v-model="iconValue" placeholder="Fav No Man’s Sky path" label="label"
+                        <Label class="font-bold mb-2">{{ $t("common.icon") }}</Label>
+                        <multiselect v-model="iconValue" :placeholder="$t('pageFields.pets.placeholder')" label="label"
                             track-by="label" :options="options" :option-height="104" :show-labels="false"
                             @update:modelValue="(value:any) => {
                                form.setFieldValue('icon', value.value)
                             }"
-                            
                             >
                             <template #singleLabel="props">
                                 <div class="flex items-center gap-3">
@@ -106,6 +105,7 @@ import { DEFINE_PET_ICONS } from "@/lib/constants";
 import { Icon } from "@iconify/vue";
 import { valueUpdater } from "@/lib/utils";
 import type { z } from "zod";
+import Label from "@/components/ui/label/Label.vue";
 
 const props = withDefaults(defineProps<{ open: boolean; rowEditting: any }>(), {
     open: false,

@@ -5,8 +5,8 @@ import { v7 as uuidv7 } from 'uuid';
 import { COLLECTION } from "@/lib/constants"
 import { sendMessageToast } from "@/lib/utils";
 
-export const usePets = defineStore('pets', () => {
-    const pets: Ref<any[]> = ref([]);
+export const usePetServices = defineStore('petServices', () => {
+    const petServices: Ref<any[]> = ref([]);
     const loading = ref(false);
     const unsubscribe = ref<null | (() => void)>(null);
     const pageCount = ref();
@@ -14,12 +14,12 @@ export const usePets = defineStore('pets', () => {
     const lastVisibleDocsCache = ref<Record<number, any>>({});
 
 
-    async function createNewPet(payload: any) {
+    async function createNewPetService(payload: any) {
         try {
             loading.value = true;
-            const notExist = await checkItemExist(COLLECTION.PETS, 'name', payload.name);
+            const notExist = await checkItemExist(COLLECTION.PETS_SERVICES, 'name', payload.name);
             if (notExist) {
-                const totalRecord = await createCollection(COLLECTION.PETS, { ...payload, uid: uuidv7() });
+                const totalRecord = await createCollection(COLLECTION.PETS_SERVICES, { ...payload, uid: uuidv7() });
                 pageCount.value = totalRecord
                 sendMessageToast('success', 'create', 'success')
             }
@@ -36,7 +36,7 @@ export const usePets = defineStore('pets', () => {
         return stt;
     };
 
-    async function getListServiceProvider({ pageIndex, pageSize }: { pageIndex: number, pageSize: number }) {
+    async function getListPetService({ pageIndex, pageSize }: { pageIndex: number, pageSize: number }) {
         loading.value = true;
         try {
             let lastVisibleDocForPage = null;
@@ -46,9 +46,9 @@ export const usePets = defineStore('pets', () => {
             }
 
             await getCollectionList(
-                COLLECTION.PETS,
+                COLLECTION.PETS_SERVICES,
                 ({ data, totalRecord, lastVisibleDoc: lastDoc }) => {
-                    pets.value = data?.map((i, j) => {
+                    petServices.value = data?.map((i, j) => {
                         return {
                             ...i,
                             index: getIndex({dataPage:{page: pageIndex, page_size:pageSize}, index: j})
@@ -73,12 +73,12 @@ export const usePets = defineStore('pets', () => {
     }
 
 
-    async function deleteServiceProvider(id: string) {
+    async function deletePetService(id: string) {
         try {
             loading.value = true;
-            const exist = await checkItemNotExist(COLLECTION.PETS, '__name__', id);
+            const exist = await checkItemNotExist(COLLECTION.PETS_SERVICES, '__name__', id);
             if (exist) {
-                 const totalRecord = await deleteItem(COLLECTION.PETS, id);
+                 const totalRecord = await deleteItem(COLLECTION.PETS_SERVICES, id);
                  pageCount.value = totalRecord
                 sendMessageToast('success', 'delete', 'success');
             }
@@ -91,11 +91,14 @@ export const usePets = defineStore('pets', () => {
         }
     }
 
+
+
+    
     onUnmounted(() => {
         if (unsubscribe.value) {
             unsubscribe.value();
         }
     });
 
-    return { pets, loading, pageCount, lastVisibleDoc, createNewPet, getListServiceProvider, deleteServiceProvider }
+    return { petServices, loading, pageCount, lastVisibleDoc, createNewPetService, getListPetService, deletePetService }
 })

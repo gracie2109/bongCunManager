@@ -1,21 +1,33 @@
 <template>
-  <Header>
-    <h1 class="font-semibold flex items-center gap-2">
-      <PawPrint class="size-4 text-primary" />
-      {{ $t('pageMeta.pets') }} ({{ pageCount }})
-    </h1>
-  </Header>
+  <PageTitle />
+
   <ContentWrap>
+    <div
+      class="w-[250px] shadow-lg border-b-primary bg-white relative -top-3 h-12"
+    >
+      <div
+        class="h-full w-full flex items-center justify-center gap-3 cursor-pointer"
+      >
+        <div @click="$router.push({ name: 'petService' })">
+          <Icon icon="carbon:settings-services" class="size-6" />
+        </div>
+        <Icon icon="iconoir:weight" class="size-6 fill-none" />
+      </div>
+    </div>
+
     <DataTable
       :headerAdvanced="headerAdvanced"
       :data="pets"
       :columns="columns"
       :page-count="pageCount"
       :page-data="pageData"
-    
       :saveColumnVisible="{
         name: 'pets',
         isRemeber: false,
+      }"
+      :add-new-handle="{
+        content: null,
+        type: 'function'
       }"
       @clear-filter="clearFilter"
       @on-reset="onReset"
@@ -23,7 +35,8 @@
       @set-open="setOpen"
       @handle-page-change="loadDataForPage"
       @update-page-size="updatePageSize"
-    />
+    >
+    </DataTable>
   </ContentWrap>
   <ServiceForm
     @change-open="() => (open = !open)"
@@ -47,10 +60,6 @@
     "
     @handleOk="handleDelete"
   />
-
-
-
-
 </template>
 
 <script lang="ts" setup>
@@ -65,12 +74,13 @@ import type { ColumnDef, PaginationState } from "@tanstack/vue-table";
 
 import { storeToRefs } from "pinia";
 import { DialogConfirm, ActionRow, DataTable } from "@/components/common";
-import { Checkbox } from "@/components/ui/checkbox";
 import DataTableColumnHeader from "@/components/common/DataTable/DataTableColumnHeader.vue";
 import { HEADER_ADVANCE_FUNCTION, INITIAL_PAGE_INDEX } from "@/lib/constants";
-import { Container, PawPrint } from "lucide-vue-next";
+import { PawPrint } from "lucide-vue-next";
 import { watch } from "vue";
 import { Icon } from "@iconify/vue";
+import RowFunction from "./components/RowFunction.vue";
+import PageTitle from "./PageTitle.vue";
 
 const store = usePets();
 const { pets, pageCount } = storeToRefs(store);
@@ -121,12 +131,11 @@ const columns: ColumnDef<any>[] = reactive([
   },
   {
     accessorKey: "icon",
-    header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "Icon" }),
-      cell: ({ row }) =>
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Icon" }),
+    cell: ({ row }) =>
       h(Icon, {
         row,
-        icon: (row.getValue('icon') as string)
+        icon: row.getValue("icon") as string,
       }),
   },
   {
@@ -147,9 +156,8 @@ const columns: ColumnDef<any>[] = reactive([
     header: ({ column }) =>
       h(DataTableColumnHeader, { column, title: "Function" }),
     cell: ({ row }) =>
-      h(ActionRow, {
+      h(RowFunction, {
         row,
-        type: type,
         onClick: (item: any) => {
           handleActionRow(item);
         },
@@ -157,22 +165,10 @@ const columns: ColumnDef<any>[] = reactive([
   },
 ]);
 
-const type = reactive<T_ROW_FUNCTION[]>([
-  {
-    id: "DELETE",
-    isShow: true,
-  },
-  {
-    id: "EDIT",
-    isShow: true,
-  },
-]);
-
 const headerAdvanced = reactive<IHeaderAdvanced[]>([
   HEADER_ADVANCE_FUNCTION.ADD_NEW,
   HEADER_ADVANCE_FUNCTION.SETTING_COLUMN,
-])
-
+]);
 
 const open = ref(false);
 
@@ -216,9 +212,8 @@ function setOpen() {
   open.value = !open.value;
 }
 
-
-function updatePageSize (newPs:number) {
-  pageData.value.pageSize = +newPs
+function updatePageSize(newPs: number) {
+  pageData.value.pageSize = +newPs;
 }
 
 const loadDataForPage = async (page: number) => {
@@ -235,11 +230,13 @@ onMounted(async () => {
   });
 });
 
-watch(() => pageData.value.pageSize, async () => {
- await store.getListServiceProvider({
-    pageIndex: pageData.value.pageIndex,
-    pageSize: pageData.value.pageSize,
-  });
-})
-
+watch(
+  () => pageData.value.pageSize,
+  async () => {
+    await store.getListServiceProvider({
+      pageIndex: pageData.value.pageIndex,
+      pageSize: pageData.value.pageSize,
+    });
+  }
+);
 </script>

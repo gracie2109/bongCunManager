@@ -1,7 +1,7 @@
 <template>
   <div class="pagination_wrap w-full flex justify-between items-center">
     <div class="left_show_selected flex items-center gap-3">
-      <span class="inline-block"> Rows per page </span>
+      <span class="inline-block text-sm font-semibold">{{ $t('common.row_per_page') }}</span>
       <Select
         :model-value="`${props.pageSize}`"
         @update:model-value="(vl) => $emit('updatePageSize', Number(vl))"
