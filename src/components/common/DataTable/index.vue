@@ -1,7 +1,8 @@
 <template>
   <div class="w-full space-y-3">
-    <SearchWrap>
+    <SearchWrap v-if="props.showSearch || props.showSearch === undefined">
       <SearchView
+      v-if="props.addNewHandle && props.saveColumnVisible && props.headerAdvanced"
         placeholder="Search by store"
         @reset="() => $emit('onReset')"
         @clear-filter="() => $emit('clearFilter')"
@@ -57,12 +58,13 @@
           </TableBody>
         </Table>
       </div>
-      <div class="h-12 bg-white pl-5 bottom-0 max-w-[90vw] w-full fixed">
+      <div class="h-12 bg-white pl-5 bottom-0 max-w-[90vw] w-full fixed" v-if="props.pageCount && props.pageData">
         <div class="w-full h-full grid place-items-center">
           <CustomPagination
-            :total-record="pageCount"
-            :page-current="pageData.pageIndex"
-            :page-size="pageData.pageSize"
+  
+            :total-record="pageCount || 0"
+            :page-current="props.pageData ? props.pageData.pageIndex : 1"
+            :page-size="props.pageData.pageSize"
             @onChange="(vl) => handleChangePage(vl)"
             @update-page-size="(vl: number) => $emit('updatePageSize', vl)"
           />
@@ -107,6 +109,7 @@ import SearchWrap from "@/views/admin/components/SearchWrap.vue";
 import SearchView from "../SearchView.vue";
 import { LOCAL_STORAGE_KEY } from "@/lib/constants";
 import { type IHeaderAdvanced } from "@/types";
+import PaginationEllipsis from "@/components/ui/pagination/PaginationEllipsis.vue";
 
 const sorting = ref<SortingState>([]);
 const columnFilters = ref<ColumnFiltersState>([]);
@@ -119,14 +122,15 @@ type TAddNewHandle = {
 const props = defineProps<{
   data: any[];
   columns: ColumnDef<any>[];
-  pageCount: number;
-  pageData: PaginationState;
-  saveColumnVisible: {
+  pageCount?: number;
+  pageData?: PaginationState;
+  saveColumnVisible?: {
     name: string;
     isRemeber: boolean;
   };
-  headerAdvanced: IHeaderAdvanced[];
-  addNewHandle: TAddNewHandle;
+  headerAdvanced?: IHeaderAdvanced[];
+  addNewHandle?: TAddNewHandle;
+  showSearch?: boolean
 }>();
 
 const emits = defineEmits([
@@ -174,8 +178,11 @@ const table = useVueTable({
 
 async function handleChangePage(vl: number) {
   table.setPageIndex(vl);
-  props.pageData.pageIndex = vl;
-  emits("handlePageChange", vl);
+  if(props.pageData) {
+     props.pageData.pageIndex = vl;
+     emits("handlePageChange", vl);
+  }
+  
 }
 
 const allColumns = computed(() => {
@@ -185,7 +192,7 @@ const allColumns = computed(() => {
 });
 
 function getColumnSettingLocal() {
-  if (props.saveColumnVisible.isRemeber) {
+  if (props.saveColumnVisible && props.saveColumnVisible.isRemeber) {
     const resLocal = localStorage.getItem(LOCAL_STORAGE_KEY.VISIBLE_COLUMN);
     const parseData = resLocal ? JSON.parse(resLocal) : null;
     if (parseData) {
@@ -220,11 +227,11 @@ function getColumnSettingLocal() {
 }
 onMounted(async () => {
   getColumnSettingLocal();
-  table.setPageSize(Number(props.pageData.pageSize));
+  table.setPageSize(Number(props.pageData && props.pageData.pageSize));
 });
 
 watchEffect(() => {
-  if (props.saveColumnVisible.isRemeber) {
+  if (props.saveColumnVisible && props.saveColumnVisible.isRemeber) {
     if (Object.keys(columnVisibility.value).length > 0) {
       table.setColumnVisibility(columnVisibility.value);
     }

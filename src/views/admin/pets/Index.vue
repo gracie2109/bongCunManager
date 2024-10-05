@@ -11,7 +11,22 @@
         <div @click="$router.push({ name: 'petService' })">
           <Icon icon="carbon:settings-services" class="size-6" />
         </div>
-        <Icon icon="iconoir:weight" class="size-6 fill-none" />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger as-child>
+            <Icon icon="iconoir:weight" class="size-6 fill-none" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel class="font-bold">
+              {{ $t("common.settingView") }}</DropdownMenuLabel
+            >
+            <DropdownMenuSeparator />
+            <DropdownMenuItem v-for="tag in contents" :key="tag.id">
+              <!-- @ts-ignore -->
+              {{ (tag.lang as any)[String(locale)] }}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
 
@@ -27,7 +42,7 @@
       }"
       :add-new-handle="{
         content: null,
-        type: 'function'
+        type: 'function',
       }"
       @clear-filter="clearFilter"
       @on-reset="onReset"
@@ -69,26 +84,35 @@ import { h, onMounted, reactive, ref, watchEffect } from "vue";
 import { usePets } from "@/stores";
 import { formatDateTime } from "@/lib/utils";
 import { type IHeaderAdvanced, type T_ROW_FUNCTION } from "@/types";
-
+import { contents } from "@/data/pet-weights.json";
 import type { ColumnDef, PaginationState } from "@tanstack/vue-table";
 
 import { storeToRefs } from "pinia";
-import { DialogConfirm, ActionRow, DataTable } from "@/components/common";
+import { DialogConfirm, DataTable } from "@/components/common";
 import DataTableColumnHeader from "@/components/common/DataTable/DataTableColumnHeader.vue";
 import { HEADER_ADVANCE_FUNCTION, INITIAL_PAGE_INDEX } from "@/lib/constants";
-import { PawPrint } from "lucide-vue-next";
 import { watch } from "vue";
 import { Icon } from "@iconify/vue";
 import RowFunction from "./components/RowFunction.vue";
 import PageTitle from "./PageTitle.vue";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { useI18n } from "vue-i18n";
 
 const store = usePets();
 const { pets, pageCount } = storeToRefs(store);
 const selectedItem = ref();
+const { locale } = useI18n();
 
 const mode = ref();
 const rowEditSelected = ref();
-
 const pageData = ref<PaginationState>({
   pageIndex: INITIAL_PAGE_INDEX,
   pageSize: 5,
