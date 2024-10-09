@@ -2,7 +2,9 @@
   <div class="w-full space-y-3">
     <SearchWrap v-if="props.showSearch || props.showSearch === undefined">
       <SearchView
-      v-if="props.addNewHandle && props.saveColumnVisible && props.headerAdvanced"
+        v-if="
+          props.addNewHandle && props.saveColumnVisible && props.headerAdvanced
+        "
         placeholder="Search by store"
         @reset="() => $emit('onReset')"
         @clear-filter="() => $emit('clearFilter')"
@@ -13,6 +15,7 @@
         :headerAdvanced="props.headerAdvanced"
       />
     </SearchWrap>
+  
     <div id="showTable" class="relative bg-white">
       <div class="bg-white space-y-6 relative">
         <Table>
@@ -58,10 +61,12 @@
           </TableBody>
         </Table>
       </div>
-      <div class="h-12 bg-white pl-5 bottom-0 max-w-[90vw] w-full fixed" v-if="props.pageCount && props.pageData">
+      <div
+        class="h-12 bg-white pl-5 bottom-0 max-w-[90vw] w-full fixed"
+        v-if="props.pageCount && props.pageData"
+      >
         <div class="w-full h-full grid place-items-center">
           <CustomPagination
-  
             :total-record="pageCount || 0"
             :page-current="props.pageData ? props.pageData.pageIndex : 1"
             :page-size="props.pageData.pageSize"
@@ -130,7 +135,7 @@ const props = defineProps<{
   };
   headerAdvanced?: IHeaderAdvanced[];
   addNewHandle?: TAddNewHandle;
-  showSearch?: boolean
+  showSearch?: boolean;
 }>();
 
 const emits = defineEmits([
@@ -178,11 +183,10 @@ const table = useVueTable({
 
 async function handleChangePage(vl: number) {
   table.setPageIndex(vl);
-  if(props.pageData) {
-     props.pageData.pageIndex = vl;
-     emits("handlePageChange", vl);
+  if (props.pageData) {
+    props.pageData.pageIndex = vl;
+    emits("handlePageChange", vl);
   }
-  
 }
 
 const allColumns = computed(() => {

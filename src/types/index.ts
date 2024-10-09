@@ -29,4 +29,5 @@ export interface LinkProp {
   icon: string;
   variant: "default" | "ghost";
   name: string;
+  children?: LinkProp[]
 }

@@ -18,6 +18,7 @@ import DetailPetServicePrice from "@/views/admin/pets/services-price/Detail.vue"
 import ListPetServices from "@/views/admin/pets/services/Index.vue";
 import CreatePetServices from "@/views/admin/pets/services/Create.vue";
 import NotFoundPage from "@/components/NotFoundPage.vue";
+import ContactView from "@/views/client/contact/ContactView.vue";
 /*
  *   RULE:
  *   meta key cần đối chiếu với pageMeta trong file i18n/locales/[lang].json
@@ -65,7 +66,15 @@ const router = createRouter({
         layout: PAGE_LAYOUT.AUTH,
       },
     },
-
+    {
+      path: "/contact",
+      name: "contact",
+      component: ContactView,
+      meta: {
+        key: "contact",
+        layout: PAGE_LAYOUT.CLIENT,
+      },
+    },
     {
       path: "/admin/",
       name: "admin",

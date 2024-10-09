@@ -12,6 +12,7 @@ import {
 import { v7 as uuidv7 } from "uuid";
 import { COLLECTION } from "@/lib/constants";
 import { sendMessageToast } from "@/lib/utils";
+import { groupBy } from "lodash-es";
 
 export const usePetServices = defineStore("petServices", () => {
   const petServices: Ref<any[]> = ref([]);
@@ -149,7 +150,10 @@ export const usePetServices = defineStore("petServices", () => {
         }
       } else {
         if (data && Array.isArray(data)) {
-          data.map(async (i: any) => {
+          const hasId = data.filter((i) => i.id !== "");
+          const notHasId = data.filter((i) => i.id === "");
+
+          hasId.map(async (i: any) => {
             if (i.id) {
               await updateCollection(COLLECTION.PET_SERVICES_PRICE, i.id, {
                 ...i,
@@ -158,6 +162,14 @@ export const usePetServices = defineStore("petServices", () => {
               throw new Error(`Item with missing ID cannot be updated.`);
             }
           });
+          notHasId.map(async (i: any) => {
+            delete i.id,
+              await createCollection(COLLECTION.PET_SERVICES_PRICE, {
+                ...i,
+                uid: uuidv7(),
+              });
+          });
+
           sendMessageToast("success", "update", "success");
         }
       }
@@ -177,7 +189,6 @@ export const usePetServices = defineStore("petServices", () => {
     serviceId: string;
   }) {
     try {
-      console.log("getServicePriceByPetId", petId, serviceId);
       loading.value = true;
       if (!(petId || serviceId)) {
         throw new Error("Missing params");
@@ -204,6 +215,32 @@ export const usePetServices = defineStore("petServices", () => {
     }
   }
 
+  async function getAllServicePriceByPetId({ petId }: { petId: string }) {
+    try {
+      loading.value = true;
+      if (!petId) {
+        throw new Error("Missing params");
+      }
+
+      const data = await getMultiConditionData({
+        collectionName: COLLECTION.PET_SERVICES_PRICE,
+        condition: [
+          {
+            field: "petId",
+            value: petId,
+          },
+        ],
+      });
+      //@ts-expect-error
+      const result = Object.groupBy(data, ({ serviceId }) => serviceId);
+      return result;
+    } catch (err) {
+      console.log("errr", err);
+      throw new Error("Get service price fail");
+    } finally {
+      loading.value = false;
+    }
+  }
   onUnmounted(() => {
     if (unsubscribe.value) {
       unsubscribe.value();
@@ -220,5 +257,6 @@ export const usePetServices = defineStore("petServices", () => {
     deletePetService,
     createPetServicePrice,
     getServicePriceByPetId,
+    getAllServicePriceByPetId,
   };
 });

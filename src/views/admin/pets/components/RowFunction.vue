@@ -26,20 +26,21 @@
       <DropdownMenuContent>
         <DropdownMenuLabel>Setting price</DropdownMenuLabel>
         <DropdownMenuSeparator />
+
         <DropdownMenuItem v-for="(i, ii) in pets" :key="ii">
           <div
             class="flex items-center gap-3 hover:text-primary"
             @click="
               $router.push({
                 name: 'settingPetServicePrice',
-                params: { petId: row.original.id },
+                params: { petId: i.id },
               })
             "
           >
             <Icon :icon="i.icon" />
-            <span class="font-bold capitalize cursor-pointer">{{
-              i.name
-            }}</span>
+            <span class="font-bold capitalize cursor-pointer">
+              {{ i.name }}
+            </span>
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -168,10 +168,9 @@ const props = defineProps<Props>();
 
 const emit = defineEmits(["reset", "clearFilter", "addNew", "setOpen"]);
 
-
 function clickAddNew() {
   if (props.addNew.type === "link") {
-    router.push({name: props.addNew.content});
+    router.push({ name: props.addNew.content });
   } else {
     emit("setOpen");
   }
