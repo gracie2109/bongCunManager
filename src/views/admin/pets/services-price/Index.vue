@@ -9,15 +9,7 @@
             class="border border-primary h-[100px] rounded-lg"
             id="create_btn"
           >
-            <div
-              class="flex w-full h-full items-center justify-center cursor-pointer"
-              @click="() => (open = !open)"
-            >
-              <Plus class="size-4 mr-2" />
-              <span class="font-semibold">
-                {{ $t("common.create") }} {{ $t("pageMeta.services") }}</span
-              >
-            </div>
+            <ModalCreateService />
           </div>
           <div v-for="(i, j) in petServices">
             <ServiceCard
@@ -44,30 +36,6 @@
         </div>
       </div>
     </div>
-
-    <Dialog :open="open" @update:open="() => (open = !open)">
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Add new service </DialogTitle>
-        </DialogHeader>
-        <ServiceForm :form="form" :show-btn="false" @on-submit="handleForm" />
-        <DialogFooter class="p-6 pt-0">
-          <Button
-            type="button"
-            variant="outline"
-            @click="
-              () => {
-                open = !open;
-                form.resetForm();
-              }
-            "
-          >
-            Cancel
-          </Button>
-          <Button type="submit" @click="handleForm"> Save changes </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
   </ContentWrap>
 </template>
 
@@ -90,11 +58,12 @@ import { useForm } from "vee-validate";
 import { storeToRefs } from "pinia";
 import ServiceCard from "../services/components/ServiceCard.vue";
 import ListServicesPriceTable from "./components/ListServicesPriceTable.vue";
+import ModalCreateService from "../components/ModalCreateService.vue";
 
 const store = usePetServices();
 const { petServices, loading } = storeToRefs(store);
-console.log('petServices',petServices)
-const open = ref(false);
+
+// const open = ref(false);
 const form = useForm();
 
 const isMouseId = ref("");
@@ -102,13 +71,6 @@ const isMouseId = ref("");
 const handleMouseEv = (value: string) => {
   isMouseId.value = value;
 };
-
-const handleForm = form.handleSubmit(async (values: any) => {
-  await store.createNewPetService(values).then(() => {
-    open.value = !open.value;
-    form.resetForm();
-  });
-});
 
 onMounted(async () => {
   await store.getListPetService({ pageIndex: 1, pageSize: 500 });

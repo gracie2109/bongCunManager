@@ -2,7 +2,10 @@
   <PageTitle />
 
   <ContentWrap>
-    <DataTable
+  
+<div class="bg-white h-auto min-h-screen p-3">
+  
+  <DataTable
       :headerAdvanced="headerAdvanced"
       :data="petServices"
       :columns="columns"
@@ -13,8 +16,8 @@
         isRemeber: false,
       }"
       :add-new-handle="{
-        type: 'link',
-        content: 'petServiceCreate'
+        type: 'function',
+        content: null
       }"
       @clear-filter="clearFilter"
       @on-reset="onReset"
@@ -23,7 +26,13 @@
       @handle-page-change="loadDataForPage"
       @update-page-size="updatePageSize"
     >
+      <template v-slot:content_header>
+          <div class="w-[200px] bg-primary py-3  text-white rounded-lg ">
+            <ModalCreateService />
+          </div>
+      </template>
     </DataTable>
+</div>
   </ContentWrap>
 
   <DialogConfirm
@@ -61,6 +70,7 @@ import { HEADER_ADVANCE_FUNCTION, INITIAL_PAGE_INDEX } from "@/lib/constants";
 import { watch } from "vue";
 import RowFunction from "../components/RowFunction.vue";
 import PageTitle from "../PageTitle.vue";
+import ModalCreateService from "../components/ModalCreateService.vue";
 
 const store = usePetServices();
 const { petServices, pageCount } = storeToRefs(store);
