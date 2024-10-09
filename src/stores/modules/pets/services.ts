@@ -7,6 +7,7 @@ import {
   deleteItem,
   checkItemNotExist,
   getMultiConditionData,
+  updateCollection,
 } from "@/lib/firebaseFn";
 import { v7 as uuidv7 } from "uuid";
 import { COLLECTION } from "@/lib/constants";
@@ -123,46 +124,42 @@ export const usePetServices = defineStore("petServices", () => {
 
   /******************** PET PRICE SERVICE ********************/
 
-  function mapPayload(obj: IPrice, petId: string, serviceId: string) {
-    return Object.keys(obj).map((key) => ({
-      petId: petId,
-      [key]: obj[key],
-      weightId: key,
-      price: obj[key],
-      serviceId: serviceId,
-    }));
-  }
-
   async function createPetServicePrice({
-    petId,
-    serviceId,
     data,
     isAdd,
   }: {
-    petId: string;
-    serviceId: string;
-    data: IPrice;
+    data: any;
     isAdd: boolean;
   }) {
     try {
       loading.value = true;
-      if (!(petId || serviceId || data)) {
+      if (!data) {
         throw new Error("Missing required parameters");
       }
       if (isAdd) {
-        const payload = mapPayload(data, petId, serviceId);
-        if (payload) {
-          payload.map(async (i) => {
-            await createCollection(COLLECTION.PET_SERVICES_PRICE, {
-              ...i,
-              uid: uuidv7(),
-            });
+        if (data && Array.isArray(data)) {
+          data.map(async (i: any) => {
+            delete i.id,
+              await createCollection(COLLECTION.PET_SERVICES_PRICE, {
+                ...i,
+                uid: uuidv7(),
+              });
           });
           sendMessageToast("success", "create", "success");
         }
-      }
-      else{
-        
+      } else {
+        if (data && Array.isArray(data)) {
+          data.map(async (i: any) => {
+            if (i.id) {
+              await updateCollection(COLLECTION.PET_SERVICES_PRICE, i.id, {
+                ...i,
+              });
+            } else {
+              throw new Error(`Item with missing ID cannot be updated.`);
+            }
+          });
+          sendMessageToast("success", "update", "success");
+        }
       }
       //
     } catch (error: any) {
@@ -180,10 +177,10 @@ export const usePetServices = defineStore("petServices", () => {
     serviceId: string;
   }) {
     try {
+      console.log("getServicePriceByPetId", petId, serviceId);
       loading.value = true;
       if (!(petId || serviceId)) {
         throw new Error("Missing params");
-        return;
       }
       const data = await getMultiConditionData({
         collectionName: COLLECTION.PET_SERVICES_PRICE,
@@ -200,8 +197,8 @@ export const usePetServices = defineStore("petServices", () => {
       });
       return data;
     } catch (err) {
-      throw new Error("Get service price fail");
       console.log("errr", err);
+      throw new Error("Get service price fail");
     } finally {
       loading.value = false;
     }

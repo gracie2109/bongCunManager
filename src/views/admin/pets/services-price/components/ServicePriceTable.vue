@@ -4,22 +4,16 @@
       <Button
         variant="outline"
         @click="clearData"
-        :disabled="!props.isHandleForm"
+        :disabled="!props.isHandleForm || loading"
       >
-        <RotateCcw
-          class="size-4 mr-2"
-          :class="{
-            'animate-spin': isClear,
-          }"
-        />
+        <RotateCcw class="size-4 mr-2" :class="{'animate-spin': loading}"/>
         Clear
       </Button>
-      <Button @click="handleSubmit" :disabled="!props.isHandleForm">
-        <Save class="size-4 mr-2" />
+      <Button @click="handleSubmit" :disabled="!props.isHandleForm || loading" >
+        <Save class="size-4 mr-2"  />
         Save
       </Button>
     </div>
-    {{data}}
     <table class="w-full">
       <thead>
         <tr>
@@ -28,13 +22,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="i in contents" :key="i.id" class="p-3">
-          <td>{{ (i.lang as any)[String(locale)] }}</td>
+        <tr v-for="(item, index) in data2" :key="item.weightId" class="p-3">
+          <td>{{ (contents[index].lang as any)[String(locale)] }}</td>
           <td class="p-1">
             <Input
+              :readonly="loading"
               type="number"
-              :placeholder="`Enter price of ${(i.lang as any)[String(locale)]}`"
-              v-model:model-value="data[i.id]"
+              :placeholder="`Enter price of ${(contents[index].lang as any)[String(locale)]}`"
+              v-model:model-value="item.price"
             />
           </td>
         </tr>
@@ -51,8 +46,8 @@ import Input from "@/components/ui/input/Input.vue";
 import { useRoute } from "vue-router";
 import Button from "@/components/ui/button/Button.vue";
 import { Save, RotateCcw } from "lucide-vue-next";
-import { toast } from "vue-sonner";
 import { usePetServices } from "@/stores";
+import { storeToRefs } from "pinia";
 
 type IPrice = {
   [key: string]: string | number;
@@ -64,27 +59,31 @@ const props = defineProps<{
 
 const { locale } = useI18n();
 const store = usePetServices();
-const data = ref<IPrice>({});
+const {loading} = storeToRefs(store)
 const route = useRoute();
-const isClear = ref(false);
+const isAdd = ref(true);
 
-function clearData() {
-  isClear.value = true;
-  setTimeout(() => {
-    data.value = {};
-    isClear.value = false;
-    toast.success("Reset success");
-  }, 500);
-}
-
-
-async function handleSubmit() {
-  if (data.value) {
-    await store.createPetServicePrice({
-      data: data.value,
-      isAdd: true,
+const data2 = ref<IPrice[]>(
+  contents.map((i) => {
+    return {
+      id: "",
       petId: String(route.params.petId),
       serviceId: String(route.params.serviceId),
+      weightId: String(i.id),
+      price: "",
+    };
+  })
+);
+
+async function clearData() {
+  await getServicePrice();
+}
+
+async function handleSubmit() {
+  if (data2.value) {
+    await store.createPetServicePrice({
+      data: data2.value,
+      isAdd: isAdd.value,
     });
     await getServicePrice();
   }
@@ -95,21 +94,28 @@ async function getServicePrice() {
     petId: String(route.params.petId),
     serviceId: String(route.params.serviceId),
   });
-  if (result) {
-    data.value = result.reduce((acc, item) => {
-      const key = item.weightId;
-      const value = item[key];
+  console.log("result", result)
+  if (result && Array.isArray(result) && result.length > 0) {
+    isAdd.value = false;
 
-      if (key && value !== undefined) {
-        acc[key] = value;
+    result.forEach((item: any) => {
+      const matched = data2.value.find(
+        (dataItem) =>
+          dataItem.petId === item.petId &&
+          dataItem.serviceId === item.serviceId &&
+          dataItem.weightId === item.weightId
+      );
+      if (matched) {
+        matched.price = item.price;
+        matched.id = item.id;
       }
-      return acc;
-    }, {});
+    });
   }
+  else isAdd.value = true;
 }
 
 onMounted(async () => {
-  getServicePrice();
+  await getServicePrice();
 });
 </script>
 

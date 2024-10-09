@@ -11,6 +11,7 @@ import {
   QueryDocumentSnapshot,
   QuerySnapshot,
   startAfter,
+  updateDoc,
   where,
   type DocumentData,
 } from "firebase/firestore";
@@ -124,6 +125,16 @@ export async function createCollection(collectionName: string, payload: any) {
   }
 }
 
+export async function updateCollection(collectionName: string, docId: string, payload: any) {
+  try {
+    const docRef = doc(db, collectionName, docId);
+    await updateDoc(docRef, convertBefore(payload, "UPDATE"));
+
+    return { success: true, message: "Document updated successfully" };
+  } catch (error) {
+    throw new Error("Failed to update document: " + error);
+  }
+}
 type TListCondition = {
   field: string;
   value: string | number;
