@@ -101,11 +101,11 @@ onMounted(async () => {
   petRecords.value = data;
 });
 onMounted(async () => {
-  if (!isShowAllPets.value) {
+  if (petId) {
     const pet = await getDetailData(
       COLLECTION.PETS,
       "__name__",
-      String(route.params.petId)
+      String(petId)
     );
     if (!pet.empty) {
       petInfo.value = pet.docs[0].data();
@@ -114,11 +114,11 @@ onMounted(async () => {
 });
 
 onMounted(async () => {
-  if (route.name === "DetailPetService" && route.params.serviceId) {
+  if (serviceId) {
     const service = await getDetailData(
       COLLECTION.PETS_SERVICES,
       "__name__",
-      String(route.params.serviceId)
+      String(serviceId)
     );
     if (!service.empty) {
       serviceInfo.value = service.docs[0].data();

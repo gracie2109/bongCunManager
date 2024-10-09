@@ -2,7 +2,7 @@
   <div
     class="border border-primary h-[100px] rounded-lg cursor-pointer"
     :class="{
-      'bg-[#dcdcdc]': props.isMouseId === String(props.data.id)
+      'bg-[#dcdcdc]': props.isMouseId === String(props.data.id),
     }"
     @mouseenter="() => onMouseOver(String(props.data.id))"
     @mouseleave="() => onMouseLeave()"
@@ -88,14 +88,14 @@
                 :key="ii"
                 :class="
                   cn({
-                    'hover:text-primary cursor-pointer': props.enable === i.id,
-                    'text-muted-foreground': props.enable !== i.id,
+                    'hover:text-primary cursor-pointer': i.id === props.enable,
+                    'text-muted-foreground': i.id !== props.enable,
                   })
                 "
               />
             </TooltipTrigger>
             <TooltipContent>
-              <p>{{ i.name }}</p>
+              <p>{{ i.name }}{{ i.id }}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -123,8 +123,6 @@ const props = defineProps<{
   isMouseId: string;
 }>();
 
-
-
 const emits = defineEmits(["setMouseEl"]);
 function onMouseOver(id: string) {
   emits("setMouseEl", id);
@@ -133,7 +131,4 @@ function onMouseOver(id: string) {
 function onMouseLeave() {
   emits("setMouseEl", "");
 }
-
-
-
 </script>

@@ -93,6 +93,7 @@ import ListServicesPriceTable from "./components/ListServicesPriceTable.vue";
 
 const store = usePetServices();
 const { petServices, loading } = storeToRefs(store);
+console.log('petServices',petServices)
 const open = ref(false);
 const form = useForm();
 
