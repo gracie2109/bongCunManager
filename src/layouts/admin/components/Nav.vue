@@ -18,9 +18,6 @@ interface NavProps {
 
 const props = defineProps<NavProps>();
 const route = useRoute();
-const router = useRouter();
-console.log('route', route);
-console.log('router', router)
 </script>
 
 <template>
