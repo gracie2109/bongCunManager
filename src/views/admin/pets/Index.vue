@@ -11,7 +11,9 @@
         <div @click="$router.push({ name: 'petService' })">
           <Icon icon="carbon:settings-services" class="size-6" />
         </div>
-
+        <div >
+          <Layers2  class="size-6" />
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <Icon icon="iconoir:weight" class="size-6 fill-none" />
@@ -25,6 +27,7 @@
               <!-- @ts-ignore -->
               {{ (tag.lang as any)[String(locale)] }}
             </DropdownMenuItem>
+            
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -105,6 +108,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useI18n } from "vue-i18n";
+import { Layers2 } from "lucide-vue-next";
 
 const store = usePets();
 const { pets, pageCount } = storeToRefs(store);

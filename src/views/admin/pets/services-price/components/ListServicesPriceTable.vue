@@ -70,7 +70,8 @@ tr {
 
 .table-container {
   overflow-x: auto; /* Cho phép cuộn ngang */
-  width: 100%; /* Đảm bảo container chiếm toàn bộ chiều rộng */
+  width: 100%; 
+  height: 100%/* Đảm bảo container chiếm toàn bộ chiều rộng */
 }
 
 table {

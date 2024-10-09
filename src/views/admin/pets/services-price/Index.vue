@@ -2,9 +2,9 @@
   <PageTitle />
 
   <ContentWrap>
-    <div class="fixed top-[3.75rem] min-h-svh w-full bg-white overflow-y-auto ">
-      <div class="w-full h-full space-y-6 ml-2 p-3 ">
-        <div class="service-card grid grid-cols-6 gap-4 ">
+    <div class="fixed top-[3.75rem] h-auto overflow-auto bg-white w-[93vw]">
+      <div class="w-full min-h-dvh space-y-6 ml-2 p-3">
+        <div class="service-card grid grid-cols-6 gap-4">
           <div
             class="border border-primary h-[100px] rounded-lg"
             id="create_btn"
@@ -28,7 +28,7 @@
           </div>
         </div>
 
-        <div class=" w-full overflow-y-auto overflow-x-auto ">
+        <div class="w-full h-auto overflow-y-auto overflow-x-auto">
           <ListServicesPriceTable :services="petServices" />
         </div>
       </div>
@@ -64,27 +64,20 @@
 import { usePetServices } from "@/stores";
 import { ContentWrap } from "@/views/admin/components";
 import PageTitle from "../PageTitle.vue";
-import { Card, CardContent } from "@/components/ui/card";
-import { onMounted, reactive, ref } from "vue";
-import { Plus, Proportions } from "lucide-vue-next";
+import { onMounted, ref } from "vue";
+import { Plus } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogScrollContent,
   DialogTitle,
 } from "@/components/ui/dialog";
 import ServiceForm from "@/views/admin/pets/services/components/ServiceForm.vue";
 import { useForm } from "vee-validate";
-import type { z } from "zod";
-import type { PetsServicesValid } from "@/validations/pets";
 import { storeToRefs } from "pinia";
 import ServiceCard from "../services/components/ServiceCard.vue";
-import ServicePriceTable from "./components/ServicePriceTable.vue";
 import ListServicesPriceTable from "./components/ListServicesPriceTable.vue";
 
 const store = usePetServices();
