@@ -57,7 +57,7 @@ export default function <T extends ZodTypeAny>(schema: T, data: MaybeRefOrGetter
     }
   }
 
-  const getError = (path: string) => get(errors.value, `${path?.replaceAll('.', ',')}.0.message`)
+  const getError = (path: string) => get(errors.value, `${path?.split('.').join(',')}.0.message`)
 
   if (opts.mode === 'eager') {
     validationWatch()
