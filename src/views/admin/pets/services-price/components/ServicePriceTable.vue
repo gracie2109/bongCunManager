@@ -94,7 +94,6 @@ async function getServicePrice() {
     petId: String(route.params.petId),
     serviceId: String(route.params.serviceId),
   });
-  console.log("result", result)
   if (result && Array.isArray(result) && result.length > 0) {
     isAdd.value = false;
 

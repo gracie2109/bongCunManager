@@ -15,6 +15,13 @@
         }
       },
       {
+        "id": "morethan5",
+         "lang": {
+           "vi": "Trên 5kg",
+           "en": "More than 5kg"
+         }
+       },
+      {
        "id": "from10to14",
         "lang": {
           "vi": "Từ 10-14kg",
