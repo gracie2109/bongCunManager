@@ -1,5 +1,12 @@
 <template>
-  <div class="border border-primary h-[100px] rounded-lg">
+  <div
+    class="border border-primary h-[100px] rounded-lg cursor-pointer"
+    :class="{
+      'bg-[#dcdcdc]': props.isMouseId === String(props.data.id)
+    }"
+    @mouseenter="() => onMouseOver(String(props.data.id))"
+    @mouseleave="() => onMouseLeave()"
+  >
     <div class="top h-[33%]">
       <div
         class="w-full h-full flex gap-x-4 items-center text-white cursor-pointer p-2 bg-primary-subb rounded-t-lg"
@@ -44,7 +51,6 @@
                     petId: String($route.params.petId),
                     serviceId: props.data.id,
                   },
-              
                 })
               "
             >
@@ -114,5 +120,20 @@ type TEnable = string | "all" | undefined;
 const props = defineProps<{
   data: any;
   enable: TEnable;
+  isMouseId: string;
 }>();
+
+
+
+const emits = defineEmits(["setMouseEl"]);
+function onMouseOver(id: string) {
+  emits("setMouseEl", id);
+}
+
+function onMouseLeave() {
+  emits("setMouseEl", "");
+}
+
+
+
 </script>

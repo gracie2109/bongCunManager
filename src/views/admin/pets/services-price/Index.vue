@@ -24,6 +24,8 @@
               :data="i"
               :key="j"
               :enable="String($route.params.petId)"
+              :isMouseId="isMouseId"
+              @set-mouse-el="handleMouseEv"
             />
           </div>
         </div>
@@ -33,7 +35,11 @@
           v-if="petServices.length > 0"
         >
           <div class="w-full h-full" id="short_cut_service">
-            <ListServicesPriceTable :services="petServices" />
+            <ListServicesPriceTable
+              :services="petServices"
+              :isMouseId="isMouseId"
+              @set-mouse-el="handleMouseEv"
+            />
           </div>
         </div>
       </div>
@@ -89,6 +95,12 @@ const store = usePetServices();
 const { petServices, loading } = storeToRefs(store);
 const open = ref(false);
 const form = useForm();
+
+const isMouseId = ref("");
+
+const handleMouseEv = (value: string) => {
+  isMouseId.value = value;
+};
 
 const handleForm = form.handleSubmit(async (values: any) => {
   await store.createNewPetService(values).then(() => {

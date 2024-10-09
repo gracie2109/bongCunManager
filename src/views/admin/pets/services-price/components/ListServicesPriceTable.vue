@@ -4,7 +4,15 @@
       <thead>
         <tr>
           <th class="fixed-column">Weight</th>
-          <th v-for="(i, ii) in props.services" :key="ii">
+          <th
+            v-for="(i, ii) in props.services"
+            :key="ii"
+            @mouseenter="() => onMouseOver(String(i.id))"
+            @mouseleave="() => onMouseLeave()"
+            :class="{
+              'bg-[#dcdcdc]': props.isMouseId === i.id,
+            }"
+          >
             {{ i.name }}
           </th>
         </tr>
@@ -22,6 +30,9 @@
                 data[k.id].some((m:any) => m.weightId === i.id)
               "
               class="font-semibold text-left pl-3"
+              :class="{
+                'bg-[#dcdcdc]': props.isMouseId === k.id,
+              }"
             >
               {{
                 formatPrice(
@@ -29,7 +40,12 @@
                 )
               }}
             </td>
-            <td v-else></td>
+            <td
+              v-else
+              :class="{
+                'bg-[#dcdcdc]': props.isMouseId === k.id,
+              }"
+            ></td>
           </template>
         </tr>
       </tbody>
@@ -49,7 +65,11 @@ const store = usePetServices();
 const route = useRoute();
 const props = defineProps<{
   services: any[];
+  isMouseId: string;
 }>();
+
+const emits = defineEmits(["setMouseEl"]);
+
 const { locale } = useI18n();
 const data = ref();
 
@@ -57,9 +77,16 @@ onMounted(async () => {
   const result = await store.getAllServicePriceByPetId({
     petId: String(route.params.petId),
   });
-  console.log("resukt", result);
   data.value = result;
 });
+
+function onMouseOver(id: string) {
+  emits("setMouseEl", id);
+}
+
+function onMouseLeave() {
+  emits("setMouseEl", "");
+}
 </script>
 
 <style scoped>
