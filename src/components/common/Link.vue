@@ -1,7 +1,7 @@
 <template>
   <li class="text-xl lg:text-base">
     <router-link
-      :to="link.url"
+      :to="{name: link.name}"
       class="transition-colors hover:text-custom-primary"
       active-class="text-custom-primary font-medium"
     >

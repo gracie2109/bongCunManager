@@ -44,17 +44,6 @@ import { usePetServices } from "@/stores";
 import { ContentWrap } from "@/views/admin/components";
 import PageTitle from "../PageTitle.vue";
 import { onMounted, ref } from "vue";
-import { Camera, Plus } from "lucide-vue-next";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import ServiceForm from "@/views/admin/pets/services/components/ServiceForm.vue";
-import { useForm } from "vee-validate";
 import { storeToRefs } from "pinia";
 import ServiceCard from "../services/components/ServiceCard.vue";
 import ListServicesPriceTable from "./components/ListServicesPriceTable.vue";
@@ -62,9 +51,6 @@ import ModalCreateService from "../components/ModalCreateService.vue";
 
 const store = usePetServices();
 const { petServices, loading } = storeToRefs(store);
-
-// const open = ref(false);
-const form = useForm();
 
 const isMouseId = ref("");
 

@@ -42,19 +42,19 @@ export const ADMIN_NAVIGATOR: LinkProp[] = [
     clientNav: [
         {
             text: 'Home',
-            url: '/'
+            name: 'home'
         },
         {
             text: 'About Us',
-            url: '#'
+            name: 'home'
         },
         {
             text: 'Contact',
-            url: '#'
+            name: 'contact'
         },
         {
             text: 'Coupons',
-            url: '#'
+            name: 'home'
         }
     ]
 }

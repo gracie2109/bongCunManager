@@ -15,7 +15,7 @@
         :headerAdvanced="props.headerAdvanced"
       />
     </SearchWrap>
-    <slot name="content_header" />
+  
     <div id="showTable" class="relative bg-white">
       <div class="bg-white space-y-6 relative">
         <Table>

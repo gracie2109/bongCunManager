@@ -1,6 +1,5 @@
 <template>
   <PageTitle />
-
   <ContentWrap>
     <div class="bg-white h-auto min-h-screen p-3">
       <DataTable
@@ -14,23 +13,17 @@
           isRemeber: false,
         }"
         :add-new-handle="{
-          type: 'function',
           content: null,
+          type: 'function',
         }"
-        :show-search="false"
+        :show-search="true"
         @clear-filter="clearFilter"
         @on-reset="onReset"
         @clearFilter="clearFilter"
         @set-open="setOpen"
         @handle-page-change="loadDataForPage"
         @update-page-size="updatePageSize"
-      >
-        <template v-slot:content_header>
-          <div class="w-[150px] bg-primary text-white rounded-sm">
-            <ModalCreateService :title="$t('common.create')" />
-          </div>
-        </template>
-      </DataTable>
+      />
     </div>
   </ContentWrap>
 
@@ -51,6 +44,12 @@
     "
     @handleOk="handleDelete"
   />
+
+  <ModalCreateService
+    :title="$t('common.create')"
+    :handle-open="open"
+    @updateOpen="(vl) => (open = vl)"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -58,7 +57,7 @@ import { ContentWrap } from "@/views/admin/components";
 
 import { h, onMounted, reactive, ref, watchEffect } from "vue";
 import { usePetServices } from "@/stores";
-import { formatDateTime } from "@/lib/utils";
+import { formatDateTime, formatPrice } from "@/lib/utils";
 import { type IHeaderAdvanced, type T_ROW_FUNCTION } from "@/types";
 import type { ColumnDef, PaginationState } from "@tanstack/vue-table";
 
@@ -70,7 +69,10 @@ import { watch } from "vue";
 import RowFunction from "../components/RowFunction.vue";
 import PageTitle from "../PageTitle.vue";
 import ModalCreateService from "../components/ModalCreateService.vue";
+import { contents as unit, type } from "@/data/pet-service.json";
+import { useI18n } from "vue-i18n";
 
+const { locale } = useI18n();
 const store = usePetServices();
 const { petServices, pageCount } = storeToRefs(store);
 const selectedItem = ref();
@@ -104,6 +106,45 @@ const columns: ColumnDef<any>[] = reactive([
         "span",
         { class: "max-w-[500px] truncate font-medium" },
         row.getValue("name")
+      );
+    },
+  },
+  {
+    accessorKey: "type",
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Type" }),
+    cell: ({ row }) => {
+      const slT = row.getValue("type") as string;
+      const petType = type.find((i) => i.id === slT)?.lang as any;
+
+      return h(
+        "span",
+        { class: "max-w-[500px] truncate font-medium" },
+        petType[locale.value]
+      );
+    },
+  },
+  {
+    accessorKey: "unit",
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Unit" }),
+    cell: ({ row }) => {
+      const slT = row.getValue("unit") as string;
+      const petType = (unit.find((i) => i.id === slT)?.lang as any) || "";
+
+      return h(
+        "span",
+        { class: "max-w-[500px] truncate font-medium" },
+        petType[locale.value]
+      );
+    },
+  },
+  {
+    accessorKey: "generalPrice",
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "General Price" }),
+    cell: ({ row }) => {
+      return h(
+        "span",
+        { class: "max-w-[500px] truncate font-medium" },
+        formatPrice(row.getValue("generalPrice") || "")
       );
     },
   },
@@ -147,8 +188,8 @@ const columns: ColumnDef<any>[] = reactive([
 ]);
 
 const headerAdvanced = reactive<IHeaderAdvanced[]>([
-  HEADER_ADVANCE_FUNCTION.ADD_NEW,
   HEADER_ADVANCE_FUNCTION.SETTING_COLUMN,
+  HEADER_ADVANCE_FUNCTION.ADD_NEW,
 ]);
 
 const open = ref(false);

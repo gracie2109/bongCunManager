@@ -1,22 +1,26 @@
 <template>
-  <!-- <div class="border border-primary h-[100px] rounded-lg" id="create_btn"> -->
-    <div
-      class="flex w-full h-full items-center justify-center cursor-pointer"
-      @click="() => (open = !open)"
-    >
-      <Plus class="size-4 mr-2" />
-      <span class="font-semibold" v-if="!props.title">
-        {{ $t("common.create") }} {{ $t("pageMeta.services") }}
-    
-        </span
-      >
-      <span class="font-semibold" v-else>
-       {{ props.title }}
-      </span>
-    </div>
-  <!-- </div> -->
+  <div
+    class="flex w-full h-full items-center justify-center cursor-pointer"
+    @click="() => (open = !open)"
+  >
+    <Plus class="size-4 mr-2" />
+    <span class="font-semibold" v-if="!props.title">
+      {{ $t("common.create") }} {{ $t("pageMeta.services") }}
+    </span>
+    <span class="font-semibold" v-else>
+      {{ props.title }}
+    </span>
+  </div>
 
-  <Dialog :open="open" @update:open="() => (open = !open)">
+  <Dialog
+    :open="open"
+    @update:open="
+      () => {
+        open = !open;
+        $emit('updateOpen', false);
+      }
+    "
+  >
     <DialogContent>
       <DialogHeader>
         <DialogTitle>Add new service </DialogTitle>
@@ -30,6 +34,7 @@
             () => {
               open = !open;
               form.resetForm();
+              $emit('updateOpen', false);
             }
           "
         >
@@ -42,8 +47,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { Camera, Plus } from "lucide-vue-next";
+import { ref, watch } from "vue";
+import { Plus } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -55,12 +60,24 @@ import {
 import ServiceForm from "@/views/admin/pets/services/components/ServiceForm.vue";
 import { useForm } from "vee-validate";
 import { usePetServices } from "@/stores";
-const props= defineProps<{
-    title?: string
-}>()
+const props = defineProps<{
+  title?: string;
+  handleOpen?: boolean;
+}>();
 const open = ref(false);
 const form = useForm();
 const store = usePetServices();
+
+defineEmits(["updateOpen"]);
+
+watch(
+  () => props.handleOpen,
+  () => {
+    if (props.handleOpen) {
+      open.value = props.handleOpen;
+    }
+  }
+);
 
 const handleForm = form.handleSubmit(async (values: any) => {
   await store.createNewPetService(values).then(() => {
