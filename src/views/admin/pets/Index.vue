@@ -12,7 +12,7 @@
           <Icon icon="carbon:settings-services" class="size-6" />
         </div>
         <div >
-          <Layers2  class="size-6" />
+          <Layers2  class="size-6"  />
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>

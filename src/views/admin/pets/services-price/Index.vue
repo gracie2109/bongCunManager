@@ -2,7 +2,7 @@
   <PageTitle />
 
   <ContentWrap>
-    <div class="fixed top-[3.75rem] h-auto overflow-auto bg-white w-[93vw]">
+    <div class="fixed top-[3.75rem] h-auto overflow-y-auto bg-white w-[93vw]">
       <div class="w-full min-h-dvh space-y-6 ml-2 p-3">
         <div class="service-card grid grid-cols-6 gap-4">
           <div
@@ -28,8 +28,13 @@
           </div>
         </div>
 
-        <div class="w-full h-auto overflow-y-auto overflow-x-auto">
-          <ListServicesPriceTable :services="petServices" />
+        <div
+          class="w-full h-auto overflow-y-auto overflow-x-auto"
+          v-if="petServices.length > 0"
+        >
+          <div class="w-full h-full" id="short_cut_service">
+            <ListServicesPriceTable :services="petServices" />
+          </div>
         </div>
       </div>
     </div>
@@ -65,7 +70,7 @@ import { usePetServices } from "@/stores";
 import { ContentWrap } from "@/views/admin/components";
 import PageTitle from "../PageTitle.vue";
 import { onMounted, ref } from "vue";
-import { Plus } from "lucide-vue-next";
+import { Camera, Plus } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

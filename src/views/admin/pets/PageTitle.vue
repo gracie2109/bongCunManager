@@ -1,49 +1,63 @@
 <template>
   <Header>
     <div class="flex gap-x-2 items-center">
-      <h1 class="font-semibold flex items-center gap-2" :class="clsx({
-        'cursor-pointer': !isShowAllPets,
-      })
-        " @click="() => {
+      <h1
+        class="font-semibold flex items-center gap-2"
+        :class="
+          clsx({
+            'cursor-pointer': !isShowAllPets,
+          })
+        "
+        @click="
+          () => {
             if (isShowAllPets) return;
             else $router.push({ name: 'pets' });
           }
-          ">
+        "
+      >
         <PawPrint class="size-4 text-primary" />
         {{ $t("pageMeta.pets") }} ({{ petRecords }})
       </h1>
 
-      <div v-if="
-        (!isShowAllPets && $route.name === 'settingPetServicePrice') ||
-        $route.name === 'DetailPetService'
-      " class="flex items-center">
-        <ChevronRight class="size-4 mr-2" />
-        <h1 class="font-semibold flex items-center gap-2 text-muted-foreground">
-          {{ $t("pageMeta.settingPetServicePrice") }}
-        </h1>
-        <div v-if="petInfo" class="flex items-center">
+      <div v-if="$route.name !== 'pets'" class="flex">
+        <div
+          id="services"
+          class="flex items-center cursor-pointer"
+          @click="handleBackService"
+        >
+          <ChevronRight class="size-4 mr-2" />
+          <h1
+            class="font-semibold flex items-center gap-2 text-muted-foreground"
+          >
+            {{ $t("pageMeta.settingPetServicePrice") }}
+          </h1>
+        </div>
+
+        <div
+          class="flex items-center cursor-pointer"
+          v-if="petInfo || petId"
+          @click="handleBackPet"
+        >
           <ChevronRight class="size-4 mr-2" />
           <div class="flex items-center h-full gap-2">
-            <Icon :icon="petInfo.icon" />
-            <h1 class="font-semibold flex items-center gap-2 text-muted-foreground">
-              {{ petInfo.name }}
+            <Icon :icon="petInfo.icon" v-if="petInfo"/>
+            <h1
+              class="font-semibold flex items-center gap-2 text-muted-foreground"
+            >
+              {{ petInfo?.name || petId}}
             </h1>
           </div>
         </div>
-
-        <div v-if="$route.name === 'DetailPetService' && serviceInfo" class="flex items-center">
+        <div class="flex items-center cursor-pointer" v-if="serviceInfo">
           <ChevronRight class="size-4 mr-2" />
-          <h1 class="font-semibold flex items-center gap-2 text-muted-foreground">
-            Service: {{ serviceInfo.name || "" }}
-          </h1>
+          <div class="flex items-center h-full gap-2">
+            <h1
+              class="font-semibold flex items-center gap-2 text-muted-foreground"
+            >
+              {{ serviceInfo.name }}
+            </h1>
+          </div>
         </div>
-      </div>
-
-      <div v-if="!isShowAllPets && $route.name === 'petService'" class="flex items-center">
-        <ChevronRight class="size-4 mr-2" />
-        <h1 class="font-semibold flex items-center gap-2 text-muted-foreground">
-          {{ $t("pageMeta.petService") }}
-        </h1>
       </div>
     </div>
   </Header>
@@ -62,6 +76,8 @@ import { Icon } from "@iconify/vue";
 
 const petRecords = ref(0);
 const route = useRoute();
+const { petId, serviceId } = route.params;
+
 const petInfo = ref();
 const serviceInfo = ref();
 const isShowAllPets = computed(() => {
@@ -69,6 +85,17 @@ const isShowAllPets = computed(() => {
   else return false;
 });
 
+function handleBackPet() {
+  router.push({
+    name: "settingPetServicePrice",
+    params: { petId: petId },
+  });
+}
+function handleBackService() {
+  router.push({
+    name: "petService",
+  });
+}
 onMounted(async () => {
   const data = await getTotalRecord(COLLECTION.PETS);
   petRecords.value = data;
@@ -85,7 +112,6 @@ onMounted(async () => {
     }
   }
 });
-
 
 onMounted(async () => {
   if (route.name === "DetailPetService" && route.params.serviceId) {

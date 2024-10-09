@@ -1,6 +1,6 @@
 <template>
   <div class="table-container">
-    <table class="w-full overflow-x-auto">
+    <table class="w-full">
       <thead>
         <tr>
           <th class="fixed-column">Weight</th>
@@ -11,7 +11,7 @@
       </thead>
       <tbody>
         <tr v-for="(i, ii) in contents" :key="ii">
-          <td class="fixed-column ">
+          <td class="fixed-column">
             {{ (contents[ii].lang as any)[String(locale)] }}
           </td>
           <template v-for="(k, kk) in props.services" :key="kk">
@@ -24,7 +24,9 @@
               class="font-semibold text-left pl-3"
             >
               {{
-                formatPrice(data[k.id].find((m:any) => m.weightId === i.id)?.price)
+                formatPrice(
+                  data[k.id].find((m: any) => m.weightId === i.id)?.price
+                )
               }}
             </td>
             <td v-else></td>
@@ -67,11 +69,10 @@ tr {
   border: 1px solid hsl(var(--primary));
 }
 
-
 .table-container {
-  overflow-x: auto; /* Cho phép cuộn ngang */
-  width: 100%; 
-  height: 100%/* Đảm bảo container chiếm toàn bộ chiều rộng */
+  overflow-y: auto; /* Cho phép cuộn ngang */
+  width: 100%;
+  height: 100%; /* Đảm bảo container chiếm toàn bộ chiều rộng */
 }
 
 table {
@@ -79,7 +80,8 @@ table {
   border-collapse: collapse; /* Xóa khoảng cách giữa các ô */
 }
 
-th, td {
+th,
+td {
   padding: 8px; /* Tùy chọn: thêm khoảng đệm cho ô */
   text-align: left; /* Căn trái cho văn bản */
 }
@@ -90,5 +92,4 @@ th, td {
   background: white; /* Để đảm bảo màu nền khi cuộn */
   z-index: 1; /* Đảm bảo cột nằm trên các cột khác */
 }
-
 </style>
