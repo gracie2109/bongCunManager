@@ -18,6 +18,7 @@ export const COLLECTION = {
   PROVIDERS: "service-provider",
   PETS: "pets",
   PETS_SERVICES: "pet-services",
+  PET_SERVICES_PRICE: 'pet-service-price'
 };
 
 export const DEFINE_PRODUCT_CATEGORIES = [

@@ -13,6 +13,8 @@ import ForgotPassView from "@/views/auth/ForgotPassView.vue";
 import ListProvider from "@/views/admin/service-providers/Index.vue";
 import ListPets from "@/views/admin/pets/Index.vue";
 import SettingPetServicePrice from "@/views/admin/pets/services-price/Index.vue";
+import DetailPetServicePrice from "@/views/admin/pets/services-price/Detail.vue";
+
 import ListPetServices from "@/views/admin/pets/services/Index.vue";
 import CreatePetServices from "@/views/admin/pets/services/Create.vue";
 import NotFoundPage from "@/components/NotFoundPage.vue";
@@ -105,6 +107,14 @@ const router = createRouter({
               path: ":petId/setting-pet-service-price",
               name: "settingPetServicePrice",
               component: SettingPetServicePrice,
+              meta: {
+                key: "settingPetServicePrice",
+              },
+            },
+            {
+              path: ":petId/setting-pet-service-price/:serviceId",
+              name: "DetailPetService",
+              component: DetailPetServicePrice,
               meta: {
                 key: "settingPetServicePrice",
               },

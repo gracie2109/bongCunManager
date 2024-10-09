@@ -1,28 +1,28 @@
 {
   "contents": [
     {
-      "id": 1,
+      "id": "lessthan2",
       "lang": {
         "vi": "Dưới 2kg",
         "en": "Less than 2kg"
       }
     },
     {
-        "id": 2,
+       "id": "from2to4",
         "lang": {
           "vi": "Từ 2-4kg",
           "en": "From 2-4kg"
         }
       },
       {
-        "id": 3,
+       "id": "from10to14",
         "lang": {
           "vi": "Từ 10-14kg",
           "en": "From 10-14kg"
         }
       },
       {
-        "id": 3,
+        "id": "from15to14",
         "lang": {
           "vi": "Từ 15-20kg",
           "en": "From 15-20kg"

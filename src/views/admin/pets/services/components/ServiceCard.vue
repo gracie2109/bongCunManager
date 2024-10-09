@@ -1,6 +1,6 @@
 <template>
-  <div class="border border-primary h-[150px] rounded-lg">
-    <div class="top h-[23%]">
+  <div class="border border-primary h-[100px] rounded-lg">
+    <div class="top h-[33%]">
       <div
         class="w-full h-full flex gap-x-4 items-center text-white cursor-pointer p-2 bg-primary-subb rounded-t-lg"
       >
@@ -35,7 +35,19 @@
             </TooltipContent>
           </Tooltip>
           <Tooltip>
-            <TooltipTrigger as-child>
+            <TooltipTrigger
+              as-child
+              @click="
+                $router.push({
+                  name: 'DetailPetService',
+                  params: {
+                    petId: String($route.params.petId),
+                    serviceId: props.data.id,
+                  },
+              
+                })
+              "
+            >
               <Edit class="size-5" />
             </TooltipTrigger>
             <TooltipContent>
@@ -103,6 +115,4 @@ const props = defineProps<{
   data: any;
   enable: TEnable;
 }>();
-
-const actionBtns = computed(() => {});
 </script>

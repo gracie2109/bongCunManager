@@ -1,28 +1,22 @@
 <template>
   <Header>
     <div class="flex gap-x-2 items-center">
-      <h1
-        class="font-semibold flex items-center gap-2"
-        :class="
-          clsx({
-            'cursor-pointer': !isShowAllPets,
-          })
-        "
-        @click="
-          () => {
+      <h1 class="font-semibold flex items-center gap-2" :class="clsx({
+        'cursor-pointer': !isShowAllPets,
+      })
+        " @click="() => {
             if (isShowAllPets) return;
             else $router.push({ name: 'pets' });
           }
-        "
-      >
+          ">
         <PawPrint class="size-4 text-primary" />
         {{ $t("pageMeta.pets") }} ({{ petRecords }})
       </h1>
 
-      <div
-        v-if="!isShowAllPets && $route.name === 'settingPetServicePrice'"
-        class="flex items-center"
-      >
+      <div v-if="
+        (!isShowAllPets && $route.name === 'settingPetServicePrice') ||
+        $route.name === 'DetailPetService'
+      " class="flex items-center">
         <ChevronRight class="size-4 mr-2" />
         <h1 class="font-semibold flex items-center gap-2 text-muted-foreground">
           {{ $t("pageMeta.settingPetServicePrice") }}
@@ -31,19 +25,21 @@
           <ChevronRight class="size-4 mr-2" />
           <div class="flex items-center h-full gap-2">
             <Icon :icon="petInfo.icon" />
-            <h1
-              class="font-semibold flex items-center gap-2 text-muted-foreground"
-            >
+            <h1 class="font-semibold flex items-center gap-2 text-muted-foreground">
               {{ petInfo.name }}
             </h1>
           </div>
         </div>
+
+        <div v-if="$route.name === 'DetailPetService' && serviceInfo" class="flex items-center">
+          <ChevronRight class="size-4 mr-2" />
+          <h1 class="font-semibold flex items-center gap-2 text-muted-foreground">
+            Service: {{ serviceInfo.name || "" }}
+          </h1>
+        </div>
       </div>
 
-      <div
-        v-if="!isShowAllPets && $route.name === 'petService'"
-        class="flex items-center"
-      >
+      <div v-if="!isShowAllPets && $route.name === 'petService'" class="flex items-center">
         <ChevronRight class="size-4 mr-2" />
         <h1 class="font-semibold flex items-center gap-2 text-muted-foreground">
           {{ $t("pageMeta.petService") }}
@@ -67,6 +63,7 @@ import { Icon } from "@iconify/vue";
 const petRecords = ref(0);
 const route = useRoute();
 const petInfo = ref();
+const serviceInfo = ref();
 const isShowAllPets = computed(() => {
   if (route.name === "pets") return true;
   else return false;
@@ -85,6 +82,20 @@ onMounted(async () => {
     );
     if (!pet.empty) {
       petInfo.value = pet.docs[0].data();
+    }
+  }
+});
+
+
+onMounted(async () => {
+  if (route.name === "DetailPetService" && route.params.serviceId) {
+    const service = await getDetailData(
+      COLLECTION.PETS_SERVICES,
+      "__name__",
+      String(route.params.serviceId)
+    );
+    if (!service.empty) {
+      serviceInfo.value = service.docs[0].data();
     }
   }
 });
