@@ -2,37 +2,36 @@
   <PageTitle />
 
   <ContentWrap>
-  
-<div class="bg-white h-auto min-h-screen p-3">
-  
-  <DataTable
-      :headerAdvanced="headerAdvanced"
-      :data="petServices"
-      :columns="columns"
-      :page-count="pageCount"
-      :page-data="pageData"
-      :saveColumnVisible="{
-        name: 'petServices',
-        isRemeber: false,
-      }"
-      :add-new-handle="{
-        type: 'function',
-        content: null
-      }"
-      @clear-filter="clearFilter"
-      @on-reset="onReset"
-      @clearFilter="clearFilter"
-      @set-open="setOpen"
-      @handle-page-change="loadDataForPage"
-      @update-page-size="updatePageSize"
-    >
-      <template v-slot:content_header>
-          <div class="w-[200px] bg-primary py-3  text-white rounded-lg ">
-            <ModalCreateService />
+    <div class="bg-white h-auto min-h-screen p-3">
+      <DataTable
+        :headerAdvanced="headerAdvanced"
+        :data="petServices"
+        :columns="columns"
+        :page-count="pageCount"
+        :page-data="pageData"
+        :saveColumnVisible="{
+          name: 'petServices',
+          isRemeber: false,
+        }"
+        :add-new-handle="{
+          type: 'function',
+          content: null,
+        }"
+        :show-search="false"
+        @clear-filter="clearFilter"
+        @on-reset="onReset"
+        @clearFilter="clearFilter"
+        @set-open="setOpen"
+        @handle-page-change="loadDataForPage"
+        @update-page-size="updatePageSize"
+      >
+        <template v-slot:content_header>
+          <div class="w-[150px] bg-primary text-white rounded-sm">
+            <ModalCreateService :title="$t('common.create')" />
           </div>
-      </template>
-    </DataTable>
-</div>
+        </template>
+      </DataTable>
+    </div>
   </ContentWrap>
 
   <DialogConfirm

@@ -5,9 +5,14 @@
       @click="() => (open = !open)"
     >
       <Plus class="size-4 mr-2" />
-      <span class="font-semibold">
-        {{ $t("common.create") }} {{ $t("pageMeta.services") }}</span
+      <span class="font-semibold" v-if="!props.title">
+        {{ $t("common.create") }} {{ $t("pageMeta.services") }}
+    
+        </span
       >
+      <span class="font-semibold" v-else>
+       {{ props.title }}
+      </span>
     </div>
   <!-- </div> -->
 
@@ -50,12 +55,13 @@ import {
 import ServiceForm from "@/views/admin/pets/services/components/ServiceForm.vue";
 import { useForm } from "vee-validate";
 import { usePetServices } from "@/stores";
-import { storeToRefs } from "pinia";
+const props= defineProps<{
+    title?: string
+}>()
 const open = ref(false);
 const form = useForm();
-
 const store = usePetServices();
-const { petServices, loading } = storeToRefs(store);
+
 const handleForm = form.handleSubmit(async (values: any) => {
   await store.createNewPetService(values).then(() => {
     open.value = !open.value;

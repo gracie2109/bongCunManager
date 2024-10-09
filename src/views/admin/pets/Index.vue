@@ -47,6 +47,7 @@
         content: null,
         type: 'function',
       }"
+       :show-search="true"
       @clear-filter="clearFilter"
       @on-reset="onReset"
       @clearFilter="clearFilter"
