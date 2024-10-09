@@ -11,6 +11,7 @@ import {
   QueryDocumentSnapshot,
   QuerySnapshot,
   startAfter,
+  updateDoc,
   where,
   type DocumentData,
 } from "firebase/firestore";
@@ -112,7 +113,6 @@ export async function getCollectionList(
   }
 }
 
-
 export async function createCollection(collectionName: string, payload: any) {
   try {
     const collectionRef = collection(db, collectionName);
@@ -123,6 +123,46 @@ export async function createCollection(collectionName: string, payload: any) {
   } catch (error) {
     throw new Error("Something went wrong: " + error);
   }
+}
+
+export async function updateCollection(collectionName: string, docId: string, payload: any) {
+  try {
+    const docRef = doc(db, collectionName, docId);
+    await updateDoc(docRef, convertBefore(payload, "UPDATE"));
+
+    return { success: true, message: "Document updated successfully" };
+  } catch (error) {
+    throw new Error("Failed to update document: " + error);
+  }
+}
+type TListCondition = {
+  field: string;
+  value: string | number;
+};
+export async function getMultiConditionData({
+  condition,
+  collectionName,
+}: {
+  condition: TListCondition[];
+  collectionName: string;
+}) {
+  //petId, serviceId
+  const clRef = collection(db, collectionName);
+  let q = query(clRef);
+  condition.forEach((cond) => {
+    q = query(q, where(cond.field, "==", cond.value));
+  });
+
+  const querySnapshot = await getDocs(q);
+  const results = [] as any[];
+  querySnapshot.forEach((doc) => {
+    results.push({
+      id: doc.id,
+      ...doc.data(),
+    });
+  });
+
+  return results;
 }
 
 export async function deleteItem(collectionName: string, idDelete: string) {

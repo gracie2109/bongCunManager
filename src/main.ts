@@ -11,4 +11,5 @@ const app = createApp(App)
 setupStore(app)
 app.use(router)
 app.use(i18n)
+
 app.mount('#app')

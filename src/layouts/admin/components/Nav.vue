@@ -7,7 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import clsx from "clsx";
 import type { LinkProp } from "@/types";
 
@@ -18,7 +18,6 @@ interface NavProps {
 
 const props = defineProps<NavProps>();
 const route = useRoute();
-
 </script>
 
 <template>
@@ -50,7 +49,7 @@ const route = useRoute();
               <Icon
                 :icon="link.icon"
                 class="size-4"
-                :class="clsx({ 'text-primary': route.name === link.name })"
+                :class="clsx({ 'text-primary': route.fullPath?.includes(link.name)})"
               />
               <span class="sr-only capitalize">{{ link.title }}</span>
             </router-link>
@@ -76,13 +75,13 @@ const route = useRoute();
           <Icon
             :icon="link.icon"
             class="mr-2 size-4"
-            :class="clsx({ 'text-primary': route.name === link.name })"
-          />
+            :class="clsx({ 'text-primary': route.fullPath?.includes(link.name)})"
+            />
           <span
             :class="
               clsx(
                 'capitalize',
-                route.name === link.name ? 'text-primary font-semibold' : ''
+                route.fullPath?.includes(link.name) ? 'text-primary font-semibold' : ''
               )
             "
           >

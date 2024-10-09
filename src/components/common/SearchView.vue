@@ -167,15 +167,11 @@ type Props = {
 const props = defineProps<Props>();
 
 const emit = defineEmits(["reset", "clearFilter", "addNew", "setOpen"]);
-const columns = computed(() =>
-  props.table.getAllColumns().filter((column) => {
-    return typeof column.accessorFn !== "undefined" && column.getCanHide();
-  })
-);
+
 
 function clickAddNew() {
   if (props.addNew.type === "link") {
-    router.push(props.addNew.content);
+    router.push({name: props.addNew.content});
   } else {
     emit("setOpen");
   }

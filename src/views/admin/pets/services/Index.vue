@@ -2,47 +2,19 @@
   <PageTitle />
 
   <ContentWrap>
-    <div
-      class="w-[250px] shadow-lg border-b-primary bg-white relative -top-3 h-12"
-    >
-      <div
-        class="h-full w-full flex items-center justify-center gap-3 cursor-pointer"
-      >
-        <div @click="$router.push({ name: 'petService' })">
-          <Icon icon="carbon:settings-services" class="size-6" />
-        </div>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger as-child>
-            <Icon icon="iconoir:weight" class="size-6 fill-none" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel class="font-bold">
-              {{ $t("common.settingView") }}</DropdownMenuLabel
-            >
-            <DropdownMenuSeparator />
-            <DropdownMenuItem v-for="tag in contents" :key="tag.id">
-              <!-- @ts-ignore -->
-              {{ (tag.lang as any)[String(locale)] }}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </div>
-
     <DataTable
       :headerAdvanced="headerAdvanced"
-      :data="pets"
+      :data="petServices"
       :columns="columns"
       :page-count="pageCount"
       :page-data="pageData"
       :saveColumnVisible="{
-        name: 'pets',
+        name: 'petServices',
         isRemeber: false,
       }"
       :add-new-handle="{
-        content: null,
-        type: 'function',
+        type: 'link',
+        content: 'petServiceCreate'
       }"
       @clear-filter="clearFilter"
       @on-reset="onReset"
@@ -53,11 +25,7 @@
     >
     </DataTable>
   </ContentWrap>
-  <ServiceForm
-    @change-open="() => (open = !open)"
-    :open="open && !selectedItem"
-    :rowEditting="rowEditSelected"
-  />
+
   <DialogConfirm
     @change-open="
       () => {
@@ -78,44 +46,32 @@
 </template>
 
 <script lang="ts" setup>
-import { Header, ContentWrap } from "@/views/admin/components";
-import ServiceForm from "./components/Form.vue";
+import { ContentWrap } from "@/views/admin/components";
+
 import { h, onMounted, reactive, ref, watchEffect } from "vue";
-import { usePets } from "@/stores";
+import { usePetServices } from "@/stores";
 import { formatDateTime } from "@/lib/utils";
 import { type IHeaderAdvanced, type T_ROW_FUNCTION } from "@/types";
-import { contents } from "@/data/pet-weights.json";
 import type { ColumnDef, PaginationState } from "@tanstack/vue-table";
 
 import { storeToRefs } from "pinia";
-import { DialogConfirm, DataTable } from "@/components/common";
+import { DialogConfirm, ActionRow, DataTable } from "@/components/common";
 import DataTableColumnHeader from "@/components/common/DataTable/DataTableColumnHeader.vue";
 import { HEADER_ADVANCE_FUNCTION, INITIAL_PAGE_INDEX } from "@/lib/constants";
 import { watch } from "vue";
-import { Icon } from "@iconify/vue";
-import RowFunction from "./components/RowFunction.vue";
-import PageTitle from "./PageTitle.vue";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import RowFunction from "../components/RowFunction.vue";
+import PageTitle from "../PageTitle.vue";
 
-import { useI18n } from "vue-i18n";
-
-const store = usePets();
-const { pets, pageCount } = storeToRefs(store);
+const store = usePetServices();
+const { petServices, pageCount } = storeToRefs(store);
 const selectedItem = ref();
-const { locale } = useI18n();
 
 const mode = ref();
 const rowEditSelected = ref();
+
 const pageData = ref<PaginationState>({
   pageIndex: INITIAL_PAGE_INDEX,
-  pageSize: 5,
+  pageSize: 500,
 });
 
 const columns: ColumnDef<any>[] = reactive([
@@ -153,15 +109,7 @@ const columns: ColumnDef<any>[] = reactive([
       );
     },
   },
-  {
-    accessorKey: "icon",
-    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Icon" }),
-    cell: ({ row }) =>
-      h(Icon, {
-        row,
-        icon: row.getValue("icon") as string,
-      }),
-  },
+
   {
     accessorKey: "createdAt",
     header: ({ column }) =>
@@ -221,7 +169,7 @@ function deleteItem(val: any) {
   mode.value = "delete";
 }
 async function handleDelete() {
-  await store.deleteServiceProvider(selectedItem.value.id);
+  await store.deletePetService(selectedItem.value.id);
   setOpen();
   selectedItem.value = null;
 }
@@ -241,14 +189,14 @@ function updatePageSize(newPs: number) {
 }
 
 const loadDataForPage = async (page: number) => {
-  await store.getListServiceProvider({
+  await store.getListPetService({
     pageIndex: page,
     pageSize: pageData.value.pageSize,
   });
 };
 
 onMounted(async () => {
-  await store.getListServiceProvider({
+  await store.getListPetService({
     pageIndex: pageData.value.pageIndex,
     pageSize: pageData.value.pageSize,
   });
@@ -257,7 +205,7 @@ onMounted(async () => {
 watch(
   () => pageData.value.pageSize,
   async () => {
-    await store.getListServiceProvider({
+    await store.getListPetService({
       pageIndex: pageData.value.pageIndex,
       pageSize: pageData.value.pageSize,
     });

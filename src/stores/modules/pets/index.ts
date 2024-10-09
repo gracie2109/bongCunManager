@@ -91,6 +91,9 @@ export const usePets = defineStore('pets', () => {
         }
     }
 
+
+
+    
     onUnmounted(() => {
         if (unsubscribe.value) {
             unsubscribe.value();

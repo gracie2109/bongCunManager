@@ -2,7 +2,7 @@
   <Header>
     <h1 class="font-semibold flex items-center gap-2">
       <Container class="size-4 text-primary" />
-      {{ $t('pageMeta.suppliers') }} ({{ pageCount }})
+      {{ $t("pageMeta.suppliers") }} ({{ pageCount }})
     </h1>
   </Header>
   <ContentWrap>
@@ -12,7 +12,10 @@
       :columns="columns"
       :page-count="pageCount"
       :page-data="pageData"
-    
+      :add-new-handle="{
+        content: null,
+        type: 'function',
+      }"
       :saveColumnVisible="{
         name: 'service_providers',
         isRemeber: false,
@@ -47,10 +50,6 @@
     "
     @handleOk="handleDelete"
   />
-
-
-
-
 </template>
 
 <script lang="ts" setup>
@@ -172,8 +171,7 @@ const type = reactive<T_ROW_FUNCTION[]>([
 const headerAdvanced = reactive<IHeaderAdvanced[]>([
   HEADER_ADVANCE_FUNCTION.ADD_NEW,
   HEADER_ADVANCE_FUNCTION.SETTING_COLUMN,
-])
-
+]);
 
 const open = ref(false);
 
@@ -217,9 +215,8 @@ function setOpen() {
   open.value = !open.value;
 }
 
-
-function updatePageSize (newPs:number) {
-  pageData.value.pageSize = +newPs
+function updatePageSize(newPs: number) {
+  pageData.value.pageSize = +newPs;
 }
 
 const loadDataForPage = async (page: number) => {
@@ -236,11 +233,13 @@ onMounted(async () => {
   });
 });
 
-watch(() => pageData.value.pageSize, async () => {
- await store.getListServiceProvider({
-    pageIndex: pageData.value.pageIndex,
-    pageSize: pageData.value.pageSize,
-  });
-})
-
+watch(
+  () => pageData.value.pageSize,
+  async () => {
+    await store.getListServiceProvider({
+      pageIndex: pageData.value.pageIndex,
+      pageSize: pageData.value.pageSize,
+    });
+  }
+);
 </script>
