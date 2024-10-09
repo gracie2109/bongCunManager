@@ -2,7 +2,7 @@
   <PageTitle />
 
   <ContentWrap>
-    <div class="fixed top-[3.75rem] h-screen w-[92vw] bg-white overflow-y-auto">
+    <div class="fixed top-[3.75rem] min-h-svh w-full bg-white overflow-y-auto ">
       <div class="w-full h-full space-y-6 ml-2 p-3 ">
         <div class="service-card grid grid-cols-6 gap-4 ">
           <div
@@ -28,8 +28,8 @@
           </div>
         </div>
 
-        <div id="table_service_price">
-          <ListServicesPriceTable />
+        <div class=" w-full overflow-y-auto overflow-x-auto ">
+          <ListServicesPriceTable :services="petServices" />
         </div>
       </div>
     </div>
