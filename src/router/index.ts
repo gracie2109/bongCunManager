@@ -19,6 +19,7 @@ import ListPetServices from "@/views/admin/pets/services/Index.vue";
 import CreatePetServices from "@/views/admin/pets/services/Create.vue";
 import NotFoundPage from "@/components/NotFoundPage.vue";
 import ContactView from "@/views/client/contact/ContactView.vue";
+import ComboServiceView from "@/views/admin/pets/service-combo/Index.vue";
 /*
  *   RULE:
  *   meta key cần đối chiếu với pageMeta trong file i18n/locales/[lang].json
@@ -132,6 +133,14 @@ const router = createRouter({
               path: "services",
               name: "petService",
               component: ListPetServices,
+              meta: {
+                key: "settingPetServicePrice",
+              },
+            },
+            {
+              path: "service-combos",
+              name: "petServiceCombo",
+              component: ComboServiceView,
               meta: {
                 key: "settingPetServicePrice",
               },

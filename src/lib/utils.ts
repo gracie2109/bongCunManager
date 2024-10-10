@@ -54,27 +54,27 @@ export function sendMessageToast(
 
 export function setLocalStorage(key: string, data: any) {
   if (!key) return;
-  sessionStorage.setItem(key, JSON.stringify(data));
+  localStorage.setItem(key, JSON.stringify(data));
 }
 
 export function getLocalStorage(key: string) {
   if (!key) return;
-  return JSON.parse(JSON.stringify(sessionStorage.getItem(key)));
+  return JSON.parse(JSON.stringify(localStorage.getItem(key)));
 }
 
 export function removeStorage(keysToKeep: string[]): void {
   const savedItems: { [key: string]: string } = {};
 
   keysToKeep.forEach((key) => {
-    const value = sessionStorage.getItem(key);
+    const value = localStorage.getItem(key);
     if (value !== null) {
       savedItems[key] = value;
     }
   });
 
-  sessionStorage.clear();
+  localStorage.clear();
   Object.keys(savedItems).forEach((key) => {
-    sessionStorage.setItem(key, savedItems[key]);
+    localStorage.setItem(key, savedItems[key]);
   });
 }
 
