@@ -95,7 +95,7 @@ function handleEmit({ action, row }: { action: T_ROW_FUNCTION; row: any }) {
 
 onMounted(async () => {
   if (route.name === "petService") {
-    await petStore.getListServiceProvider({ pageIndex: 1, pageSize: 500 });
+    await petStore.getListPets({ pageIndex: 1, pageSize: 500 });
   }
 });
 </script>
