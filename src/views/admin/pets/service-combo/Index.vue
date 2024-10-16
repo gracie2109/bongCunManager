@@ -34,7 +34,7 @@
         :open="open && !selectedItem"
         @changeOpen="reset"
         :rowEditting="rowEditting"
-        :listServices="petServices"
+        :listPet="pets"
       />
 
       <DialogConfirm
@@ -64,7 +64,7 @@ import Header from "../../components/Header.vue";
 import { h, onMounted, reactive, ref, watch } from "vue";
 import ServiceComboForm from "./ServiceComboForm.vue";
 import { useForm } from "vee-validate";
-import { usePetCombo, usePetServices } from "@/stores";
+import { usePetCombo, usePets, usePetServices } from "@/stores";
 import { storeToRefs } from "pinia";
 import type { ColumnDef, PaginationState } from "@tanstack/vue-table";
 import DataTableColumnHeader from "@/components/common/DataTable/DataTableColumnHeader.vue";
@@ -80,11 +80,12 @@ const { locale } = useI18n();
 
 const store = usePetCombo();
 const serviceStore = usePetServices();
+const petStore = usePets();
 
 const open = ref(false);
 const form = useForm();
-const { listCombo, loading, pageCount } = storeToRefs(store);
-const { petServices } = storeToRefs(serviceStore);
+const { listCombo, pageCount } = storeToRefs(store);
+const { pets } = storeToRefs(petStore);
 
 const rowEditting = ref();
 const selectedItem = ref();
@@ -138,7 +139,8 @@ const columns: ColumnDef<any>[] = reactive([
   },
   {
     accessorKey: "price",
-    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Price" }),
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "Price" }),
     cell: ({ row }) => {
       return h(
         "span",
@@ -148,8 +150,35 @@ const columns: ColumnDef<any>[] = reactive([
     },
   },
   {
+    accessorKey: "serviceIds",
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "Services" }),
+    cell: ({ row }) => {
+      const data = row.original.serviceProfiles?.map((i: any, index: any) => {
+        return index < row.original.serviceProfiles.length - 1
+          ? `${i?.name} + `
+          : i?.name;
+      });
+      return h("span", { class: "max-w-[500px] truncate font-medium" }, data);
+    },
+  },
+  {
+    accessorKey: "petIds",
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "petIds" }),
+    cell: ({ row }) => {
+      const data = row.original.petProfiles?.map((i: any, index: any) => {
+        return index < row.original.petProfiles.length - 1
+          ? `${i?.name} + `
+          : i?.name;
+      });
+      return h("span", { class: "max-w-[500px] truncate font-medium" }, data);
+    },
+  },
+  {
     accessorKey: "estimateTime",
-    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Estimate Time" }),
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "Estimate Time" }),
     cell: ({ row }) => {
       return h(
         "span",
@@ -169,7 +198,8 @@ const columns: ColumnDef<any>[] = reactive([
   },
   {
     accessorKey: "markTime",
-    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Promotion time" }),
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "Promotion time" }),
     cell: ({ row }) => {
       const time1 = (row.getValue("markTime") as any)[0];
       return h("span", { class: "max-w-[500px] truncate font-medium" }, time1);
@@ -177,7 +207,8 @@ const columns: ColumnDef<any>[] = reactive([
   },
   {
     accessorKey: "status",
-    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Status" }),
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "Status" }),
     cell: ({ row }) => {
       const data = manualStatus.find((i) => i.id === row.getValue("status"));
       const res = data ? (data.name as any)[String(locale.value)] : "";
@@ -199,7 +230,8 @@ const columns: ColumnDef<any>[] = reactive([
 
   {
     accessorKey: "createdAt",
-    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Created At" }),
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "Created At" }),
     cell: ({ row }) => {
       return h(
         "span",
@@ -211,7 +243,8 @@ const columns: ColumnDef<any>[] = reactive([
   {
     id: "function",
     accessorKey: "function",
-    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Function" }),
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "Function" }),
     cell: ({ row }) =>
       h(RowFunction, {
         row,
@@ -226,7 +259,13 @@ function updatePageSize(newPs: number) {
   pageData.value.pageSize = +newPs;
 }
 
-function handleActionRow({ action, row }: { action: T_ROW_FUNCTION; row: any }) {
+function handleActionRow({
+  action,
+  row,
+}: {
+  action: T_ROW_FUNCTION;
+  row: any;
+}) {
   if (action.isShow) {
     if (action.id === "DELETE") {
       selectedItem.value = row;
@@ -259,6 +298,10 @@ onMounted(async () => {
     pageSize: pageData.value.pageSize,
   });
   await serviceStore.getListPetService({
+    pageIndex: INITIAL_PAGE_INDEX,
+    pageSize: 5000,
+  });
+  await petStore.getListPets({
     pageIndex: INITIAL_PAGE_INDEX,
     pageSize: 5000,
   });

@@ -42,7 +42,7 @@ export const usePets = defineStore("pets", () => {
     }
   }
 
-  async function getListServiceProvider({
+  async function getListPets({
     pageIndex,
     pageSize,
   }: {
@@ -109,7 +109,7 @@ export const usePets = defineStore("pets", () => {
     pageCount,
     lastVisibleDoc,
     createNewPet,
-    getListServiceProvider,
+    getListPets,
     deleteServiceProvider,
   };
 });

@@ -8,11 +8,11 @@ import {
   checkItemNotExist,
   getMultiConditionData,
   updateCollection,
+  getContainsAnyData,
 } from "@/lib/firebaseFn";
 import { v7 as uuidv7 } from "uuid";
 import { COLLECTION } from "@/lib/constants";
 import { getIndex, sendMessageToast } from "@/lib/utils";
-import { groupBy } from "lodash-es";
 
 export const usePetServices = defineStore("petServices", () => {
   const petServices: Ref<any[]> = ref([]);
@@ -106,6 +106,21 @@ export const usePetServices = defineStore("petServices", () => {
       }
     } catch (error: any) {
       sendMessageToast("fail", "delete", "error", error.message);
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function searchServiceOfPet({ petIds }: { petIds: string[] }) {
+    try {
+      loading.value = true;
+      if (!petIds) return;
+      return await getContainsAnyData({
+        collectionName: COLLECTION.PETS_SERVICES,
+        conditions: [{ fieldId: "petIds", dataSearch: petIds }],
+      });
+    } catch (error) {
+      console.log("err", error);
     } finally {
       loading.value = false;
     }
@@ -246,5 +261,6 @@ export const usePetServices = defineStore("petServices", () => {
     createPetServicePrice,
     getServicePriceByPetId,
     getAllServicePriceByPetId,
+    searchServiceOfPet,
   };
 });
