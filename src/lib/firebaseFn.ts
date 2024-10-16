@@ -210,3 +210,58 @@ export function convertBefore(payload: any, method: "UPDATE" | "CREATE") {
     };
   }
 }
+
+type Condition = {
+  fieldId?: string;
+  dataSearch?: any[];
+  equalityField?: string;
+  equalityValue?: any;
+};
+export async function getContainsAnyData({
+  collectionName,
+  conditions,
+}: {
+  collectionName: string;
+  conditions: Condition[];
+}): Promise<any[]> {
+  try {
+    const colRef = collection(db, collectionName);
+    const q = query(colRef);
+    let finalQuery = q;
+
+    let hasConditions = false;
+
+    conditions.forEach(
+      ({ fieldId, dataSearch, equalityField, equalityValue }) => {
+        if (dataSearch && dataSearch.length > 0 && fieldId) {
+          finalQuery = query(
+            finalQuery,
+            where(fieldId, "array-contains-any", dataSearch)
+          );
+          hasConditions = true;
+        }
+        if (equalityField && equalityValue !== undefined) {
+          finalQuery = query(
+            finalQuery,
+            where(equalityField, "==", equalityValue)
+          );
+          hasConditions = true;
+        }
+      }
+    );
+
+    if (!hasConditions) {
+      return []; 
+    }
+
+    const querySnapshot = await getDocs(finalQuery);
+    const results = querySnapshot.docs.map((doc: QueryDocumentSnapshot) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return results;
+  } catch (error) {
+    throw new Error("Something went wrong: " + error);
+  }
+}
