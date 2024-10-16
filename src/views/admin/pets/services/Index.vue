@@ -34,7 +34,7 @@
         open = !open;
       }
     "
-    :open="open && selectedItem"
+    :open="open && selectedItem && !rowEditSelected"
     :title="selectedItem?.name"
     @cancel="
       () => {
@@ -47,8 +47,9 @@
 
   <ModalCreateService
     :title="$t('common.create')"
-    :handle-open="open"
+    :handle-open="open && !selectedItem"
     @updateOpen="(vl) => (open = vl)"
+    :rowEditting="rowEditSelected"
   />
 </template>
 
@@ -62,7 +63,7 @@ import { type IHeaderAdvanced, type T_ROW_FUNCTION } from "@/types";
 import type { ColumnDef, PaginationState } from "@tanstack/vue-table";
 
 import { storeToRefs } from "pinia";
-import { DialogConfirm, ActionRow, DataTable } from "@/components/common";
+import { DialogConfirm, DataTable } from "@/components/common";
 import DataTableColumnHeader from "@/components/common/DataTable/DataTableColumnHeader.vue";
 import { HEADER_ADVANCE_FUNCTION, INITIAL_PAGE_INDEX } from "@/lib/constants";
 import { watch } from "vue";
@@ -76,9 +77,8 @@ const { locale } = useI18n();
 const store = usePetServices();
 const { petServices, pageCount } = storeToRefs(store);
 const selectedItem = ref();
-
-const mode = ref();
 const rowEditSelected = ref();
+const mode = ref();
 
 const pageData = ref<PaginationState>({
   pageIndex: INITIAL_PAGE_INDEX,
@@ -139,7 +139,8 @@ const columns: ColumnDef<any>[] = reactive([
   },
   {
     accessorKey: "generalPrice",
-    header: ({ column }) => h(DataTableColumnHeader, { column, title: "General Price" }),
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "General Price" }),
     cell: ({ row }) => {
       return h(
         "span",

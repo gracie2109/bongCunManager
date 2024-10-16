@@ -62,7 +62,7 @@
         </Table>
       </div>
       <div
-        class="h-12 bg-white pl-5 bottom-0 max-w-[90vw] w-full fixed"
+        class="h-12 bg-white pl-5 bottom-0 w-full fixed"
         v-if="props.pageCount && props.pageData"
       >
         <div class="w-full h-full grid place-items-center">

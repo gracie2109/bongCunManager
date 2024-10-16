@@ -81,7 +81,7 @@ provide(PROVIDER_KEYS.IS_COLLAPSE, isCollapsed);
           <ResizableHandle id="resize-handle-1" with-handle />
 
           <ResizablePanel id="resize-panel-2" :default-size="defaultLayout[1]">
-            <ScrollArea class="h-screen flex bg-[#e3e3e3]">
+            <ScrollArea class="h-screen flex bg-[#f5f5f5]">
               <slot />
             </ScrollArea>
           </ResizablePanel>

@@ -106,3 +106,26 @@ export function formatDateTime(date: string | Date | number) {
   if (!date) return;
   return format(date, "dd-MM-yyyy HH:mm:ss");
 }
+
+export function convertNumberToTime(minutes: number) {
+  const days = Math.floor(minutes / 1440);
+  const hours = Math.floor((minutes % 1440) / 60);
+  const mins = minutes % 60;
+
+  if (days > 0) {
+    return `${days}d ${hours}:${mins.toString().padStart(2, "0")}`;
+  } else {
+    return `${hours}:${mins.toString().padStart(2, "0")}`;
+  }
+}
+
+export const getIndex = ({
+  dataPage,
+  index,
+}: {
+  index: number;
+  dataPage: { page: number; page_size: number };
+}) => {
+  const stt = (dataPage.page - 1) * dataPage.page_size + index + 1;
+  return stt;
+};

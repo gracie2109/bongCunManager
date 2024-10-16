@@ -52,8 +52,75 @@ export async function checkItemNotExist(
     );
 }
 
-export async function getCollectionList(
-  collectionName: string,
+// export async function getCollectionList(
+//   collectionName: string,
+//   callback: ({
+//     data,
+//     totalRecord,
+//     lastVisibleDoc,
+//   }: {
+//     data: any[];
+//     totalRecord: number;
+//     lastVisibleDoc: any;
+//   }) => void,
+//   isAll?: boolean,
+//   limitNumb?: number,
+//   startAfterDoc?: any
+// ) {
+//   try {
+//     const colRef = collection(db, collectionName);
+//     let qData;
+
+//     if (!isAll && limitNumb) {
+//       if (startAfterDoc) {
+//         qData = query(
+//           colRef,
+//           orderBy("createdAt", "desc"),
+//           startAfter(startAfterDoc),
+//           limit(limitNumb)
+//         );
+//       } else {
+//         qData = query(colRef, orderBy("createdAt", "desc"), limit(limitNumb));
+//       }
+//     } else {
+//       qData = query(colRef, orderBy("createdAt", "desc"));
+//     }
+
+//     const totalRecord = await getTotalRecord(collectionName);
+//     return onSnapshot(qData, (snapshot) => {
+//       let response: any[] = [];
+//       let lastVisibleDoc: any = null;
+
+//       if (!snapshot.empty) {
+//         snapshot.forEach((doc) => {
+//           response.push({
+//             ...doc.data(),
+//             id: doc.id,
+//           });
+//           lastVisibleDoc = doc;
+//         });
+//         //@ts-ignore
+//       }
+
+//       callback({
+//         data: response,
+//         totalRecord: totalRecord,
+//         lastVisibleDoc: lastVisibleDoc,
+//       });
+//     });
+//   } catch (error) {
+//     throw new Error("Something went wrong: " + error);
+//   }
+// }
+
+export async function getCollectionList({
+  collectionName,
+  callback,
+  isAll,
+  limitNumb,
+  startAfterDoc,
+}: {
+  collectionName: string;
   callback: ({
     data,
     totalRecord,
@@ -62,11 +129,11 @@ export async function getCollectionList(
     data: any[];
     totalRecord: number;
     lastVisibleDoc: any;
-  }) => void,
-  isAll?: boolean,
-  limitNumb?: number,
-  startAfterDoc?: any
-) {
+  }) => void;
+  isAll?: boolean;
+  limitNumb?: number;
+  startAfterDoc?: any;
+}) {
   try {
     const colRef = collection(db, collectionName);
     let qData;
@@ -125,7 +192,11 @@ export async function createCollection(collectionName: string, payload: any) {
   }
 }
 
-export async function updateCollection(collectionName: string, docId: string, payload: any) {
+export async function updateCollection(
+  collectionName: string,
+  docId: string,
+  payload: any
+) {
   try {
     const docRef = doc(db, collectionName, docId);
     await updateDoc(docRef, convertBefore(payload, "UPDATE"));

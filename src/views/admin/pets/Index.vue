@@ -2,60 +2,66 @@
   <PageTitle />
 
   <ContentWrap>
-    <div
-      class="w-[250px] shadow-lg border-b-primary bg-white relative -top-3 h-12"
-    >
+    <div class="relative">
       <div
-        class="h-full w-full flex items-center justify-center gap-3 cursor-pointer"
+        class="w-[250px] shadow-lg border-b-primary bg-white fixed top-12 h-12 z-40"
+        id="sub_navigation"
       >
-        <div @click="$router.push({ name: 'petService' })">
-          <Icon icon="carbon:settings-services" class="size-6" />
+        <div
+          class="h-full w-full flex items-center justify-center gap-3 cursor-pointer"
+        >
+          <div @click="$router.push({ name: 'petService' })">
+            <Icon icon="carbon:settings-services" class="size-6" />
+          </div>
+          <div>
+            <Layers2
+              class="size-6"
+              @click="$router.push({ name: 'petServiceCombo' })"
+            />
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger as-child>
+              <Icon icon="iconoir:weight" class="size-6 fill-none" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel class="font-bold">
+                {{ $t("common.settingView") }}</DropdownMenuLabel
+              >
+              <DropdownMenuSeparator />
+              <DropdownMenuItem v-for="tag in contents" :key="tag.id">
+                <!-- @ts-ignore -->
+                {{ (tag.lang as any)[String(locale)] }}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        <div >
-          <Layers2  class="size-6"  @click="$router.push({ name: 'petServiceCombo' })"/>
-        </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger as-child>
-            <Icon icon="iconoir:weight" class="size-6 fill-none" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel class="font-bold">
-              {{ $t("common.settingView") }}</DropdownMenuLabel
-            >
-            <DropdownMenuSeparator />
-            <DropdownMenuItem v-for="tag in contents" :key="tag.id">
-              <!-- @ts-ignore -->
-              {{ (tag.lang as any)[String(locale)] }}
-            </DropdownMenuItem>
-            
-          </DropdownMenuContent>
-        </DropdownMenu>
+      </div>
+      <div class="relative top-14 z-30">
+        <DataTable
+          :headerAdvanced="headerAdvanced"
+          :data="pets"
+          :columns="columns"
+          :page-count="pageCount"
+          :page-data="pageData"
+          :saveColumnVisible="{
+            name: 'pets',
+            isRemeber: false,
+          }"
+          :add-new-handle="{
+            content: null,
+            type: 'function',
+          }"
+          :show-search="true"
+          @clear-filter="clearFilter"
+          @on-reset="onReset"
+          @clearFilter="clearFilter"
+          @set-open="setOpen"
+          @handle-page-change="loadDataForPage"
+          @update-page-size="updatePageSize"
+        >
+        </DataTable>
       </div>
     </div>
-
-    <DataTable
-      :headerAdvanced="headerAdvanced"
-      :data="pets"
-      :columns="columns"
-      :page-count="pageCount"
-      :page-data="pageData"
-      :saveColumnVisible="{
-        name: 'pets',
-        isRemeber: false,
-      }"
-      :add-new-handle="{
-        content: null,
-        type: 'function',
-      }"
-       :show-search="true"
-      @clear-filter="clearFilter"
-      @on-reset="onReset"
-      @clearFilter="clearFilter"
-      @set-open="setOpen"
-      @handle-page-change="loadDataForPage"
-      @update-page-size="updatePageSize"
-    >
-    </DataTable>
   </ContentWrap>
   <ServiceForm
     @change-open="() => (open = !open)"
@@ -188,6 +194,7 @@ const columns: ColumnDef<any>[] = reactive([
       h(RowFunction, {
         row,
         onClick: (item: any) => {
+          console.log("pets", item)
           handleActionRow(item);
         },
       }),

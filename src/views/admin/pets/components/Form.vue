@@ -139,7 +139,6 @@ const onSubmit = form.handleSubmit(async (values: z.infer<typeof PetsValid>) => 
 watch(
     () => props.rowEditting,
     (newVal:z.infer<typeof PetsValid>) => {
-        console.log('newVal',newVal)
         if (newVal) {
             form.resetForm();
             form.setValues({ ...newVal }, true);
