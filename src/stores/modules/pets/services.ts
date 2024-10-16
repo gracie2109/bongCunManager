@@ -262,5 +262,6 @@ export const usePetServices = defineStore("petServices", () => {
     getServicePriceByPetId,
     getAllServicePriceByPetId,
     searchServiceOfPet,
+    
   };
 });
