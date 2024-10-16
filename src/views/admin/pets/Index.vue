@@ -3,39 +3,7 @@
 
   <ContentWrap>
     <div class="relative">
-      <div
-        class="w-[250px] shadow-lg border-b-primary bg-white fixed top-12 h-12 z-40"
-        id="sub_navigation"
-      >
-        <div
-          class="h-full w-full flex items-center justify-center gap-3 cursor-pointer"
-        >
-          <div @click="$router.push({ name: 'petService' })">
-            <Icon icon="carbon:settings-services" class="size-6" />
-          </div>
-          <div>
-            <Layers2
-              class="size-6"
-              @click="$router.push({ name: 'petServiceCombo' })"
-            />
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger as-child>
-              <Icon icon="iconoir:weight" class="size-6 fill-none" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel class="font-bold">
-                {{ $t("common.settingView") }}</DropdownMenuLabel
-              >
-              <DropdownMenuSeparator />
-              <DropdownMenuItem v-for="tag in contents" :key="tag.id">
-                <!-- @ts-ignore -->
-                {{ (tag.lang as any)[String(locale)] }}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
+      <SubMenu />
       <div class="relative top-14 z-30">
         <DataTable
           :headerAdvanced="headerAdvanced"
@@ -88,13 +56,12 @@
 </template>
 
 <script lang="ts" setup>
-import { Header, ContentWrap } from "@/views/admin/components";
+import { ContentWrap } from "@/views/admin/components";
 import ServiceForm from "./components/Form.vue";
-import { h, onMounted, reactive, ref, watchEffect } from "vue";
+import { h, onMounted, reactive, ref } from "vue";
 import { usePets } from "@/stores";
 import { formatDateTime } from "@/lib/utils";
 import { type IHeaderAdvanced, type T_ROW_FUNCTION } from "@/types";
-import { contents } from "@/data/pet-weights.json";
 import type { ColumnDef, PaginationState } from "@tanstack/vue-table";
 
 import { storeToRefs } from "pinia";
@@ -105,17 +72,8 @@ import { watch } from "vue";
 import { Icon } from "@iconify/vue";
 import RowFunction from "./components/RowFunction.vue";
 import PageTitle from "./PageTitle.vue";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
 import { useI18n } from "vue-i18n";
-import { Layers2 } from "lucide-vue-next";
+import SubMenu from "./components/SubMenu.vue";
 
 const store = usePets();
 const { pets, pageCount } = storeToRefs(store);
@@ -194,7 +152,7 @@ const columns: ColumnDef<any>[] = reactive([
       h(RowFunction, {
         row,
         onClick: (item: any) => {
-          console.log("pets", item)
+          console.log("pets", item);
           handleActionRow(item);
         },
       }),
