@@ -1,5 +1,5 @@
 <template>
-  <div class="admin_content">
+  <div class="admin_content ">
     <slot />
   </div>
 </template>

@@ -22,7 +22,9 @@
     "phone": "Số điện thoại",
     "settingView": "Cài đặt hiển thị cột",
     "icon": "Biểu tượng",
-    "row_per_page": "Hàng trên mỗi trang"
+    "row_per_page": "Hàng trên mỗi trang",
+    "price": "Giá tiền"
+
   },
   "pageMeta": {
     "home": "Trang chủ ",

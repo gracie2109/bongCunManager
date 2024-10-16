@@ -52,8 +52,14 @@ export async function checkItemNotExist(
     );
 }
 
-export async function getCollectionList(
-  collectionName: string,
+export async function getCollectionList({
+  collectionName,
+  callback,
+  isAll,
+  limitNumb,
+  startAfterDoc,
+}: {
+  collectionName: string;
   callback: ({
     data,
     totalRecord,
@@ -62,11 +68,11 @@ export async function getCollectionList(
     data: any[];
     totalRecord: number;
     lastVisibleDoc: any;
-  }) => void,
-  isAll?: boolean,
-  limitNumb?: number,
-  startAfterDoc?: any
-) {
+  }) => void;
+  isAll?: boolean;
+  limitNumb?: number;
+  startAfterDoc?: any;
+}) {
   try {
     const colRef = collection(db, collectionName);
     let qData;
@@ -125,7 +131,11 @@ export async function createCollection(collectionName: string, payload: any) {
   }
 }
 
-export async function updateCollection(collectionName: string, docId: string, payload: any) {
+export async function updateCollection(
+  collectionName: string,
+  docId: string,
+  payload: any
+) {
   try {
     const docRef = doc(db, collectionName, docId);
     await updateDoc(docRef, convertBefore(payload, "UPDATE"));

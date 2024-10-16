@@ -48,6 +48,7 @@ const getIcon = (id: T_ROW_FUNCTION["id"]) => {
 };
 
 function handleClick(item: any) {
+  console.log('handleClick', item)
   emits("click", { action: toRaw(item), row: toRaw(props.row.original) });
 }
 </script>

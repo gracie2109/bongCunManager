@@ -11,7 +11,7 @@ import {
 } from "@/lib/firebaseFn";
 import { v7 as uuidv7 } from "uuid";
 import { COLLECTION } from "@/lib/constants";
-import { sendMessageToast } from "@/lib/utils";
+import { getIndex, sendMessageToast } from "@/lib/utils";
 import { groupBy } from "lodash-es";
 
 export const usePetServices = defineStore("petServices", () => {
@@ -48,17 +48,6 @@ export const usePetServices = defineStore("petServices", () => {
     }
   }
 
-  const getIndex = ({
-    dataPage,
-    index,
-  }: {
-    index: number;
-    dataPage: { page: number; page_size: number };
-  }) => {
-    const stt = (dataPage.page - 1) * dataPage.page_size + index + 1;
-    return stt;
-  };
-
   async function getListPetService({
     pageIndex,
     pageSize,
@@ -73,10 +62,9 @@ export const usePetServices = defineStore("petServices", () => {
       if (pageIndex > 1) {
         lastVisibleDocForPage = lastVisibleDocsCache.value[pageIndex - 1];
       }
-
-      await getCollectionList(
-        COLLECTION.PETS_SERVICES,
-        ({ data, totalRecord, lastVisibleDoc: lastDoc }) => {
+      await getCollectionList({
+        collectionName: COLLECTION.PETS_SERVICES,
+        callback({ data, totalRecord, lastVisibleDoc: lastDoc }) {
           petServices.value = data?.map((i, j) => {
             return {
               ...i,
@@ -91,10 +79,10 @@ export const usePetServices = defineStore("petServices", () => {
           lastVisibleDocsCache.value[pageIndex] = lastDoc;
           loading.value = false;
         },
-        false,
-        pageSize,
-        lastVisibleDocForPage
-      );
+        isAll: false,
+        limitNumb: pageSize,
+        startAfterDoc: lastVisibleDocForPage,
+      });
     } catch (error) {
       loading.value = false;
       console.error(error);

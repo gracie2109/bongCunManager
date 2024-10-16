@@ -1,5 +1,5 @@
 <template>
-  <ActionRow :type="type" :row="props.row" @click="$emit('click')">
+  <ActionRow :type="type" :row="props.row" @click="handleEmit">
     <Tooltip v-if="$route.name === 'pets'">
       <TooltipTrigger as-child>
         <Button
@@ -19,7 +19,7 @@
       </TooltipContent>
     </Tooltip>
 
-    <DropdownMenu v-if="$route.name === 'petService'">
+    <DropdownMenu>
       <DropdownMenuTrigger>
         <EllipsisVertical class="text-primary-subb" />
       </DropdownMenuTrigger>
@@ -50,11 +50,7 @@
 
 <script lang="ts" setup>
 import { ActionRow } from "@/components/common";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 
 import type { T_ROW_FUNCTION } from "@/types";
@@ -92,6 +88,10 @@ const type = reactive<T_ROW_FUNCTION[]>([
 ]);
 
 const route = useRoute();
+
+function handleEmit({ action, row }: { action: T_ROW_FUNCTION; row: any }) {
+  emits("click", { action, row });
+}
 
 onMounted(async () => {
   if (route.name === "petService") {

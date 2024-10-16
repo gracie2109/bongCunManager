@@ -54,27 +54,27 @@ export function sendMessageToast(
 
 export function setLocalStorage(key: string, data: any) {
   if (!key) return;
-  sessionStorage.setItem(key, JSON.stringify(data));
+  localStorage.setItem(key, JSON.stringify(data));
 }
 
 export function getLocalStorage(key: string) {
   if (!key) return;
-  return JSON.parse(JSON.stringify(sessionStorage.getItem(key)));
+  return JSON.parse(JSON.stringify(localStorage.getItem(key)));
 }
 
 export function removeStorage(keysToKeep: string[]): void {
   const savedItems: { [key: string]: string } = {};
 
   keysToKeep.forEach((key) => {
-    const value = sessionStorage.getItem(key);
+    const value = localStorage.getItem(key);
     if (value !== null) {
       savedItems[key] = value;
     }
   });
 
-  sessionStorage.clear();
+  localStorage.clear();
   Object.keys(savedItems).forEach((key) => {
-    sessionStorage.setItem(key, savedItems[key]);
+    localStorage.setItem(key, savedItems[key]);
   });
 }
 
@@ -106,3 +106,26 @@ export function formatDateTime(date: string | Date | number) {
   if (!date) return;
   return format(date, "dd-MM-yyyy HH:mm:ss");
 }
+
+export function convertNumberToTime(minutes: number) {
+  const days = Math.floor(minutes / 1440);
+  const hours = Math.floor((minutes % 1440) / 60);
+  const mins = minutes % 60;
+
+  if (days > 0) {
+    return `${days}d ${hours}:${mins.toString().padStart(2, "0")}`;
+  } else {
+    return `${hours}:${mins.toString().padStart(2, "0")}`;
+  }
+}
+
+export const getIndex = ({
+  dataPage,
+  index,
+}: {
+  index: number;
+  dataPage: { page: number; page_size: number };
+}) => {
+  const stt = (dataPage.page - 1) * dataPage.page_size + index + 1;
+  return stt;
+};

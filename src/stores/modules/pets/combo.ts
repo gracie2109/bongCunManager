@@ -1,37 +1,41 @@
-import { onUnmounted, ref, type Ref } from "vue";
-import { defineStore } from "pinia";
+import { COLLECTION } from "@/lib/constants";
 import {
   checkItemExist,
-  createCollection,
-  getCollectionList,
-  deleteItem,
   checkItemNotExist,
+  createCollection,
+  deleteItem,
+  getCollectionList,
 } from "@/lib/firebaseFn";
+import { defineStore } from "pinia";
+import { ref, type Ref } from "vue";
 import { v7 as uuidv7 } from "uuid";
-import { COLLECTION } from "@/lib/constants";
 import { getIndex, sendMessageToast } from "@/lib/utils";
 
-export const usePets = defineStore("pets", () => {
-  const pets: Ref<any[]> = ref([]);
+export const usePetCombo = defineStore("petCombo", () => {
   const loading = ref(false);
-  const unsubscribe = ref<null | (() => void)>(null);
   const pageCount = ref();
   const lastVisibleDoc = ref(null);
   const lastVisibleDocsCache = ref<Record<number, any>>({});
 
-  async function createNewPet(payload: any) {
+  const listCombo: Ref<any[]> = ref([]);
+
+  async function createNewPetCombo(payload: any) {
     try {
+      console.log("paykiad", payload);
       loading.value = true;
       const notExist = await checkItemExist(
-        COLLECTION.PETS,
+        COLLECTION.PET_SERVICES_COMBO,
         "name",
         payload.name
       );
       if (notExist) {
-        const totalRecord = await createCollection(COLLECTION.PETS, {
-          ...payload,
-          uid: uuidv7(),
-        });
+        const totalRecord = await createCollection(
+          COLLECTION.PET_SERVICES_COMBO,
+          {
+            ...payload,
+            uid: uuidv7(),
+          }
+        );
         pageCount.value = totalRecord;
         sendMessageToast("success", "create", "success");
       }
@@ -42,7 +46,7 @@ export const usePets = defineStore("pets", () => {
     }
   }
 
-  async function getListServiceProvider({
+  async function getListPetCombo({
     pageIndex,
     pageSize,
   }: {
@@ -57,8 +61,9 @@ export const usePets = defineStore("pets", () => {
         lastVisibleDocForPage = lastVisibleDocsCache.value[pageIndex - 1];
       }
       await getCollectionList({
-        callback: ({ data, totalRecord, lastVisibleDoc: lastDoc }) => {
-          pets.value = data?.map((i, j) => {
+        collectionName: COLLECTION.PET_SERVICES_COMBO,
+        callback({ data, totalRecord, lastVisibleDoc: lastDoc }) {
+          listCombo.value = data?.map((i, j) => {
             return {
               ...i,
               index: getIndex({
@@ -67,8 +72,11 @@ export const usePets = defineStore("pets", () => {
               }),
             };
           });
+          pageCount.value = totalRecord;
+          lastVisibleDoc.value = lastDoc;
+          lastVisibleDocsCache.value[pageIndex] = lastDoc;
+          loading.value = false;
         },
-        collectionName: COLLECTION.PETS,
         isAll: false,
         limitNumb: pageSize,
         startAfterDoc: lastVisibleDocForPage,
@@ -81,12 +89,12 @@ export const usePets = defineStore("pets", () => {
     }
   }
 
-  async function deleteServiceProvider(id: string) {
+  async function deleteServiceCombo(id: string) {
     try {
       loading.value = true;
-      const exist = await checkItemNotExist(COLLECTION.PETS, "__name__", id);
+      const exist = await checkItemNotExist(COLLECTION.PET_SERVICES_COMBO, "__name__", id);
       if (exist) {
-        const totalRecord = await deleteItem(COLLECTION.PETS, id);
+        const totalRecord = await deleteItem(COLLECTION.PET_SERVICES_COMBO, id);
         pageCount.value = totalRecord;
         sendMessageToast("success", "delete", "success");
       }
@@ -96,20 +104,12 @@ export const usePets = defineStore("pets", () => {
       loading.value = false;
     }
   }
-
-  onUnmounted(() => {
-    if (unsubscribe.value) {
-      unsubscribe.value();
-    }
-  });
-
   return {
-    pets,
     loading,
+    listCombo,
     pageCount,
-    lastVisibleDoc,
-    createNewPet,
-    getListServiceProvider,
-    deleteServiceProvider,
+    createNewPetCombo,
+    getListPetCombo,
+    deleteServiceCombo
   };
 });
