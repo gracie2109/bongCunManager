@@ -26,6 +26,33 @@
                 <FormMessage />
               </FormItem>
             </FormField>
+            <FormField v-slot="{ componentField }" name="petIds">
+              <FormItem>
+                <FormLabel>PetIds</FormLabel>
+                <FormControl>
+                  <Multiselect
+                    v-bind="componentField"
+                    v-model="petSelected"
+                    :options="listPet"
+                    :multiple="true"
+                    :close-on-select="false"
+                    :clear-on-select="false"
+                    :preserve-search="true"
+                    placeholder="choose service"
+                    label="name"
+                    track-by="name"
+                    :taggable="true"
+                    @update:modelValue="(value:any) => {
+                               props.form.setFieldValue('petIds', value?.map((i:any) => i.id));
+                               props.form.setFieldValue('petProfiles', value?.map((i:any) => i))
+
+                            }"
+                  >
+                  </Multiselect>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
             <FormField v-slot="{ componentField }" name="serviceIds">
               <FormItem>
                 <FormLabel>serviceIds</FormLabel>
@@ -219,25 +246,27 @@ import {
 import { status } from "@/data/status.json";
 import { useI18n } from "vue-i18n";
 import type { FormContext } from "vee-validate";
-import { usePetCombo } from "@/stores";
+import { usePetCombo, usePetServices } from "@/stores";
 import Multiselect from "vue-multiselect";
 
 const props = defineProps<{
   form: FormContext<any>;
   open: boolean;
   rowEditting?: any;
-  listServices: any[];
+  listPet: any[];
 }>();
 
 const emit = defineEmits(["onSubmitHdl", "changeOpen"]);
 const { locale } = useI18n();
 const dataItem = ref();
 const store = usePetCombo();
-
+const serviceStore = usePetServices();
 const date = ref();
 const time = ref();
 const price = ref();
 const serviceSelected = ref<any[]>([]);
+const petSelected = ref<any[]>([]);
+const listServices = ref<any[]>([]);
 
 const onSubmit = props.form.handleSubmit(async (values: any) => {
   if (!dataItem.value) {
@@ -270,6 +299,41 @@ const presetDates = ref([
     value: [startOfYear(new Date()), endOfYear(new Date())],
   },
 ]);
+watch(
+  () => petSelected.value,
+  async () => {
+    if (!petSelected.value || petSelected.value.length === 0) {
+      serviceSelected.value = [];
+      listServices.value = [];
+      props.form.setFieldValue("serviceIds", []);
+      return;
+    }
+
+    const response = await serviceStore.searchServiceOfPet({
+      petIds: petSelected.value.map((i) => i?.id),
+    });
+    listServices.value = response || [];
+
+    const selectedServiceIds = serviceSelected.value.map(
+      (service) => service.id
+    );
+
+    const validServices = serviceSelected.value.filter((service) =>
+      listServices.value.some((respService) => respService.id === service.id)
+    );
+
+    serviceSelected.value = validServices;
+
+    if (validServices.length !== selectedServiceIds.length) {
+      props.form.setFieldValue(
+        "serviceIds",
+        validServices.map((service) => service.id)
+      );
+    } else {
+      props.form.setFieldValue("serviceIds", selectedServiceIds);
+    }
+  }
+);
 
 watch(
   () => props.rowEditting,

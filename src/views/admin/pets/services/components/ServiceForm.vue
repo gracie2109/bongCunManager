@@ -182,6 +182,6 @@ const onSubmit = (values: any) => {
 };
 
 onMounted(async () => {
-  await petStore.getListServiceProvider({ pageIndex: 1, pageSize: 500 });
+  await petStore.getListPets({ pageIndex: 1, pageSize: 500 });
 });
 </script>

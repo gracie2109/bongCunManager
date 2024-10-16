@@ -211,14 +211,14 @@ function updatePageSize(newPs: number) {
 }
 
 const loadDataForPage = async (page: number) => {
-  await store.getListServiceProvider({
+  await store.getListPets({
     pageIndex: page,
     pageSize: pageData.value.pageSize,
   });
 };
 
 onMounted(async () => {
-  await store.getListServiceProvider({
+  await store.getListPets({
     pageIndex: pageData.value.pageIndex,
     pageSize: pageData.value.pageSize,
   });
@@ -227,7 +227,7 @@ onMounted(async () => {
 watch(
   () => pageData.value.pageSize,
   async () => {
-    await store.getListServiceProvider({
+    await store.getListPets({
       pageIndex: pageData.value.pageIndex,
       pageSize: pageData.value.pageSize,
     });
