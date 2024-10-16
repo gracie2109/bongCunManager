@@ -1,7 +1,9 @@
 import { COLLECTION } from "@/lib/constants";
 import {
   checkItemExist,
+  checkItemNotExist,
   createCollection,
+  deleteItem,
   getCollectionList,
 } from "@/lib/firebaseFn";
 import { defineStore } from "pinia";
@@ -86,11 +88,28 @@ export const usePetCombo = defineStore("petCombo", () => {
       loading.value = false;
     }
   }
+
+  async function deleteServiceCombo(id: string) {
+    try {
+      loading.value = true;
+      const exist = await checkItemNotExist(COLLECTION.PET_SERVICES_COMBO, "__name__", id);
+      if (exist) {
+        const totalRecord = await deleteItem(COLLECTION.PET_SERVICES_COMBO, id);
+        pageCount.value = totalRecord;
+        sendMessageToast("success", "delete", "success");
+      }
+    } catch (error: any) {
+      sendMessageToast("fail", "delete", "error", error.message);
+    } finally {
+      loading.value = false;
+    }
+  }
   return {
     loading,
     listCombo,
     pageCount,
     createNewPetCombo,
-    getListPetCombo
+    getListPetCombo,
+    deleteServiceCombo
   };
 });

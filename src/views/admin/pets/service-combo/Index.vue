@@ -30,9 +30,28 @@
 
       <ServiceComboForm
         :form="form"
-        :open="open"
+        :open="open && !selectedItem"
         @changeOpen="reset"
         :rowEditting="rowEditting"
+        :listServices="petServices"
+      />
+
+      <DialogConfirm
+        @change-open="
+          () => {
+            selectedItem = null;
+            open = !open;
+          }
+        "
+        :open="open && selectedItem"
+        :title="selectedItem?.name"
+        @cancel="
+          () => {
+            selectedItem = null;
+            open = false;
+          }
+        "
+        @handleOk="handleDelete"
       />
     </div>
   </ContentWrap>
@@ -44,24 +63,29 @@ import Header from "../../components/Header.vue";
 import { h, onMounted, reactive, ref, watch } from "vue";
 import ServiceComboForm from "./ServiceComboForm.vue";
 import { useForm } from "vee-validate";
-import { usePetCombo } from "@/stores";
+import { usePetCombo, usePetServices } from "@/stores";
 import { storeToRefs } from "pinia";
 import type { ColumnDef, PaginationState } from "@tanstack/vue-table";
 import DataTableColumnHeader from "@/components/common/DataTable/DataTableColumnHeader.vue";
 import { convertNumberToTime, formatDateTime, formatPrice } from "@/lib/utils";
 import type { IHeaderAdvanced, T_ROW_FUNCTION } from "@/types";
 import { HEADER_ADVANCE_FUNCTION, INITIAL_PAGE_INDEX } from "@/lib/constants";
-import { DataTable } from "@/components/common";
+import { DataTable, DialogConfirm } from "@/components/common";
 import { status, manualStatus } from "@/data/status.json";
 import { useI18n } from "vue-i18n";
 import RowFunction from "../components/RowFunction.vue";
 const { locale } = useI18n();
 
 const store = usePetCombo();
+const serviceStore = usePetServices();
+
 const open = ref(false);
 const form = useForm();
 const { listCombo, loading, pageCount } = storeToRefs(store);
+const { petServices } = storeToRefs(serviceStore);
+
 const rowEditting = ref();
+const selectedItem = ref();
 
 const headerAdvanced = reactive<IHeaderAdvanced[]>([
   HEADER_ADVANCE_FUNCTION.SETTING_COLUMN,
@@ -215,6 +239,8 @@ function handleActionRow({
 }) {
   if (action.isShow) {
     if (action.id === "DELETE") {
+      selectedItem.value = row;
+      open.value = true;
     }
 
     if (action.id === "EDIT") {
@@ -231,10 +257,20 @@ const loadDataForPage = async (page: number) => {
   });
 };
 
+async function handleDelete() {
+  await store.deleteServiceCombo(selectedItem.value.id);
+  setOpen();
+  selectedItem.value = null;
+}
+
 onMounted(async () => {
   await store.getListPetCombo({
     pageIndex: pageData.value.pageIndex,
     pageSize: pageData.value.pageSize,
+  });
+  await serviceStore.getListPetService({
+    pageIndex: INITIAL_PAGE_INDEX,
+    pageSize: 5000,
   });
 });
 

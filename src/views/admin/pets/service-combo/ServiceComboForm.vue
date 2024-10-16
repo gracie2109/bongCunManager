@@ -1,6 +1,5 @@
 <template>
   <div id="service_combo_form">
-
     <Dialog :open="props.open" @update:open="$emit('changeOpen')">
       <DialogContent
         class="sm:max-w-[425px] lg:max-w-[950px] grid-rows-[auto_minmax(0,1fr)_auto] p-0 h-auto max-h-[90dvh]"
@@ -27,7 +26,32 @@
                 <FormMessage />
               </FormItem>
             </FormField>
-
+            <FormField v-slot="{ componentField }" name="serviceIds">
+              <FormItem>
+                <FormLabel>serviceIds</FormLabel>
+                <FormControl>
+                  <Multiselect
+                    v-bind="componentField"
+                    v-model="serviceSelected"
+                    :options="listServices"
+                    :multiple="true"
+                    :close-on-select="false"
+                    :clear-on-select="false"
+                    :preserve-search="true"
+                    placeholder="choose service"
+                    label="name"
+                    track-by="name"
+                    :taggable="true"
+                    @update:modelValue="(value:any) => {
+                               props.form.setFieldValue('serviceIds', value?.map((i:any) => i.id));
+                               props.form.setFieldValue('serviceProfiles', value?.map((i:any) => i))
+                            }"
+                  >
+                  </Multiselect>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
             <div class="grid grid-cols-2 gap-3">
               <FormField v-slot="{ componentField }" name="price">
                 <FormItem>
@@ -39,7 +63,7 @@
                       @update-value="(vl) => (price = vl)"
                       :contentValue="formatPrice(price)"
                       :form="props.form"
-                       name="price"
+                      name="price"
                     />
                   </FormControl>
                   <FormMessage />
@@ -196,11 +220,13 @@ import { status } from "@/data/status.json";
 import { useI18n } from "vue-i18n";
 import type { FormContext } from "vee-validate";
 import { usePetCombo } from "@/stores";
+import Multiselect from "vue-multiselect";
 
 const props = defineProps<{
   form: FormContext<any>;
   open: boolean;
   rowEditting?: any;
+  listServices: any[];
 }>();
 
 const emit = defineEmits(["onSubmitHdl", "changeOpen"]);
@@ -211,6 +237,7 @@ const store = usePetCombo();
 const date = ref();
 const time = ref();
 const price = ref();
+const serviceSelected = ref<any[]>([]);
 
 const onSubmit = props.form.handleSubmit(async (values: any) => {
   if (!dataItem.value) {
@@ -219,6 +246,7 @@ const onSubmit = props.form.handleSubmit(async (values: any) => {
     date.value = null;
     time.value = null;
     price.value = null;
+    serviceSelected.value = [];
     emit("changeOpen");
   }
 });
@@ -248,10 +276,8 @@ watch(
   (newVal) => {
     console.log("pros", props.rowEditting, newVal);
     props.form.setValues({ ...newVal }, true);
-    price.value = newVal['price'];
-    time.value = newVal['estimateTime']
-   }
+    price.value = newVal["price"];
+    time.value = newVal["estimateTime"];
+  }
 );
-
-
 </script>
