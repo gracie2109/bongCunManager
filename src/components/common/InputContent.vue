@@ -8,7 +8,7 @@
     />
     <div
       class="absolute right-3 h-full grid place-items-center cursor-pointer"
-      v-if="value.trim().length > 0"
+      v-if="value.length > 0"
     >
       <span class="">{{ props.contentValue }}</span>
     </div>
