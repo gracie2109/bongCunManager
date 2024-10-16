@@ -1,8 +1,7 @@
 <template>
   <div
-    class=" w-[93.5vw] p-3 border bg-white border-dashed"
+    class="p-3 border bg-white border-dashed"
     id="searchWrap"
-    :class="{ 'w-[80%]': !expand}"
   >
    <slot />
   </div>

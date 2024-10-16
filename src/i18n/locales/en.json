@@ -22,7 +22,8 @@
     "phone":"Phone Number",
     "settingView":"Setting View",
     "icon": "Icon",
-    "row_per_page": "Rows per page"
+    "row_per_page": "Rows per page",
+    "price": "Price"
 
   },
   "pageMeta": {

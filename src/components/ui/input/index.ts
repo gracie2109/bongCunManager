@@ -20,7 +20,7 @@ export const inputVariants = cva(
       },
       defaultVariants: {
         variant: 'default',
-        size: 'default',
+        size: 'lg',
       },
     },
   )
