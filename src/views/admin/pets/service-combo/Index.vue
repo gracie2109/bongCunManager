@@ -4,7 +4,8 @@
   </Header>
 
   <ContentWrap>
-    <div class="bg-white min-h-svh p-5 space-y-6">
+    <SubMenu />
+    <div class="bg-white min-h-svh p-5 space-y-6 mt-12">
       <DataTable
         :headerAdvanced="headerAdvanced"
         :data="listCombo"
@@ -74,6 +75,7 @@ import { DataTable, DialogConfirm } from "@/components/common";
 import { status, manualStatus } from "@/data/status.json";
 import { useI18n } from "vue-i18n";
 import RowFunction from "../components/RowFunction.vue";
+import SubMenu from "../components/SubMenu.vue";
 const { locale } = useI18n();
 
 const store = usePetCombo();
@@ -136,8 +138,7 @@ const columns: ColumnDef<any>[] = reactive([
   },
   {
     accessorKey: "price",
-    header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "Price" }),
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Price" }),
     cell: ({ row }) => {
       return h(
         "span",
@@ -148,8 +149,7 @@ const columns: ColumnDef<any>[] = reactive([
   },
   {
     accessorKey: "estimateTime",
-    header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "Estimate Time" }),
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Estimate Time" }),
     cell: ({ row }) => {
       return h(
         "span",
@@ -169,8 +169,7 @@ const columns: ColumnDef<any>[] = reactive([
   },
   {
     accessorKey: "markTime",
-    header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "Promotion time" }),
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Promotion time" }),
     cell: ({ row }) => {
       const time1 = (row.getValue("markTime") as any)[0];
       return h("span", { class: "max-w-[500px] truncate font-medium" }, time1);
@@ -178,8 +177,7 @@ const columns: ColumnDef<any>[] = reactive([
   },
   {
     accessorKey: "status",
-    header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "Status" }),
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Status" }),
     cell: ({ row }) => {
       const data = manualStatus.find((i) => i.id === row.getValue("status"));
       const res = data ? (data.name as any)[String(locale.value)] : "";
@@ -201,8 +199,7 @@ const columns: ColumnDef<any>[] = reactive([
 
   {
     accessorKey: "createdAt",
-    header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "Created At" }),
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Created At" }),
     cell: ({ row }) => {
       return h(
         "span",
@@ -214,8 +211,7 @@ const columns: ColumnDef<any>[] = reactive([
   {
     id: "function",
     accessorKey: "function",
-    header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "Function" }),
+    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Function" }),
     cell: ({ row }) =>
       h(RowFunction, {
         row,
@@ -230,13 +226,7 @@ function updatePageSize(newPs: number) {
   pageData.value.pageSize = +newPs;
 }
 
-function handleActionRow({
-  action,
-  row,
-}: {
-  action: T_ROW_FUNCTION;
-  row: any;
-}) {
+function handleActionRow({ action, row }: { action: T_ROW_FUNCTION; row: any }) {
   if (action.isShow) {
     if (action.id === "DELETE") {
       selectedItem.value = row;
