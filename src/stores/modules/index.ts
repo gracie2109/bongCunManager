@@ -5,3 +5,5 @@ export * from "./service-provider";
 export * from "./pets/index";
 export * from "./pets/services";
 export * from "./pets/combo";
+export * from "./permissions";
+export * from "./roles";

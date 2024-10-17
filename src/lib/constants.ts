@@ -95,3 +95,22 @@ export const DEFINE_PET_ICONS: { [key: string]: string } = {
   turtle: "lucide:turtle",
   worm: "lucide:worm",
 };
+
+export const baseMethods = [
+  {
+    id: 'CREATE',
+    value: 'CREATE',
+  },
+  {
+    id: 'READ',
+    value: 'READ',
+  },
+  {
+    id: 'DELETE',
+    value: 'DELETE',
+  },
+  {
+    id: 'UPDATE',
+    value: 'UPDATE',
+  },
+] as const

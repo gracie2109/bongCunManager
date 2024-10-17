@@ -25,12 +25,3 @@ import { User2 } from "lucide-vue-next";
 
 
 </script>
-
-
-<style>
-.admin_content {
-    position: relative;
-    top: 2.5rem;
-    padding: 1.25rem
-}
-</style>
