@@ -24,7 +24,6 @@
     "icon": "Biểu tượng",
     "row_per_page": "Hàng trên mỗi trang",
     "price": "Giá tiền"
-
   },
   "pageMeta": {
     "home": "Trang chủ ",
@@ -36,7 +35,8 @@
     "pets": "Thú cưng",
     "services": "Dịch vụ",
     "settingPetServicePrice": "Quản lý giá dịch vụ thú cưng",
-    "petService": "Quản lý các dịch vụ của thú cưng"
+    "petService": "Quản lý các dịch vụ của thú cưng",
+    "customers": "Khách hàng"
   },
   "validation": {
     "min": "{name} cần tối thiểu {min} ký tự"
