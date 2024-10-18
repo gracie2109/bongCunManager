@@ -52,6 +52,7 @@ export const LOCAL_STORAGE_KEY = {
   LAYOUT: "layout",
   THEME: "theme",
   VISIBLE_COLUMN: "visibleColumn",
+  SETTING_KEY: 'settingKey'
 };
 
 export const HEADER_ADVANCE_FUNCTION = {
