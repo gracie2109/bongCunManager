@@ -2,17 +2,12 @@ import type { LinkProp } from "@/types";
 
 export const ADMIN_NAVIGATOR: LinkProp[] = [
   {
-    title: "suppliers",
-    icon: "lucide:container",
-    variant: "ghost",
-    name: "suppliers",
-  },
-  {
     title: "customers",
     icon: "lucide:user-2",
     variant: "ghost",
     name: "users",
   },
+
   {
     title: "pets",
     icon: "lucide:paw-print",
@@ -22,10 +17,16 @@ export const ADMIN_NAVIGATOR: LinkProp[] = [
       {
         title: "Combo",
         icon: "lucide:paw-print",
-        name:"pets",
+        name: "pets",
         variant: "ghost",
       },
     ],
+  },
+  {
+    title: "settings",
+    icon: "lucide:cog",
+    variant: "ghost",
+    name: "settings",
   },
 ];
 

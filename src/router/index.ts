@@ -10,7 +10,6 @@ import RegisterView from "@/views/auth/RegisterView.vue";
 import DashboardView from "@/views/admin/dashboard/DashboardView.vue";
 import ListUserView from "@/views/admin/users/ListView.vue";
 import ForgotPassView from "@/views/auth/ForgotPassView.vue";
-import ListProvider from "@/views/admin/service-providers/Index.vue";
 import ListPets from "@/views/admin/pets/Index.vue";
 import SettingPetServicePrice from "@/views/admin/pets/services-price/Index.vue";
 import DetailPetServicePrice from "@/views/admin/pets/services-price/Detail.vue";
@@ -20,7 +19,9 @@ import CreatePetServices from "@/views/admin/pets/services/Create.vue";
 import NotFoundPage from "@/components/NotFoundPage.vue";
 import ContactView from "@/views/client/contact/ContactView.vue";
 import ComboServiceView from "@/views/admin/pets/service-combo/Index.vue";
-import PetOverview from "@/views/admin/pets/overview/Index.vue"
+import PetOverview from "@/views/admin/pets/overview/Index.vue";
+import PermissionView from "@/views/admin/settings/permissions/Index.vue";
+import SettingView from "@/views/admin/settings/SettingView.vue";
 /*
  *   RULE:
  *   meta key cần đối chiếu với pageMeta trong file i18n/locales/[lang].json
@@ -96,14 +97,6 @@ const router = createRouter({
           component: ListUserView,
         },
         {
-          path: "suppliers",
-          name: "suppliers",
-          component: ListProvider,
-          meta: {
-            key: "suppliers",
-          },
-        },
-        {
           path: "pets",
           children: [
             {
@@ -160,6 +153,28 @@ const router = createRouter({
               component: CreatePetServices,
               meta: {
                 key: "settingPetServicePrice",
+              },
+            },
+          ],
+        },
+
+        {
+          path: "settings",
+          children: [
+            {
+              path: "",
+              name: "settings",
+              component: SettingView,
+              meta: {
+                key: "pets",
+              },
+            },
+            {
+              path: "permissions",
+              name: "permissions",
+              component: PermissionView,
+              meta: {
+                key: "pets",
               },
             },
           ],

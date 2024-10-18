@@ -19,12 +19,11 @@
     "addNew": "Add new {field}",
     "name": "Name",
     "description": "Description",
-    "phone":"Phone Number",
-    "settingView":"Setting View",
+    "phone": "Phone Number",
+    "settingView": "Setting View",
     "icon": "Icon",
     "row_per_page": "Rows per page",
     "price": "Price"
-
   },
   "pageMeta": {
     "home": "HOME",
@@ -32,11 +31,12 @@
     "login": "Login",
     "register": "Register",
     "forgotPw": "Forgot Password",
-    "suppliers":"Suppliers",
+    "suppliers": "Suppliers",
     "pets": "Pets",
     "services": "Service",
-    "settingPetServicePrice":"Setting Pet's service price",
-    "petService": "Pet's services"
+    "settingPetServicePrice": "Setting Pet's service price",
+    "petService": "Pet's services",
+    "customers": "Customers"
   },
   "validation": {
     "min": "{name} must be at least {min} characters"
@@ -54,12 +54,12 @@
       "createAcc": "Create an account",
       "prefForgotPw": "Enter your email to receive password recovery mail"
     },
-    "serviceProvider":{
+    "serviceProvider": {
       "desc": "More information about the product supplier for you"
     },
-    "pets":{
+    "pets": {
       "placeholder": "Select the representative icon",
-      "dontHasService":"You do not have any services yet!"
+      "dontHasService": "You do not have any services yet!"
     }
   }
 }
