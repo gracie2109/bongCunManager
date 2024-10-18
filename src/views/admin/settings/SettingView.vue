@@ -2,7 +2,16 @@
 import ContentWrap from "../components/ContentWrap.vue";
 import { Cog } from "lucide-vue-next";
 import Header from "../components/Header.vue";
-import { reactive, ref, defineAsyncComponent, computed } from "vue";
+import {
+  reactive,
+  ref,
+  defineAsyncComponent,
+  computed,
+  watch,
+  onMounted,
+} from "vue";
+import { LOCAL_STORAGE_KEY } from "@/lib/constants";
+import { getLocalStorage, setLocalStorage } from "@/lib/utils";
 
 const PermissionView = defineAsyncComponent(
   () => import("./permissions/Index.vue")
@@ -22,7 +31,10 @@ const tabs = reactive([
     component: RoleView,
   },
 ]);
-const currentTab = ref(tabs[0].id);
+const localTab = computed(() => {
+  return JSON.parse(getLocalStorage(LOCAL_STORAGE_KEY.SETTING_KEY));
+});
+const currentTab = ref(localTab.value || tabs[0].id);
 const currentTabComponent = computed(() => {
   const selected = tabs.find((i) => i.id === currentTab.value);
   return selected?.component;
@@ -47,7 +59,12 @@ const currentTabComponent = computed(() => {
             :class="{
               'border-b border-red-500': currentTab === tab.id,
             }"
-            @click="currentTab = tab.id"
+            @click="
+              () => {
+                currentTab = tab.id;
+                setLocalStorage(LOCAL_STORAGE_KEY.SETTING_KEY, tab.id);
+              }
+            "
           >
             <span
               class="text-center w-[80%] pb-2 text-sm mx-auto font-semibold capitalize text-muted-foreground"
@@ -76,21 +93,3 @@ const currentTabComponent = computed(() => {
     </div>
   </ContentWrap>
 </template>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s, transform 0.3s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.fade-enter-to,
-.fade-leave {
-  opacity: 1;
-  transform: translateY(0);
-}
-</style>
