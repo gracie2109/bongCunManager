@@ -1,30 +1,8 @@
 <script setup lang="ts">
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ContentWrap from "../components/ContentWrap.vue";
 import { Cog } from "lucide-vue-next";
 import Header from "../components/Header.vue";
-import {
-  reactive,
-  ref,
-  defineAsyncComponent,
-  shallowRef,
-  watch,
-  computed,
-  type DefineComponent,
-} from "vue";
-import type { cn } from "@/lib/utils";
-import type clsx from "clsx";
+import { reactive, ref, defineAsyncComponent, computed } from "vue";
 
 const PermissionView = defineAsyncComponent(
   () => import("./permissions/Index.vue")

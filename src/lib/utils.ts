@@ -136,7 +136,7 @@ export const reduceData = (data: any) => {
     return acc;
   }, {});
 };
-export function groupByPermissions(data: any[]) {}
+
 
 export function getUniquePermissions(array1: any, array2: any) {
   if (!(array1 && array2)) return [];

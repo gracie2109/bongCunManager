@@ -1,20 +1,28 @@
 <template>
-  <form @submit="submitHandle" class="space-y-6 grid">
+  <form @submit.prevent="submitHandle" class="space-y-6 grid">
     <FormField v-slot="{ componentField }" name="name">
       <FormItem v-auto-animate>
         <FormLabel> Indentity Name</FormLabel>
         <FormControl>
-          <Input
-            type="text"
-            placeholder="users, products...."
-            v-bind="componentField"
-          />
+          <Input type="text" placeholder="users, products...." v-bind="componentField" />
         </FormControl>
         <FormDescription>Not support Vietnam tone</FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>
-
+    <FormField v-slot="{ componentField }" name="description">
+      <FormItem v-auto-animate>
+        <FormLabel> Description</FormLabel>
+        <FormControl>
+          <Textarea
+            placeholder="Tell us a little bit about yourself"
+            class="resize-none"
+            v-bind="componentField"
+          />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    </FormField>
     <FormField name="methods">
       <FormItem>
         <div class="mb-4">
@@ -32,10 +40,7 @@
             :key="item.id"
             name="methods"
           >
-            <FormItem
-              :key="item.id"
-              class="flex items-center space-x-2 space-y-0.5"
-            >
+            <FormItem :key="item.id" class="flex items-center space-x-2 space-y-0.5">
               <FormControl>
                 <Checkbox
                   :checked="value?.includes(item.id)"
@@ -68,11 +73,25 @@
         <li>{{ i }}</li>
       </ol>
     </div>
-    <Button type="submit" class="mt-8 w-40" :disabled="props.loading">
-      <Loader2 class="w-4 h-4 mr-2 animate-spin" v-if="props.loading" />
-      <span v-if="props.loading">Loading </span>
-      <span v-else>Submit</span>
-    </Button>
+    <div class="flex gap-3 justify-end">
+      <Button
+        type="button"
+        variant="outline"
+        class="mt-8 w-40"
+        :disabled="props.loading"
+        @click="$emit('closeDialog')"
+      >
+        <Loader2 class="w-4 h-4 mr-2 animate-spin" v-if="props.loading" />
+        <span v-if="props.loading">Loading </span>
+        <span v-else>Close</span>
+      </Button>
+
+      <Button type="submit" class="mt-8 w-40" :disabled="props.loading">
+        <Loader2 class="w-4 h-4 mr-2 animate-spin" v-if="props.loading" />
+        <span v-if="props.loading">Loading </span>
+        <span v-else>Submit</span>
+      </Button>
+    </div>
   </form>
 </template>
 
@@ -86,36 +105,28 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import type { FormContext } from "vee-validate";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-vue-next";
 import { baseMethods } from "@/lib/constants";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ref, watch } from "vue";
-import { usePermissionStore } from "@/stores";
+import { ref } from "vue";
 
 const props = defineProps<{
   form: FormContext<any>;
   loading: boolean;
+  elSelect?:any
 }>();
 
 const allPermission = ref<string[] | null>(null);
-const permissions = ref([]);
-const emit = defineEmits(["onSubmit"]);
-const store = usePermissionStore();
+const permissions = ref(props.elSelect?.methods || []);
+const emit = defineEmits(["onSubmit", "closeDialog"]);
+
 
 const submitHandle = async () => {
-  //   await emit("onSubmit");
+  emit("onSubmit");
 };
 
-watch(
-  () => props.form.values,
-  () => {
-    const { name, methods } = props.form.values;
-    console.log("name", name);
-    console.log("methods", methods);
-    //   if(name && methods.length> 0) allPermission.value = store.modifyData({name, methods})
-    //   else allPermission.value = null
-  }
-);
+
 </script>

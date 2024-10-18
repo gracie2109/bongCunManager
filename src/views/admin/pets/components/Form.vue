@@ -129,7 +129,6 @@ const form = useForm({
 });
 
 const onSubmit = form.handleSubmit(async (values: z.infer<typeof PetsValid>) => {
-    console.log('submitForm', values)
     await store.createNewPet(values);
     form.resetForm();
     emit("changeOpen");
