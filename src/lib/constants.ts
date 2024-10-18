@@ -11,6 +11,8 @@ export const COLLECTION = {
   PETS_SERVICES: "pet-services",
   PET_SERVICES_PRICE: "pet-service-price",
   PET_SERVICES_COMBO: "pet-service-combo",
+  ROLE: "roles",
+  PERMISSIONS: "permissions",
 };
 
 export const DEFINE_PRODUCT_CATEGORIES = [
@@ -95,3 +97,38 @@ export const DEFINE_PET_ICONS: { [key: string]: string } = {
   turtle: "lucide:turtle",
   worm: "lucide:worm",
 };
+
+export const baseMethods = [
+  {
+    id: "CREATE",
+    value: "CREATE",
+  },
+  {
+    id: "VIEW",
+    value: "VIEW",
+  },
+  {
+    id: "DELETE",
+    value: "DELETE",
+  },
+  {
+    id: "UPDATE",
+    value: "UPDATE",
+  },
+  {
+    id: "IMPORT",
+    value: "IMPORT",
+  },
+  {
+    id: "EXPORT",
+    value: "EXPORT",
+  },
+  {
+    id: "SETTING",
+    value: "SETTING",
+  },
+  {
+    id: "ALL",
+    value: "ALL",
+  },
+] as const;

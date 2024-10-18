@@ -152,7 +152,6 @@ const columns: ColumnDef<any>[] = reactive([
       h(RowFunction, {
         row,
         onClick: (item: any) => {
-          console.log("pets", item);
           handleActionRow(item);
         },
       }),

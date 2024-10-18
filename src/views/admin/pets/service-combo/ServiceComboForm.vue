@@ -338,7 +338,6 @@ watch(
 watch(
   () => props.rowEditting,
   (newVal) => {
-    console.log("pros", props.rowEditting, newVal);
     props.form.setValues({ ...newVal }, true);
     price.value = newVal["price"];
     time.value = newVal["estimateTime"];

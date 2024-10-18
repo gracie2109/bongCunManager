@@ -32,7 +32,6 @@ const switchLanguage = async (newLocale: string) => {
     // await router.replace({params: {locale: newLocale}});
     // router.go(0)
   } catch (e) {
-    console.log(e)
     router.push("/")
   }
 }
