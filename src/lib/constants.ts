@@ -52,7 +52,7 @@ export const LOCAL_STORAGE_KEY = {
   LAYOUT: "layout",
   THEME: "theme",
   VISIBLE_COLUMN: "visibleColumn",
-  SETTING_KEY: 'settingKey'
+  SETTING_KEY: "settingKey",
 };
 
 export const HEADER_ADVANCE_FUNCTION = {
@@ -133,3 +133,27 @@ export const baseMethods = [
     value: "ALL",
   },
 ] as const;
+
+export const BASE_GENDER = [
+  {
+    value: "MALE",
+    name: {
+      vi: "Nam",
+      en: "Male",
+    },
+  },
+  {
+    value: "FEMALE",
+    name: {
+      vi: "Nữ",
+      en: "Female",
+    },
+  },
+  {
+    value: "OTHER",
+    name: {
+      vi: "Khác",
+      en: "Other",
+    },
+  },
+];

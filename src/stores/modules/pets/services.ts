@@ -118,6 +118,10 @@ export const usePetServices = defineStore("petServices", () => {
       return await getContainsAnyData({
         collectionName: COLLECTION.PETS_SERVICES,
         conditions: [{ fieldId: "petIds", dataSearch: petIds }],
+        // callback({ data, totalRecord, lastVisibleDoc, }) {
+        //   console.log('serviceOfper', data)
+        //     return data
+        // },
       });
     } catch (error) {
       console.log("err", error);

@@ -265,3 +265,90 @@ export async function getContainsAnyData({
     throw new Error("Something went wrong: " + error);
   }
 }
+export async function getContainsAnyDataPagination({
+  collectionName,
+  conditions,
+  limitNumb,
+  startAfterDoc,
+  isAll,
+  callback,
+}: {
+  collectionName: string;
+  conditions: Condition[];
+  limitNumb?: number;
+  startAfterDoc?: any;
+  isAll?: boolean;
+  callback: ({
+    data,
+    totalRecord,
+    lastVisibleDoc,
+  }: {
+    data: any[];
+    totalRecord: number;
+    lastVisibleDoc: any;
+  }) => void;
+}) {
+  try {
+    const colRef = collection(db, collectionName);
+    let finalQuery = query(colRef);
+    let hasConditions = false;
+
+    conditions.forEach(
+      ({ fieldId, dataSearch, equalityField, equalityValue }) => {
+        if (dataSearch && dataSearch.length > 0 && fieldId) {
+          finalQuery = query(
+            finalQuery,
+            where(fieldId, "array-contains-any", dataSearch)
+          );
+          hasConditions = true;
+        }
+        if (equalityField && equalityValue !== undefined) {
+          finalQuery = query(
+            finalQuery,
+            where(equalityField, "==", equalityValue)
+          );
+          hasConditions = true;
+        }
+      }
+    );
+
+    if (!isAll && limitNumb) {
+      finalQuery = query(
+        finalQuery,
+        orderBy("createdAt", "desc"),
+        limit(limitNumb)
+      );
+
+      if (startAfterDoc) {
+        finalQuery = query(finalQuery, startAfter(startAfterDoc));
+      }
+    } else {
+      finalQuery = query(finalQuery, orderBy("createdAt", "desc")); // Without limit, get all
+    }
+
+    if (!hasConditions) {
+      callback({ data: [], totalRecord: 0, lastVisibleDoc: null });
+      return;
+    }
+
+    // Get total record count
+    const totalRecord = await getTotalRecord(collectionName);
+
+    const querySnapshot = await getDocs(finalQuery);
+    const results = querySnapshot.docs.map((doc: QueryDocumentSnapshot) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    const lastVisibleDoc =
+      querySnapshot.docs[querySnapshot.docs.length - 1] || null;
+
+     callback({
+      data: results,
+      totalRecord: totalRecord,
+      lastVisibleDoc: lastVisibleDoc,
+    });
+  } catch (error) {
+    throw new Error("Something went wrong: " + error);
+  }
+}

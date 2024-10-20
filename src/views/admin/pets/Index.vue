@@ -78,8 +78,6 @@ import SubMenu from "./components/SubMenu.vue";
 const store = usePets();
 const { pets, pageCount } = storeToRefs(store);
 const selectedItem = ref();
-const { locale } = useI18n();
-
 const mode = ref();
 const rowEditSelected = ref();
 const pageData = ref<PaginationState>({

@@ -29,7 +29,7 @@
         }
       "
     >
-      <DialogContent>
+      <DialogContent class="max-w-screen-xl h-[800px]">
         <PermissionForm
           :loading="loading"
           :form="form"
