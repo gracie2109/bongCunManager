@@ -5,4 +5,5 @@ export interface TreeViewNodeItem {
   name: string;
   icon?:string;
   children?: TreeViewNodeItem[];
+  showBox?:boolean
 }

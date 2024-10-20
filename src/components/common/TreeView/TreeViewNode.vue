@@ -2,13 +2,16 @@
   <div :class="classes" class="treeview-node treeview-node--click">
     <div class="treeview-node__root">
       <template v-if="props.item">
+      
         <div class="treeview-node__content">
           <div
             class="treeview-node__level"
             v-for="l in numberOfLevels"
             :key="l"
           />
+          <Icon v-if="hasChildren" :icon="hasChildren && !isOpen ? 'lucide:chevron-right' :'lucide:chevron-down'" />
           <div @click.stop="openNode" v-if="hasChildren">
+          
             <Icon
               :class="{
                 open: isOpen,
@@ -23,6 +26,7 @@
           </div>
 
           <div class="treeview-node__level" v-else />
+          
           <Icon
             v-if="!hasChildren"
             :class="{
@@ -35,25 +39,27 @@
           <template v-if="props.selectable">
             <div class="radio-group" v-if="props.radio">
               <input
+                v-if="props.showBox"
                 :disabled="props.disabled"
                 class="radio"
                 @click="nodeSelected"
                 type="radio"
                 :checked="isChecked"
               />
-              <span>
+              <span @click="nodeSelected">
                 {{ item.name }}
               </span>
             </div>
             <template v-else>
-              <label>
+              <label @click="nodeSelected">
                 <Checkbox
+                  v-if="props.showBox"
                   :disabled="props.disabled"
                   :checked="isIndeterminate ? 'indeterminate' : isChecked"
-                  @click="nodeSelected"
                   class="w-4 h-4 mr-2"
+                  @click="nodeSelected"
                 />
-                <span>
+                <span @click="nodeSelected">
                   {{ item.name }}
                 </span>
               </label>
@@ -105,6 +111,7 @@ const props = defineProps<{
   unopenable?: boolean;
   color?: string;
   identifier: number;
+  showBox?: boolean;
 }>();
 
 const { emit: emitNodeOpen } = useEventBus<number>(
@@ -259,29 +266,4 @@ input[type="radio"] {
   min-width: 0;
 }
 
-.open {
-  animation: open 0.15s linear;
-}
-
-@keyframes open {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(90deg);
-  }
-}
-
-.close {
-  animation: close 0.15s linear;
-}
-
-@keyframes close {
-  0% {
-    transform: rotate(90deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
 </style>

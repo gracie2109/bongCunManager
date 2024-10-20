@@ -11,6 +11,7 @@
       :unopenable="props.unopenable"
       :radio="props.radio"
       :identifier="identifier"
+      :showBox="props.showBox"
     />
   </div>
 </template>
@@ -49,11 +50,13 @@ const props = withDefaults(
     modelValue: number[];
     items: TreeViewNodeItem[];
     selectionMode?: TreeViewSelectionMode;
+    showBox?:boolean
   }>(),
   {
     color: "#7e7ec2",
     selectionMode: "leaf",
     selectable: true,
+    showBox:true,
     radio: false,
   }
 );
@@ -235,29 +238,4 @@ onUnmounted(() => {
   min-width: 0;
 }
 
-.open {
-  animation: open 0.15s linear;
-}
-
-@keyframes open {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(90deg);
-  }
-}
-
-.close {
-  animation: close 0.15s linear;
-}
-
-@keyframes close {
-  0% {
-    transform: rotate(90deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
 </style>
