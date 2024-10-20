@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <div>
-      <table class="w-[550px]">
+      <table id="service_apply_for_all" class="w-[550px]">
         <thead>
           <tr>
             <th>Service</th>
@@ -16,7 +16,12 @@
               'bg-[#dcdcdc]': props.isMouseId === i.id,
             }"
           >
-            <td>{{ i.name }}</td>
+            <td
+              @mouseenter="() => onMouseOver(String(i.id))"
+              @mouseleave="() => onMouseLeave()"
+            >
+              {{ i.name }}
+            </td>
             <td>{{ formatPrice(i.generalPrice || "") }}</td>
           </tr>
         </tbody>

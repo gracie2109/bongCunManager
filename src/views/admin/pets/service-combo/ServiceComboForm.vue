@@ -96,7 +96,7 @@
                   <FormMessage />
                 </FormItem>
               </FormField>
-              <FormField v-slot="{ componentField }" name="estimateTime">
+              <!-- <FormField v-slot="{ componentField }" name="duration">
                 <FormItem>
                   <FormLabel>Estimate time</FormLabel>
                   <FormControl>
@@ -106,8 +106,33 @@
                       @update-value="(vl) => (time = vl)"
                       :contentValue="convertNumberToTime(time)"
                       :form="props.form"
-                      name="estimateTime"
+                      name="duration"
                     />
+                    <Slider
+                      v-model="time"
+                      :max="100"
+                      :step="1"
+                      :class="cn('w-3/5', $attrs.class ?? '')"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              </FormField> -->
+
+              <FormField v-slot="{ componentField, value }" name="duration">
+                <FormItem>
+                  <FormLabel>Duration</FormLabel>
+                  <FormControl>
+                    <Slider
+                      v-bind="componentField"
+                      :default-value="[0]"
+                      :max="1439"
+                      :min="0"
+                      :step="5"
+                    />
+                    <FormDescription class="flex justify-between">
+                      <span>{{ convertNumberToTime(value?.[0] || 0) }} m</span>
+                    </FormDescription>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -225,7 +250,7 @@ import { onMounted, ref, watch, watchEffect } from "vue";
 import "@vuepic/vue-datepicker/dist/main.css";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import { InputContent } from "@/components/common";
-import { convertNumberToTime, formatPrice } from "@/lib/utils";
+import { cn, convertNumberToTime, formatPrice } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -248,6 +273,7 @@ import { useI18n } from "vue-i18n";
 import type { FormContext } from "vee-validate";
 import { usePetCombo, usePetServices } from "@/stores";
 import Multiselect from "vue-multiselect";
+import { Slider } from "@/components/ui/slider";
 
 const props = defineProps<{
   form: FormContext<any>;
@@ -262,20 +288,25 @@ const dataItem = ref();
 const store = usePetCombo();
 const serviceStore = usePetServices();
 const date = ref();
-const time = ref();
+const time = ref([0]);
 const price = ref();
 const serviceSelected = ref<any[]>([]);
 const petSelected = ref<any[]>([]);
 const listServices = ref<any[]>([]);
 
+function resetAll() {
+  props.form.resetForm();
+  date.value = null;
+  time.value = [0];
+  price.value = null;
+  serviceSelected.value = [];
+  petSelected.value = [];
+}
 const onSubmit = props.form.handleSubmit(async (values: any) => {
   if (!dataItem.value) {
     const pl = { ...values, status: 1 };
     await store.createNewPetCombo(pl);
-    date.value = null;
-    time.value = null;
-    price.value = null;
-    serviceSelected.value = [];
+    resetAll();
     emit("changeOpen");
   }
 });
@@ -340,7 +371,16 @@ watch(
   (newVal) => {
     props.form.setValues({ ...newVal }, true);
     price.value = newVal["price"];
-    time.value = newVal["estimateTime"];
+    time.value = newVal["duration"];
+  }
+);
+
+watch(
+  () => props.open,
+  () => {
+    if (!props.open) {
+      resetAll();
+    }
   }
 );
 </script>

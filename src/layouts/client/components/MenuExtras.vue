@@ -56,7 +56,6 @@ const route = useRoute();
 const component = ref<string | null>(null);
 const user = JSON.parse(getLocalStorage("auth"));
 const open = ref(false);
-
 const directPath = (value: any) => {
   component.value = value;
 };

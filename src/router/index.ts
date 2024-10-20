@@ -9,6 +9,8 @@ import RegisterView from "@/views/auth/RegisterView.vue";
 
 import DashboardView from "@/views/admin/dashboard/DashboardView.vue";
 import ListUserView from "@/views/admin/users/ListView.vue";
+import ListUserGroupView from "@/views/admin/users/user-groups/Index.vue";
+
 import ForgotPassView from "@/views/auth/ForgotPassView.vue";
 import ListPets from "@/views/admin/pets/Index.vue";
 import SettingPetServicePrice from "@/views/admin/pets/services-price/Index.vue";
@@ -95,6 +97,11 @@ const router = createRouter({
           path: "users",
           name: "users",
           component: ListUserView,
+        },
+        {
+          path: "users-groups",
+          name: "usersGroup",
+          component: ListUserGroupView,
         },
         {
           path: "pets",

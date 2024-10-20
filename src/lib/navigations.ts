@@ -7,6 +7,12 @@ export const ADMIN_NAVIGATOR: LinkProp[] = [
     variant: "ghost",
     name: "users",
   },
+  {
+    title: "Groups",
+    icon: "lucide:users-round",
+    variant: "ghost",
+    name: "usersGroup",
+  },
 
   {
     title: "pets",
