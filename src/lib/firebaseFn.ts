@@ -265,6 +265,13 @@ export async function getContainsAnyData({
     throw new Error("Something went wrong: " + error);
   }
 }
+
+type QueryCondition = {
+  fieldId: string; // Tên trường cần so sánh
+  operator: any; // Các toán tử: "==", "<=", "array-contains-any", v.v.
+  value: any; // Giá trị để so sánh
+};
+
 export async function getContainsAnyDataPagination({
   collectionName,
   conditions,
@@ -274,7 +281,7 @@ export async function getContainsAnyDataPagination({
   callback,
 }: {
   collectionName: string;
-  conditions: Condition[];
+  conditions: QueryCondition[]; 
   limitNumb?: number;
   startAfterDoc?: any;
   isAll?: boolean;
@@ -293,37 +300,21 @@ export async function getContainsAnyDataPagination({
     let finalQuery = query(colRef);
     let hasConditions = false;
 
-    conditions.forEach(
-      ({ fieldId, dataSearch, equalityField, equalityValue }) => {
-        if (dataSearch && dataSearch.length > 0 && fieldId) {
-          finalQuery = query(
-            finalQuery,
-            where(fieldId, "array-contains-any", dataSearch)
-          );
-          hasConditions = true;
-        }
-        if (equalityField && equalityValue !== undefined) {
-          finalQuery = query(
-            finalQuery,
-            where(equalityField, "==", equalityValue)
-          );
-          hasConditions = true;
-        }
+    conditions.forEach(({ fieldId, operator, value }) => {
+      if (fieldId && operator && value !== undefined) {
+        finalQuery = query(finalQuery, where(fieldId, operator, value));
+        hasConditions = true;
       }
-    );
+    });
 
     if (!isAll && limitNumb) {
-      finalQuery = query(
-        finalQuery,
-        orderBy("createdAt", "desc"),
-        limit(limitNumb)
-      );
+      finalQuery = query(finalQuery, orderBy("createdAt", "desc"), limit(limitNumb));
 
       if (startAfterDoc) {
         finalQuery = query(finalQuery, startAfter(startAfterDoc));
       }
     } else {
-      finalQuery = query(finalQuery, orderBy("createdAt", "desc")); // Without limit, get all
+      finalQuery = query(finalQuery, orderBy("createdAt", "desc")); 
     }
 
     if (!hasConditions) {
@@ -331,19 +322,19 @@ export async function getContainsAnyDataPagination({
       return;
     }
 
-    // Get total record count
+
     const totalRecord = await getTotalRecord(collectionName);
 
     const querySnapshot = await getDocs(finalQuery);
-    const results = querySnapshot.docs.map((doc: QueryDocumentSnapshot) => ({
+    const results = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
 
-    const lastVisibleDoc =
-      querySnapshot.docs[querySnapshot.docs.length - 1] || null;
+    const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1] || null;
 
-     callback({
+
+    callback({
       data: results,
       totalRecord: totalRecord,
       lastVisibleDoc: lastVisibleDoc,

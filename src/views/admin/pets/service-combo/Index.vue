@@ -5,7 +5,7 @@
 
   <ContentWrap>
     <SubMenu />
-    <div class="bg-white min-h-svh p-5 space-y-6 mt-20">
+    <div class="bg-white min-h-svh p-5 space-y-6 mt-12">
       <DataTable
         :headerAdvanced="headerAdvanced"
         :data="listCombo"

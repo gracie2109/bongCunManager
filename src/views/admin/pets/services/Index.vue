@@ -11,7 +11,7 @@
         :page-data="pageData"
         :saveColumnVisible="{
           name: 'petServices',
-          isRemeber: false,
+          isRemeber: true,
         }"
         :add-new-handle="{
           content: null,

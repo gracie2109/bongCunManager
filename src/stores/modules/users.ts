@@ -61,6 +61,7 @@ export const useUsers = defineStore("users", () => {
       }
       await getContainsAnyDataPagination({
         callback: ({ data, totalRecord, lastVisibleDoc: lastDoc }) => {
+          
           users.value = data?.map((i, j) => {
             return {
               ...i,
@@ -75,10 +76,9 @@ export const useUsers = defineStore("users", () => {
         isAll: false,
         limitNumb: pageSize,
         startAfterDoc: lastVisibleDocForPage,
+
         conditions:[
-          {
-            fieldId:'role', dataSearch:[null],
-          }
+          { fieldId: "role", operator: "==", value: null }, 
         ]
       });
     } catch (error) {
@@ -130,6 +130,7 @@ export const useUsers = defineStore("users", () => {
   return {
     loading,
     users,
+    pageCount,
     getListUser,
     createNewUser,
   };
