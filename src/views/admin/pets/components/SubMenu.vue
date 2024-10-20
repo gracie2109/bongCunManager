@@ -25,7 +25,7 @@
               class="tooltip_card"
             >
               <PawPrint />
-              <span class="tooltip_span">List pet</span>
+              <span class="tooltip_span">Pets</span>
             </TooltipTrigger>
             <TooltipContent>Pets</TooltipContent>
           </Tooltip>

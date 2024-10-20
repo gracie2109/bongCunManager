@@ -4,7 +4,7 @@
   </Header>
   <ContentWrap>
     <SubMenu />
-    <div class="overview relative top-14 z-30">Overview coming soon</div>
+    <div class="overview relative top-20 bg-white min-h-dvh z-30">Overview coming soon</div>
   </ContentWrap>
 </template>
 

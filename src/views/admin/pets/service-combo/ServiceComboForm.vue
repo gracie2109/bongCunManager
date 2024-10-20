@@ -10,7 +10,7 @@
             {{ $t("pageFields.serviceProvider.desc") }}
           </DialogDescription>
         </DialogHeader>
-        <div class="grid gap-4 py-4 px-6">
+        <div class="grid gap-4 py-4 px-6 overflow-y-auto">
           <form class="space-y-6" @submit="onSubmit">
             <FormField v-slot="{ componentField }" name="name">
               <FormItem>

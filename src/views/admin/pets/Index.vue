@@ -4,7 +4,7 @@
   <ContentWrap>
     <div class="relative">
       <SubMenu />
-      <div class="relative top-14 z-30">
+      <div class="relative top-20 z-30">
         <DataTable
           :headerAdvanced="headerAdvanced"
           :data="pets"
