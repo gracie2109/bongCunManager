@@ -13,7 +13,7 @@
       >
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger as-child>
+            <TooltipTrigger as-child @click="comingsoon">
               <Settings class="size-5" />
             </TooltipTrigger>
             <TooltipContent>
@@ -24,7 +24,7 @@
           <Tooltip
             v-if="props.data.petIds?.includes(String($route.params.petId))"
           >
-            <TooltipTrigger as-child>
+            <TooltipTrigger as-child @click="comingsoon">
               <HeartOff class="size-5" />
             </TooltipTrigger>
             <TooltipContent>
@@ -34,7 +34,7 @@
           <Tooltip
             v-if="!props.data.petIds?.includes(String($route.params.petId))"
           >
-            <TooltipTrigger as-child>
+            <TooltipTrigger as-child @click="comingsoon">
               <Heart class="size-5" />
             </TooltipTrigger>
             <TooltipContent>
@@ -61,7 +61,7 @@
             </TooltipContent>
           </Tooltip>
           <Tooltip>
-            <TooltipTrigger as-child>
+            <TooltipTrigger as-child @click="comingsoon">
               <Trash class="size-5" />
             </TooltipTrigger>
             <TooltipContent>
@@ -116,6 +116,7 @@ import { computed } from "vue";
 import clsx from "clsx";
 import { cn } from "@/lib/utils";
 import { Settings, HeartOff, Heart, Edit, Trash } from "lucide-vue-next";
+import { toast } from "vue-sonner";
 type TEnable = string | "all" | undefined;
 const props = defineProps<{
   data: any;
@@ -131,4 +132,9 @@ function onMouseOver(id: string) {
 function onMouseLeave() {
   emits("setMouseEl", "");
 }
+
+function comingsoon() {
+  toast.info("Function comming soon")
+}
+
 </script>

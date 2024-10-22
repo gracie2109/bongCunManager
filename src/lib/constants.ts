@@ -1,4 +1,4 @@
-import { getLocalStorage, getCurrentDateTime, valueUpdater } from "@/lib/utils";
+import { getCurrentDateTime, getLocalStorage, valueUpdater } from "@/lib/utils";
 
 export const USER_LOCALE = JSON.parse(getLocalStorage("user-locale"));
 export const CURRENT_DATE = getCurrentDateTime();
@@ -13,6 +13,7 @@ export const COLLECTION = {
   PET_SERVICES_COMBO: "pet-service-combo",
   ROLE: "roles",
   PERMISSIONS: "permissions",
+  ORDER_SERVICE: 'order-service'
 };
 
 export const DEFINE_PRODUCT_CATEGORIES = [

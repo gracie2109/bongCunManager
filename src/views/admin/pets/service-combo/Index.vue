@@ -176,14 +176,15 @@ const columns: ColumnDef<any>[] = reactive([
     },
   },
   {
-    accessorKey: "estimateTime",
+    accessorKey: "duration",
     header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "Estimate Time" }),
+      h(DataTableColumnHeader, { column, title: "duration Time" }),
     cell: ({ row }) => {
+      const data = (row.getValue("duration") as any[])[0];
       return h(
         "span",
         { class: "max-w-[500px] truncate font-medium" },
-        convertNumberToTime(row.getValue("estimateTime"))
+        convertNumberToTime(+data)
       );
     },
   },

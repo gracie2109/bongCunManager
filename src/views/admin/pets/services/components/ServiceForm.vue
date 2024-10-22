@@ -1,5 +1,5 @@
 <template>
-  <form class="space-y-6" @submit="onSubmit">
+  <form class="space-y-6" @submit.prevent="onSubmit">
     <FormField v-slot="{ componentField }" name="name">
       <FormItem>
         <FormLabel>{{ $t("common.name") }}</FormLabel>
@@ -106,6 +106,21 @@
         <FormMessage />
       </FormItem>
     </FormField>
+    <FormField v-slot="{ value, handleChange }" name="isShow">
+      <FormItem>
+        <FormLabel>Selling status</FormLabel>
+        <div
+          class="flex flex-row items-center justify-between rounded-lg border p-4"
+        >
+          <div class="space-y-0.5">
+            <FormDescription> Show via selling sevice </FormDescription>
+          </div>
+          <FormControl>
+            <Switch :checked="value" @update:checked="handleChange" />
+          </FormControl>
+        </div>
+      </FormItem>
+    </FormField>
     <FormField v-slot="{ componentField }" name="desc">
       <FormItem>
         <FormLabel>{{ $t("common.description") }}</FormLabel>
@@ -138,7 +153,14 @@ import { Textarea } from "@/components/ui/textarea";
 import type { FormContext } from "vee-validate";
 import { usePets, usePetServices } from "@/stores";
 import { storeToRefs } from "pinia";
-import { computed, getCurrentInstance, onMounted, ref, type Ref } from "vue";
+import {
+  computed,
+  getCurrentInstance,
+  onMounted,
+  ref,
+  watch,
+  type Ref,
+} from "vue";
 import Multiselect from "vue-multiselect";
 import Label from "@/components/ui/label/Label.vue";
 import Button from "@/components/ui/button/Button.vue";
@@ -156,10 +178,12 @@ import {
 
 import type { z } from "zod";
 import { useI18n } from "vue-i18n";
+import Switch from "@/components/ui/switch/Switch.vue";
 
 const props = defineProps<{
   form: FormContext<any>;
   showBtn: boolean;
+  elSelect?: any;
 }>();
 const { locale } = useI18n();
 const emits = defineEmits(["onSubmit"]);
@@ -173,7 +197,6 @@ const onFormSubmit = props.form.handleSubmit(
 );
 
 const onSubmit = (values: any) => {
-  const petIds = petsSelected.value.map((i) => i.id);
   if (!props.showBtn) {
     emits("onSubmit", values);
   } else {
@@ -184,4 +207,14 @@ const onSubmit = (values: any) => {
 onMounted(async () => {
   await petStore.getListPets({ pageIndex: 1, pageSize: 500 });
 });
+
+watch(
+  () => props.elSelect,
+  () => {
+    console.log('props.elSelect',props.elSelect)
+    if (props.elSelect) {
+      petsSelected.value = props.elSelect.petIds;
+    }
+  }
+);
 </script>

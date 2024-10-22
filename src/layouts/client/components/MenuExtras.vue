@@ -37,26 +37,23 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from "vue-router";
-import { SwitchLang } from "@/components/common";
-import MenuButton from "../components/MenuButton.vue";
-import CartMenu from "./CartMenu.vue";
-import Separator from "@/components/ui/separator/Separator.vue";
-import { getLocalStorage } from "@/lib/utils";
-import { BaseAvatar } from "@/components/common";
+import { BaseAvatar, SwitchLang } from "@/components/common";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { ref } from "vue";
+import { Separator } from "@/components/ui/separator";
+import { getLocalStorage } from "@/lib/utils";
+import ForgotPassView from "@/views/auth/ForgotPassView.vue";
 import LoginView from "@/views/auth/LoginView.vue";
 import RegisterView from "@/views/auth/RegisterView.vue";
-import ForgotPassView from "@/views/auth/ForgotPassView.vue";
-import { useRefHistory } from "@vueuse/core";
+import { ref } from "vue";
+import { useRoute } from "vue-router";
+import MenuButton from "../components/MenuButton.vue";
+import CartMenu from "./CartMenu.vue";
 
 const emit = defineEmits(["toggleMenu"]);
 const route = useRoute();
 const component = ref<string | null>(null);
 const user = JSON.parse(getLocalStorage("auth"));
 const open = ref(false);
-
 const directPath = (value: any) => {
   component.value = value;
 };
