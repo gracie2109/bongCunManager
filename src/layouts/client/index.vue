@@ -1,10 +1,9 @@
 <template>
-  <header class="fixed left-0 top-0 z-40 w-full transition-transform duration-300 border-b bg-[rgb(255, 255, 255)]"
+
+  <header class="fixed left-0 top-0  py-6 py-3  z-40 w-full transition-transform duration-300 border-b bg-[rgb(255, 255, 255)]"
     :class="clsx({
       'translate-y-0': isShow,
       '-translate-y-96': !isShow,
-      'xl:p-3 border-b py-3': route.name !== 'home',
-      'py-6': route.name === 'home',
     })
       ">
     <div class="absolute inset-0 w-full  duration-200 opacity-0" :class="clsx({

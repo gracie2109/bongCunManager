@@ -25,7 +25,12 @@
       <DialogHeader>
         <DialogTitle>Add new service </DialogTitle>
       </DialogHeader>
-      <ServiceForm :form="form" :show-btn="false" @on-submit="handleForm" />
+      <ServiceForm
+        :elSelect="props.elSelect"
+        :form="form"
+        :show-btn="false"
+        @on-submit="handleForm"
+      />
       <DialogFooter class="p-6 pt-0">
         <Button
           type="button"
@@ -63,12 +68,13 @@ import { usePetServices } from "@/stores";
 const props = defineProps<{
   title?: string;
   handleOpen?: boolean;
+  elSelect?: any;
 }>();
 const open = ref(false);
 const form = useForm();
 const store = usePetServices();
 
-defineEmits(["updateOpen"]);
+const emits =defineEmits(["updateOpen","setElSelect"]);
 
 watch(
   () => props.handleOpen,
@@ -80,9 +86,27 @@ watch(
 );
 
 const handleForm = form.handleSubmit(async (values: any) => {
-  await store.createNewPetService(values).then(() => {
-    open.value = !open.value;
-    form.resetForm();
-  });
+  if (!props.elSelect) {
+    await store.createNewPetService(values).then(() => {
+      open.value = !open.value;
+      form.resetForm();
+    });
+  }else{
+    await store.updatePetService(values).then(() => {
+      open.value = !open.value;
+      form.resetForm();
+      emits('setElSelect');
+      emits('updateOpen')
+    });
+  }
 });
+
+watch(
+  () => props.elSelect,
+  () => {
+    if (props.elSelect) {
+      form.setValues({ ...props.elSelect }, true);
+    }
+  }
+);
 </script>

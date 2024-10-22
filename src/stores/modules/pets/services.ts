@@ -9,6 +9,7 @@ import {
   getMultiConditionData,
   updateCollection,
   getContainsAnyData,
+
 } from "@/lib/firebaseFn";
 import { v7 as uuidv7 } from "uuid";
 import { COLLECTION } from "@/lib/constants";
@@ -21,10 +22,7 @@ export const usePetServices = defineStore("petServices", () => {
   const pageCount = ref();
   const lastVisibleDoc = ref(null);
   const lastVisibleDocsCache = ref<Record<number, any>>({});
-
-  type IPrice = {
-    [key: string]: string | number;
-  };
+  
   async function createNewPetService(payload: any) {
     try {
       loading.value = true;
@@ -47,7 +45,21 @@ export const usePetServices = defineStore("petServices", () => {
       loading.value = false;
     }
   }
-
+  async function updatePetService(payload: any) {
+    try {
+      loading.value = true;
+        const totalRecord = await updateCollection(COLLECTION.PETS_SERVICES, payload.id, {
+          ...payload,
+        });
+        pageCount.value = totalRecord;
+        sendMessageToast("success", "create", "success");
+      // }
+    } catch (error: any) {
+      sendMessageToast("fail", "create", "error", error.message);
+    } finally {
+      loading.value = false;
+    }
+  }
   async function getListPetService({
     pageIndex,
     pageSize,
@@ -266,6 +278,6 @@ export const usePetServices = defineStore("petServices", () => {
     getServicePriceByPetId,
     getAllServicePriceByPetId,
     searchServiceOfPet,
-    
+    updatePetService
   };
 });

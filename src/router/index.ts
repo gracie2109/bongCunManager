@@ -1,29 +1,48 @@
-import { createRouter, createWebHistory, useRouter } from "vue-router";
-import HomeView from "@/views/HomeView.vue";
-import i18n from "@/i18n";
 import * as Vue from "vue";
-import { useAuthStore } from "@/stores";
-import { PAGE_LAYOUT } from "@/lib/constants";
-import LoginView from "@/views/auth/LoginView.vue";
-import RegisterView from "@/views/auth/RegisterView.vue";
 
-import DashboardView from "@/views/admin/dashboard/DashboardView.vue";
-import ListUserView from "@/views/admin/users/ListView.vue";
-import ListUserGroupView from "@/views/admin/users/user-groups/Index.vue";
+import { createRouter, createWebHistory, useRouter } from "vue-router";
 
-import ForgotPassView from "@/views/auth/ForgotPassView.vue";
-import ListPets from "@/views/admin/pets/Index.vue";
-import SettingPetServicePrice from "@/views/admin/pets/services-price/Index.vue";
-import DetailPetServicePrice from "@/views/admin/pets/services-price/Detail.vue";
-
-import ListPetServices from "@/views/admin/pets/services/Index.vue";
-import CreatePetServices from "@/views/admin/pets/services/Create.vue";
-import NotFoundPage from "@/components/NotFoundPage.vue";
-import ContactView from "@/views/client/contact/ContactView.vue";
 import ComboServiceView from "@/views/admin/pets/service-combo/Index.vue";
-import PetOverview from "@/views/admin/pets/overview/Index.vue";
+import ContactView from "@/views/client/contact/ContactView.vue";
+import DashboardView from "@/views/admin/dashboard/DashboardView.vue";
+import DetailPetServicePrice from "@/views/admin/pets/services-price/Detail.vue";
+import ForgotPassView from "@/views/auth/ForgotPassView.vue";
+import HomeView from "@/views/HomeView.vue";
+import ListPetServices from "@/views/admin/pets/services/Index.vue";
+import ListPets from "@/views/admin/pets/Index.vue";
+import ListUserGroupView from "@/views/admin/users/user-groups/Index.vue";
+import ListUserView from "@/views/admin/users/ListView.vue";
+import LoginView from "@/views/auth/LoginView.vue";
+import NotFoundPage from "@/components/NotFoundPage.vue";
+import { PAGE_LAYOUT } from "@/lib/constants";
 import PermissionView from "@/views/admin/settings/permissions/Index.vue";
+import PetOverview from "@/views/admin/pets/overview/Index.vue";
+import RegisterView from "@/views/auth/RegisterView.vue";
+import SettingPetServicePrice from "@/views/admin/pets/services-price/Index.vue";
 import SettingView from "@/views/admin/settings/SettingView.vue";
+import i18n from "@/i18n";
+import { useAuthStore } from "@/stores";
+
+// import CreatePetServices from "@/views/admin/pets/services/Create.vue";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  *   RULE:
  *   meta key cần đối chiếu với pageMeta trong file i18n/locales/[lang].json
@@ -154,14 +173,14 @@ const router = createRouter({
                 key: "settingPetServicePrice",
               },
             },
-            {
-              path: "services-create",
-              name: "petServiceCreate",
-              component: CreatePetServices,
-              meta: {
-                key: "settingPetServicePrice",
-              },
-            },
+            // {
+            //   path: "services-create",
+            //   name: "petServiceCreate",
+            //   component: CreatePetServices,
+            //   meta: {
+            //     key: "settingPetServicePrice",
+            //   },
+            // },
           ],
         },
 
