@@ -1,4 +1,5 @@
 import * as z from 'zod';
+
 import i18n from "@/i18n"
 
 const t = i18n.global.t;
@@ -52,4 +53,17 @@ export const validEmail = z.string().superRefine((data, ctx) => {
 
 export const EmailSChema = z.object({
     email: validEmail,
-})
+});
+
+const isVietnamesePhoneNumber = /^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$/;
+
+export const validPhoneNumber = z.string().superRefine((data, ctx) => {
+    if (!isVietnamesePhoneNumber.test(data)) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Invalid phone number",
+        });
+        return z.NEVER;
+
+    }
+});
