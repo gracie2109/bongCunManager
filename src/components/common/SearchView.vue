@@ -1,20 +1,23 @@
 <template>
   <div class="search-view grid grid-cols-3 gap-3">
     <div id="search_view--search" class="w-full col-span-2">
-      <InputSearch
-        :placeholder="props.placeholder"
-        class="w-[1350px]"
-        size="sm"
+      <InputSearch :placeholder="props.placeholder" size="sm" 
+        @on-input="(vl) => $emit('onInput', vl)"
       />
     </div>
 
-    <div>
+    <div class="col-span-1">
+      <div>
       <TooltipProvider>
         <div class="flex items-center gap-2">
-          <div
-            id="filter"
-            v-if="props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.FILTER)"
-          >
+          <div v-if="props.buttonFunctions">
+            <Suspense>
+              <div v-if="props.buttonFunctions">
+                <component :is="props.buttonFunctions" :key="buttonFunctions"></component>
+              </div>
+            </Suspense>
+          </div>
+          <div id="filter" v-if="props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.FILTER)">
             <Tooltip>
               <TooltipTrigger as-child>
                 <Button variant="outline">
@@ -24,10 +27,7 @@
               <TooltipContent> filter </TooltipContent>
             </Tooltip>
           </div>
-          <div
-            id="eraser"
-            v-if="props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.RESET)"
-          >
+          <div id="eraser" v-if="props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.RESET)">
             <Tooltip>
               <TooltipTrigger as-child>
                 <Button variant="outline" @click="$emit('clearFilter')">
@@ -37,36 +37,26 @@
               <TooltipContent> Eraser filter </TooltipContent>
             </Tooltip>
           </div>
-          <div
-            id="setting_column"
-            v-if="
-              props.headerAdvanced.includes(
-                HEADER_ADVANCE_FUNCTION.SETTING_COLUMN
-              )
-            "
-          >
+          <div id="setting_column" v-if="
+            props.headerAdvanced.includes(
+              HEADER_ADVANCE_FUNCTION.SETTING_COLUMN
+            )
+          ">
             <Tooltip>
               <TooltipTrigger as-child>
-                <Button
-                  variant="outline"
-                  @click="
-                    () => {
-                      openSettingView = !openSettingView;
-                    }
-                  "
-                >
+                <Button variant="outline" @click="() => {
+                  openSettingView = !openSettingView;
+                }
+                  ">
                   <Columns2 color="hsl(var(--primary))" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>View({{ openSettingView }}) </TooltipContent>
             </Tooltip>
           </div>
-          <div
-            id="addNew"
-            v-if="
-              props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.ADD_NEW)
-            "
-          >
+          <div id="addNew" v-if="
+            props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.ADD_NEW) && props.addNew.type
+          ">
             <Tooltip>
               <TooltipTrigger as-child>
                 <Button variant="outline" @click="clickAddNew">
@@ -76,10 +66,7 @@
               <TooltipContent> Add new </TooltipContent>
             </Tooltip>
           </div>
-          <div
-            id="export"
-            v-if="props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.EXPORT)"
-          >
+          <div id="export" v-if="props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.EXPORT)">
             <Tooltip>
               <TooltipTrigger as-child>
                 <Button variant="outline">
@@ -89,10 +76,7 @@
               <TooltipContent> Export </TooltipContent>
             </Tooltip>
           </div>
-          <div
-            id="import"
-            v-if="props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.IMPORT)"
-          >
+          <div id="import" v-if="props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.IMPORT)">
             <Tooltip>
               <TooltipTrigger as-child>
                 <Button variant="outline">
@@ -106,12 +90,11 @@
       </TooltipProvider>
     </div>
 
-    <SettingColumnVisible
-      :table="props.table"
-      :openSettingView="openSettingView"
+    <SettingColumnVisible :table="props.table" :openSettingView="openSettingView"
       @changeOpenSettingView="() => (openSettingView = !openSettingView)"
-      :saveColumnVisible="props.saveColumnVisible"
-    />
+      :saveColumnVisible="props.saveColumnVisible" />
+
+    </div>
   </div>
 </template>
 
@@ -127,13 +110,6 @@ import {
   Columns2,
 } from "lucide-vue-next";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -142,7 +118,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { ref } from "vue";
 import type { Table } from "@tanstack/vue-table";
-import { computed } from "vue";
 import { SettingColumnVisible } from "@/components/common";
 import { type IHeaderAdvanced } from "@/types";
 import { HEADER_ADVANCE_FUNCTION } from "@/lib/constants";
@@ -162,11 +137,12 @@ type Props = {
     isRemeber: boolean;
   };
   headerAdvanced: IHeaderAdvanced[];
+  buttonFunctions: any
 };
 
 const props = defineProps<Props>();
 
-const emit = defineEmits(["reset", "clearFilter", "addNew", "setOpen"]);
+const emit = defineEmits(["reset", "clearFilter", "addNew", "setOpen","onInput"]);
 
 function clickAddNew() {
   if (props.addNew.type === "link") {

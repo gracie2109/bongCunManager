@@ -10,6 +10,7 @@ import ForgotPassView from "@/views/auth/ForgotPassView.vue";
 import HomeView from "@/views/HomeView.vue";
 import ListPetServices from "@/views/admin/pets/services/Index.vue";
 import ListPets from "@/views/admin/pets/Index.vue";
+import ListScheduleOrder from "@/views/admin/schedule/order-services/list/Index.vue";
 import ListUserGroupView from "@/views/admin/users/user-groups/Index.vue";
 import ListUserView from "@/views/admin/users/ListView.vue";
 import LoginView from "@/views/auth/LoginView.vue";
@@ -22,26 +23,6 @@ import SettingPetServicePrice from "@/views/admin/pets/services-price/Index.vue"
 import SettingView from "@/views/admin/settings/SettingView.vue";
 import i18n from "@/i18n";
 import { useAuthStore } from "@/stores";
-
-// import CreatePetServices from "@/views/admin/pets/services/Create.vue";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
  *   RULE:
@@ -183,7 +164,19 @@ const router = createRouter({
             // },
           ],
         },
-
+        {
+          path: "schedule",
+          children: [
+            {
+              path: "list-order-schedule",
+              name: "listOrderSchedule",
+              component: ListScheduleOrder,
+              meta: {
+                key: "pets",
+              },
+            },
+          ],
+        },
         {
           path: "settings",
           children: [

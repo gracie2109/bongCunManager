@@ -13,7 +13,10 @@
         :table="table"
         :saveColumnVisible="props.saveColumnVisible"
         :headerAdvanced="props.headerAdvanced"
-      />
+        :buttonFunctions="props.buttonFunctions"
+        @on-input="(vl) => $emit('onInput',vl)"
+      >
+      </SearchView>
     </SearchWrap>
   
     <div id="showTable" class="relative bg-white">
@@ -136,6 +139,7 @@ const props = defineProps<{
   headerAdvanced?: IHeaderAdvanced[];
   addNewHandle?: TAddNewHandle;
   showSearch?: boolean;
+  buttonFunctions?:any
 }>();
 
 const emits = defineEmits([
@@ -144,6 +148,7 @@ const emits = defineEmits([
   "clearFilter",
   "setOpen",
   "updatePageSize",
+  "onInput"
 ]);
 
 const table = useVueTable({

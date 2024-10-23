@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ props.form.errorBag }}
     <form class="space-y-6" @submit.prevent="onSubmit">
       <FormField v-slot="{ componentField }" name="name">
         <FormItem>

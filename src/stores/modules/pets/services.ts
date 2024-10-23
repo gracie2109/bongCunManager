@@ -36,7 +36,7 @@ export const usePetServices = defineStore("petServices", () => {
           ...payload,
           uid: uuidv7(),
         });
-        pageCount.value = totalRecord;
+        pageCount.value = totalRecord.data;
         sendMessageToast("success", "create", "success");
       }
     } catch (error: any) {

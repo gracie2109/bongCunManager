@@ -40,6 +40,7 @@ onMounted(async () => {
 
 const onSubmit = form.handleSubmit(async (values) => {
       await $orderService.createServiceOrder(values);
+      form.resetForm();
       form.handleReset()
 });
 </script>

@@ -13,7 +13,8 @@ export const COLLECTION = {
   PET_SERVICES_COMBO: "pet-service-combo",
   ROLE: "roles",
   PERMISSIONS: "permissions",
-  ORDER_SERVICE: 'order-service'
+  ORDER_SERVICES: 'order-services',
+  ORDER_SERVICES_SERVICE: 'order-services-service'
 };
 
 export const DEFINE_PRODUCT_CATEGORIES = [
