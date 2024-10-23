@@ -29,6 +29,12 @@ export const ADMIN_NAVIGATOR: LinkProp[] = [
     ],
   },
   {
+    title: "schedule",
+    icon: "lucide:calendar-days",
+    variant: "ghost",
+    name: "listOrderSchedule",
+  },
+  {
     title: "settings",
     icon: "lucide:cog",
     variant: "ghost",

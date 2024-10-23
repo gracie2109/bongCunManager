@@ -36,7 +36,7 @@ export const usePetCombo = defineStore("petCombo", () => {
             uid: uuidv7(),
           }
         );
-        pageCount.value = totalRecord;
+        pageCount.value = totalRecord.data;
         sendMessageToast("success", "create", "success");
       }
     } catch (error: any) {
