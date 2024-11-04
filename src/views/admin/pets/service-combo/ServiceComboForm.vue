@@ -96,28 +96,6 @@
                   <FormMessage />
                 </FormItem>
               </FormField>
-              <!-- <FormField v-slot="{ componentField }" name="duration">
-                <FormItem>
-                  <FormLabel>Estimate time</FormLabel>
-                  <FormControl>
-                    <InputContent
-                      v-bind="componentField"
-                      placeholder="Estimate time"
-                      @update-value="(vl) => (time = vl)"
-                      :contentValue="convertNumberToTime(time)"
-                      :form="props.form"
-                      name="duration"
-                    />
-                    <Slider
-                      v-model="time"
-                      :max="100"
-                      :step="1"
-                      :class="cn('w-3/5', $attrs.class ?? '')"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              </FormField> -->
 
               <FormField v-slot="{ componentField, value }" name="duration">
                 <FormItem>
@@ -246,7 +224,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { onMounted, ref, watch, watchEffect } from "vue";
+import { ref, watch } from "vue";
 import "@vuepic/vue-datepicker/dist/main.css";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import { InputContent } from "@/components/common";
@@ -260,20 +238,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import {
-  endOfMonth,
-  endOfYear,
-  startOfMonth,
-  startOfYear,
-  subMonths,
-} from "date-fns";
-
 import { status } from "@/data/status.json";
 import { useI18n } from "vue-i18n";
 import type { FormContext } from "vee-validate";
 import { usePetCombo, usePetServices } from "@/stores";
 import Multiselect from "vue-multiselect";
 import { Slider } from "@/components/ui/slider";
+import { TIME_OPTIONS } from "@/lib/constants";
 
 const props = defineProps<{
   form: FormContext<any>;
@@ -311,25 +282,7 @@ const onSubmit = props.form.handleSubmit(async (values: any) => {
   }
 });
 
-const presetDates = ref([
-  { label: "Today", value: [new Date(), new Date()] },
-  {
-    label: "Today (Slot)",
-    value: [new Date(), new Date()],
-    slot: "preset-date-range-button",
-  },
-  {
-    label: "Last month",
-    value: [
-      startOfMonth(subMonths(new Date(), 1)),
-      endOfMonth(subMonths(new Date(), 1)),
-    ],
-  },
-  {
-    label: "This year",
-    value: [startOfYear(new Date()), endOfYear(new Date())],
-  },
-]);
+const presetDates = ref(TIME_OPTIONS);
 watch(
   () => petSelected.value,
   async () => {

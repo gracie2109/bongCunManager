@@ -4,17 +4,29 @@
       <FormItem>
         <FormLabel>{{ $t("common.name") }}</FormLabel>
         <FormControl>
-          <Input
-            type="text"
-            placeholder="shadcn"
-            v-bind="componentField"
-            size="sm"
-          />
+          <Input type="text" placeholder="shadcn" v-bind="componentField" size="sm" />
         </FormControl>
         <FormMessage />
       </FormItem>
     </FormField>
-
+    <FormField v-slot="{ componentField, value }" name="duration">
+      <FormItem>
+        <FormLabel>Duration</FormLabel>
+        <FormControl>
+          <Slider
+            v-bind="componentField"
+            :default-value="[0]"
+            :max="1439"
+            :min="0"
+            :step="5"
+          />
+          <FormDescription class="flex justify-between">
+            <span>{{ convertNumberToTime(value?.[0] || 0) }} m</span>
+          </FormDescription>
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    </FormField>
     <div id="choose_pets">
       <Label class="font-bold mb-3">Choose pets</Label>
       <multiselect
@@ -109,9 +121,7 @@
     <FormField v-slot="{ value, handleChange }" name="isShow">
       <FormItem>
         <FormLabel>Selling status</FormLabel>
-        <div
-          class="flex flex-row items-center justify-between rounded-lg border p-4"
-        >
+        <div class="flex flex-row items-center justify-between rounded-lg border p-4">
           <div class="space-y-0.5">
             <FormDescription> Show via selling sevice </FormDescription>
           </div>
@@ -175,7 +185,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { cn, convertNumberToTime, formatPrice } from "@/lib/utils";
+import { Slider } from "@/components/ui/slider";
 import type { z } from "zod";
 import { useI18n } from "vue-i18n";
 import Switch from "@/components/ui/switch/Switch.vue";

@@ -74,33 +74,6 @@
     <div class="h-[33%] text-center p-2">
       <h1 class="h-full font-bold capitalize text-lg">{{ props.data.name }}</h1>
     </div>
-    <div class="h-[33%]">
-      <div
-        class="flex gap-3 items-center justify-start px-2 h-full my-auto"
-        v-if="props.data.petsProfiles"
-      >
-        <TooltipProvider>
-          <Tooltip v-for="(i, ii) in props.data.petsProfiles">
-            <TooltipTrigger as-child>
-              <Icon
-                class="size-6 inline-block"
-                :icon="i.icon"
-                :key="ii"
-                :class="
-                  cn({
-                    'hover:text-primary cursor-pointer': i.id === props.enable,
-                    'text-muted-foreground': i.id !== props.enable,
-                  })
-                "
-              />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{{ i.name }}{{ i.id }}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
-    </div>
   </div>
 </template>
 

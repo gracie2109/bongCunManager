@@ -6,6 +6,7 @@ import ComboServiceView from "@/views/admin/pets/service-combo/Index.vue";
 import ContactView from "@/views/client/contact/ContactView.vue";
 import DashboardView from "@/views/admin/dashboard/DashboardView.vue";
 import DetailPetServicePrice from "@/views/admin/pets/services-price/Detail.vue";
+import DetailScheduleOrder from "@/views/admin/schedule/order-services/detail/Index.vue"
 import ForgotPassView from "@/views/auth/ForgotPassView.vue";
 import HomeView from "@/views/HomeView.vue";
 import ListPetServices from "@/views/admin/pets/services/Index.vue";
@@ -172,7 +173,15 @@ const router = createRouter({
               name: "listOrderSchedule",
               component: ListScheduleOrder,
               meta: {
-                key: "pets",
+                key: "schedule",
+              },
+            },
+            {
+              path: "list-order-schedule/:id",
+              name: "detailOrderScheduleDetail",
+              component: DetailScheduleOrder,
+              meta: {
+                key: "schedule",
               },
             },
           ],

@@ -97,7 +97,7 @@
                         @update:checked="
                           (bool) => {
                             const data = bool
-                              ? [...new Set([...items, { ...i, type: 'combo' }])]
+                              ? [...new Set([...items, { ...i, type: 'service' }])]
                               : items.filter((i) => i?.id !== i?.id);
 
                             items = data;

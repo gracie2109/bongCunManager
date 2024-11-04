@@ -201,3 +201,8 @@ body {
   will-change: contents;
   box-sizing: border-box;
 }
+
+
+.dp__input_wrap{
+  width: 340px !important;
+}

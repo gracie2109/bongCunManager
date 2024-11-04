@@ -1,4 +1,5 @@
 import { getCurrentDateTime, getLocalStorage, valueUpdater } from "@/lib/utils";
+import { endOfDay, endOfMonth, endOfYear, startOfDay, startOfMonth, startOfYear, subMonths } from "date-fns";
 
 export const USER_LOCALE = JSON.parse(getLocalStorage("user-locale"));
 export const CURRENT_DATE = getCurrentDateTime();
@@ -159,3 +160,17 @@ export const BASE_GENDER = [
     },
   },
 ];
+
+
+export const TIME_OPTIONS = [
+  {
+    label: "Today",
+    value: [startOfDay(new Date()), endOfDay(new Date())],
+  },
+  { label: "This month", value: [startOfMonth(new Date()), endOfMonth(new Date())] },
+  {
+    label: "Last month",
+    value: [startOfMonth(subMonths(new Date(), 1)), endOfMonth(subMonths(new Date(), 1))],
+  },
+  { label: "This year", value: [startOfYear(new Date()), endOfYear(new Date())] },
+]
