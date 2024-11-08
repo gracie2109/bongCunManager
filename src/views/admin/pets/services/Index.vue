@@ -3,7 +3,7 @@
   <ContentWrap>
     <SubMenu />
     <div class="bg-white min-h-svh p-5 space-y-6 mt-20">
-    {{ selectedItem}}
+  
       <DataTable
         :headerAdvanced="headerAdvanced"
         :data="petServices"

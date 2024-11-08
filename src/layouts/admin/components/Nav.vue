@@ -10,7 +10,7 @@ import {
 import { useRoute, useRouter } from "vue-router";
 import clsx from "clsx";
 import type { LinkProp } from "@/types";
-
+import * as _ from "lodash-es"
 interface NavProps {
   isCollapsed: boolean;
   links: LinkProp[];
@@ -18,6 +18,8 @@ interface NavProps {
 
 const props = defineProps<NavProps>();
 const route = useRoute();
+
+console.log('route.fullPath',route.fullPath)
 </script>
 
 <template>
@@ -75,13 +77,13 @@ const route = useRoute();
           <Icon
             :icon="link.icon"
             class="mr-2 size-4"
-            :class="clsx({ 'text-primary': route.fullPath?.includes(link.name)})"
+            :class="clsx({ 'text-primary': route.fullPath?.includes(_.toLower(link.name))})"
             />
           <span
             :class="
               clsx(
                 'capitalize',
-                route.fullPath?.includes(link.name) ? 'text-primary font-semibold' : ''
+                route.fullPath?.includes(_.toLower(link.name))? 'text-primary font-semibold' : ''
               )
             "
           >

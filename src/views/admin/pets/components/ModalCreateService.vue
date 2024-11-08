@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="flex w-full h-full items-center justify-center cursor-pointer"
-    @click="() => (open = !open)"
-  >
+  <div class="flex w-full h-full items-center justify-center cursor-pointer" @click="() => (open = !open)">
     <Plus class="size-4 mr-2" />
     <span class="font-semibold" v-if="!props.title">
       {{ $t("common.create") }} {{ $t("pageMeta.services") }}
@@ -12,37 +9,25 @@
     </span>
   </div>
 
-  <Dialog
-    :open="open"
-    @update:open="
-      () => {
-        open = !open;
-        $emit('updateOpen', false);
-      }
-    "
-  >
+  <Dialog :open="open" @update:open="() => {
+      open = !open;
+      $emit('updateOpen', false);
+    }
+    ">
     <DialogContent>
       <DialogHeader>
         <DialogTitle>Add new service </DialogTitle>
       </DialogHeader>
-      <ServiceForm
-        :elSelect="props.elSelect"
-        :form="form"
-        :show-btn="false"
-        @on-submit="handleForm"
-      />
+      <div class="h-[650px] overflow-y-auto p-3">
+        <ServiceForm :elSelect="props.elSelect" :form="form" :show-btn="false" @on-submit="handleForm" />
+      </div>
       <DialogFooter class="p-6 pt-0">
-        <Button
-          type="button"
-          variant="outline"
-          @click="
-            () => {
-              open = !open;
-              form.resetForm();
-              $emit('updateOpen', false);
-            }
-          "
-        >
+        <Button type="button" variant="outline" @click="() => {
+            open = !open;
+            form.resetForm();
+            $emit('updateOpen', false);
+          }
+          ">
           Cancel
         </Button>
         <Button type="submit" @click="handleForm"> Save changes </Button>
@@ -74,7 +59,7 @@ const open = ref(false);
 const form = useForm();
 const store = usePetServices();
 
-const emits =defineEmits(["updateOpen","setElSelect"]);
+const emits = defineEmits(["updateOpen", "setElSelect"]);
 
 watch(
   () => props.handleOpen,
@@ -91,7 +76,7 @@ const handleForm = form.handleSubmit(async (values: any) => {
       open.value = !open.value;
       form.resetForm();
     });
-  }else{
+  } else {
     await store.updatePetService(values).then(() => {
       open.value = !open.value;
       form.resetForm();

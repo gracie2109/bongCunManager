@@ -14,11 +14,12 @@
         :saveColumnVisible="props.saveColumnVisible"
         :headerAdvanced="props.headerAdvanced"
         :buttonFunctions="props.buttonFunctions"
-        @on-input="(vl) => $emit('onInput',vl)"
+        @on-input="(vl) => $emit('onInput', vl)"
+        @change-date="(vl) => $emit('changeDate', vl)"
       >
       </SearchView>
     </SearchWrap>
-  
+
     <div id="showTable" class="relative bg-white">
       <div class="bg-white space-y-6 relative">
         <Table>
@@ -91,7 +92,7 @@ import {
   getSortedRowModel,
   getExpandedRowModel,
   useVueTable,
-  _getVisibleLeafColumns,
+  _getVisibleLeafColumns
 } from "@tanstack/vue-table";
 
 import type {
@@ -99,7 +100,7 @@ import type {
   ColumnFiltersState,
   SortingState,
   VisibilityState,
-  PaginationState,
+  PaginationState
 } from "@tanstack/vue-table";
 import {
   Table,
@@ -107,7 +108,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 
 import { valueUpdater } from "@/lib/utils";
@@ -139,7 +140,7 @@ const props = defineProps<{
   headerAdvanced?: IHeaderAdvanced[];
   addNewHandle?: TAddNewHandle;
   showSearch?: boolean;
-  buttonFunctions?:any
+  buttonFunctions?: any;
 }>();
 
 const emits = defineEmits([
@@ -148,7 +149,8 @@ const emits = defineEmits([
   "clearFilter",
   "setOpen",
   "updatePageSize",
-  "onInput"
+  "onInput",
+  "changeDate"
 ]);
 
 const table = useVueTable({
@@ -182,8 +184,8 @@ const table = useVueTable({
     },
     get rowSelection() {
       return rowSelection.value;
-    },
-  },
+    }
+  }
 });
 
 async function handleChangePage(vl: number) {

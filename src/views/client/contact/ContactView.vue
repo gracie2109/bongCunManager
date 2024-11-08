@@ -18,6 +18,7 @@ import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { toTypedSchema } from "@vee-validate/zod";
 import { orderServiceSchema } from "@/validations/order-service";
+import {format} from "date-fns"
 const formSchema = toTypedSchema(orderServiceSchema);
 
 
@@ -39,7 +40,8 @@ onMounted(async () => {
 
 
 const onSubmit = form.handleSubmit(async (values) => {
-      await $orderService.createServiceOrder(values);
+  const formatTime = format(values?.time, 'MM/dd/yyyy hh:mm:ss' );
+      await $orderService.createServiceOrder({...values, time: formatTime});
       form.resetForm();
       form.handleReset()
 });
