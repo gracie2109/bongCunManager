@@ -197,7 +197,7 @@ export const useOrderService = defineStore("orderService", () => {
               })
               .filter((item: any) => item !== null);
 
-            services.push([...comboServices]);
+            services.push(...comboServices);
           }
         }
         if (notComboOrder.length > 0) {
@@ -214,10 +214,10 @@ export const useOrderService = defineStore("orderService", () => {
               })
               .filter((item: any) => item !== null);
 
-            services.push([...individualServices]);
+            services.push(...individualServices);
           }
         }
-
+        
         selected = {
           ...selected,
           services,

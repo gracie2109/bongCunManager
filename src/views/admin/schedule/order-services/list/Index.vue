@@ -7,7 +7,6 @@
       </h1>
     </Header>
     <ContentWrap>
-
       <div class="relative top-10">
         <DataTable
           :headerAdvanced="headerAdvanced"
@@ -19,6 +18,7 @@
           :add-new-handle="{ content: null, type: 'function' }"
           :show-search="true"
           @on-input="onInput"
+          @change-date="handleDate"
         />
       </div>
     </ContentWrap>
@@ -60,9 +60,7 @@ import { CalendarDays } from "lucide-vue-next";
 const $store = useOrderService();
 const { loading, searchOrderService, searchTotalPage } = storeToRefs($store);
 const totalRecord = ref(0);
-
-
-
+const date = ref(TIME_OPTIONS[0]["value"]);
 
 const headerAdvanced = reactive<IHeaderAdvanced[]>([
   HEADER_ADVANCE_FUNCTION.SETTING_COLUMN,
@@ -86,6 +84,10 @@ const onInput = (vl: string | number) => {
   } else {
     dataSearch.value = [];
   }
+};
+
+const handleDate = (vl: any) => {
+  date.value = vl;
 };
 
 const columns: ColumnDef<any>[] = reactive([
@@ -190,7 +192,10 @@ onMounted(async () => {
   await $store.searchServiceOrder({
     pageIndex: 1,
     pageSize: 25,
-    dataSearch: []
+    dataSearch: [
+      // { fieldId: "time", operator: "<=", value:format(date.value[0],'') },
+      // { fieldId: "time", operator: ">=", value:date.value[1] }
+    ]
   });
 });
 

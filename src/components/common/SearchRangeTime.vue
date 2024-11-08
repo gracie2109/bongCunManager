@@ -1,6 +1,11 @@
 <template>
   <div>
-    <VueDatePicker v-model="props.rangeDate" range :preset-dates="presetDates">
+    <VueDatePicker
+      v-model="props.rangeDate"
+      range
+      :preset-dates="presetDates"
+      @update:model-value="handleDate"
+    >
       <template #preset-date-range-button="{ label, value, presetDate }">
         <span
           role="button"
@@ -24,11 +29,12 @@ import { TIME_OPTIONS } from "@/lib/constants";
 const presetDates = ref(TIME_OPTIONS);
 
 const props = defineProps<{
-  rangeDate: any
-}>()
-// const date = ref(TIME_OPTIONS[0]["value"]);
+  rangeDate: any;
+}>();
 
+const emits = defineEmits(["changeDate"]);
 
-// provide("search_range_time", date)
-
+const handleDate = (modelData: any) => {
+  emits("changeDate", modelData);
+};
 </script>

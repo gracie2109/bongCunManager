@@ -16,21 +16,26 @@
                 <div class="grid grid-cols-4 gap-8 wrap">
                     <div class="col-span-3 border bg-white rounded-md h-auto min-h-[650px] p-5">
                         <Calendar />
-                           
-                
+
+
                     </div>
                     <div class="col-span-1 border bg-white rounded-md p-5 overflow-y-auto h-[650px] ">
-                    
+
                         <div class="block  " v-if="orderSelected && orderSelected.services.length > 0"
                             v-for="(i, ii) in orderSelected.services" :key="ii">
-                            <div class="space-y-6 border border-solid border-red-300 rounded-md h-20 mb-3">
+                            <div class="space-y-6 border border-solid border-red-300 rounded-md h-20 mb-3 cursor-move"
+                                draggable="true"
+                                @dragstart="handleDragStart"
+                                
+                                >
                                 <div class="h-full w-full p-3 ">
-                                    <h3 class="font-semibold flex items-center justify-start gap-x-6" id="service_title">
+                                    <h3 class="font-semibold flex items-center justify-start gap-x-6"
+                                        id="service_title">
                                         {{ i.name || "" }}
 
-                                        <span class="font-normal" v-if="i.type === 'combo' ||  i.serviceProfiles" >
-                                            (<span v-for="(c, cc) in i.serviceProfiles" :key="cc"> 
-                                                    {{c.name }}
+                                        <span class="font-normal" v-if="i.type === 'combo' || i.serviceProfiles">
+                                            (<span v-for="(c, cc) in i.serviceProfiles" :key="cc">
+                                                {{ c.name }}
                                             </span>)
                                         </span>
                                     </h3>
@@ -41,11 +46,11 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div v-else>
                             Service not found
                         </div>
-                      </div>
+                    </div>
                 </div>
             </div>
         </ContentWrap>
@@ -66,6 +71,9 @@ const orderSelected = ref();
 const $store = useOrderService();
 const { params } = useRoute();
 
+const handleDragStart = () => {
+    
+}
 onMounted(async () => {
     const res = await $store.getDetailServiceOrder(params.id.toString());
     console.log('res', res)

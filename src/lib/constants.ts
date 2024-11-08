@@ -174,3 +174,5 @@ export const TIME_OPTIONS = [
   },
   { label: "This year", value: [startOfYear(new Date()), endOfYear(new Date())] },
 ]
+
+export const TIME_FORMAT = 'MM/dd/yyyy hh:mm:ss'

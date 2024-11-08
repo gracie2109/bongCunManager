@@ -10,9 +10,14 @@
 
     <div class="col-span-1">
       <!-- {{ rangeDate }} -->
+
       <div>
         <TooltipProvider>
           <div class="flex items-center gap-2">
+            <SearchRangeTime
+              :range-date="date"
+              @change-date="handleChangeDate"
+            />
             <div v-if="props.buttonFunctions">
               <Suspense>
                 <div v-if="props.buttonFunctions">
@@ -139,7 +144,7 @@
 </template>
 
 <script lang="ts" setup>
-import { provide } from "vue"
+import { provide } from "vue";
 import { useRouter } from "vue-router";
 import InputSearch from "./InputSearch.vue";
 import {
@@ -162,6 +167,7 @@ import type { Table } from "@tanstack/vue-table";
 import { SettingColumnVisible } from "@/components/common";
 import { type IHeaderAdvanced } from "@/types";
 import { HEADER_ADVANCE_FUNCTION, TIME_OPTIONS } from "@/lib/constants";
+import SearchRangeTime from "./SearchRangeTime.vue";
 
 const router = useRouter();
 const openSettingView = ref(false);
@@ -183,12 +189,15 @@ type Props = {
 
 const props = defineProps<Props>();
 
+const date = ref(TIME_OPTIONS[0]["value"]);
+
 const emit = defineEmits([
   "reset",
   "clearFilter",
   "addNew",
   "setOpen",
-  "onInput"
+  "onInput",
+  "changeDate"
 ]);
 
 function clickAddNew() {
@@ -197,5 +206,9 @@ function clickAddNew() {
   } else {
     emit("setOpen");
   }
+}
+
+function handleChangeDate(val:any) {
+  emit('changeDate', val)
 }
 </script>
