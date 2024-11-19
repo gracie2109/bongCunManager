@@ -9,7 +9,6 @@ import {
   getMultiConditionData,
   updateCollection,
   getContainsAnyData,
-
 } from "@/lib/firebaseFn";
 import { v7 as uuidv7 } from "uuid";
 import { COLLECTION } from "@/lib/constants";
@@ -22,7 +21,7 @@ export const usePetServices = defineStore("petServices", () => {
   const pageCount = ref();
   const lastVisibleDoc = ref(null);
   const lastVisibleDocsCache = ref<Record<number, any>>({});
-  
+
   async function createNewPetService(payload: any) {
     try {
       loading.value = true;
@@ -48,11 +47,15 @@ export const usePetServices = defineStore("petServices", () => {
   async function updatePetService(payload: any) {
     try {
       loading.value = true;
-        const totalRecord = await updateCollection(COLLECTION.PETS_SERVICES, payload.id, {
+      const totalRecord = await updateCollection(
+        COLLECTION.PETS_SERVICES,
+        payload.id,
+        {
           ...payload,
-        });
-        pageCount.value = totalRecord;
-        sendMessageToast("success", "create", "success");
+        }
+      );
+      pageCount.value = totalRecord;
+      sendMessageToast("success", "create", "success");
       // }
     } catch (error: any) {
       sendMessageToast("fail", "create", "error", error.message);
@@ -200,6 +203,21 @@ export const usePetServices = defineStore("petServices", () => {
     }
   }
 
+  async function createAndUpdateTypeAllService({
+    data,
+    isAdd,
+  }: {
+    data: any;
+    isAdd: true;
+  }) {
+    try {
+      loading.value = true;
+    } catch (e) {
+      console.log("error", e);
+    } finally {
+      loading.value = false;
+    }
+  }
   async function getServicePriceByPetId({
     petId,
     serviceId,
@@ -278,6 +296,6 @@ export const usePetServices = defineStore("petServices", () => {
     getServicePriceByPetId,
     getAllServicePriceByPetId,
     searchServiceOfPet,
-    updatePetService
+    updatePetService,
   };
 });

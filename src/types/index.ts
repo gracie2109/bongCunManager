@@ -26,8 +26,7 @@ export type T_ROW_FUNCTION = {
 
 export interface LinkProp {
   title: string;
-  icon: string;
-  variant: "default" | "ghost";
+  icon?: string;
   name: string;
-  children?: LinkProp[]
+  children?: LinkProp[] | null
 }

@@ -1,53 +1,95 @@
 <template>
-    <Dialog :open="props.open" @update:open="$emit('updateOpen')">
-        <DialogContent>
-            <DialogHeader class="p-6 pb-0">
-                <DialogTitle> {{ $t("pageFields.pets.editPrice") }}</DialogTitle>
-            </DialogHeader>
+  <Dialog :open="props.open && props.data" @update:open="$emit('updateOpen')">
+    <DialogContent>
+      <DialogHeader class="p-6 pb-0">
+        <DialogTitle> {{ $t("pageFields.pets.editPrice") }}</DialogTitle>
+      </DialogHeader>
+      <div>
+        <form @submit="onSubmit">
+          <FormField v-slot="{ componentField }" name="username">
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  placeholder="shadcn"
+                  v-bind="componentField"
+                  :default-value="props.data.name"
+                  disabled
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
 
-            <div>
-                <form @submit="onSubmit">
-                    <FormField v-slot="{ componentField }" name="username">
-                        <FormItem>
-                            <FormLabel>Name</FormLabel>
-                            <FormControl>
-                                <Input type="text" placeholder="shadcn" v-bind="componentField" />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    </FormField>
-                </form>
-            </div>
-        </DialogContent>
-    </Dialog>
+          <FormField
+            v-slot="{ componentField }"
+            type="radio"
+            name="generalPrice"
+          >
+            <FormItem class="space-y-3">
+              <FormLabel>General Price</FormLabel>
+
+              <FormControl>
+                <Input
+                  type="number"
+                  v-bind="componentField"
+                  size="sm"
+                  :default-value="props.data.generalPrice"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+
+          <div class="mt-5 flex w-full justify-end gap-3">
+            <Button type="button" variant="outline" @click="$emit('updateOpen')"
+            >Cancel</Button
+          >
+          <Button type="submit">Save</Button>
+          </div>
+        </form>
+      </div>
+    </DialogContent>
+  </Dialog>
 </template>
 
 <script lang="ts" setup>
+import Button from "@/components/ui/button/Button.vue";
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogScrollContent,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { Form, FormField, FormMessage } from "@/components/ui/form"
+import {
+  FormField,
+  FormMessage,
+  FormControl,
+  FormItem,
+} from "@/components/ui/form";
 import FormLabel from "@/components/ui/form/FormLabel.vue";
 import Input from "@/components/ui/input/Input.vue";
+import { usePetServices } from "@/stores";
 import { useForm } from "vee-validate";
 
 const props = defineProps<{
-    data: any,
-    open: boolean
+  data: any;
+  open: boolean;
 }>();
 const form = useForm();
-const onSubmit = form.handleSubmit((values) => {
-    console.log('values', values);
+const $store = usePetServices()
+const onSubmit = form.handleSubmit(async (values) => {
+    const payload = {
+        id: props.data.id,
+        generalPrice: values.generalPrice
+    }
+    await $store.createPetServicePrice({
+        data:payload,
+        isAdd: false
+    })
 
-})
-const emits = defineEmits(['updateOpen']);
-
+});
+const emits = defineEmits(["updateOpen"]);
 </script>
