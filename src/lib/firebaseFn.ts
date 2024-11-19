@@ -123,9 +123,9 @@ export async function createCollection(collectionName: string, payload: any) {
   try {
     const collectionRef = collection(db, collectionName);
 
-    await addDoc(collectionRef, convertBefore(payload, "CREATE"));
+    const response = await addDoc(collectionRef, convertBefore(payload, "CREATE"));
     const data = await getTotalRecord(collectionName);
-    return data;
+    return { data, response };
   } catch (error) {
     throw new Error("Something went wrong: " + error);
   }
@@ -251,7 +251,7 @@ export async function getContainsAnyData({
     );
 
     if (!hasConditions) {
-      return []; 
+      return [];
     }
 
     const querySnapshot = await getDocs(finalQuery);
@@ -261,6 +261,97 @@ export async function getContainsAnyData({
     }));
 
     return results;
+  } catch (error) {
+    throw new Error("Something went wrong: " + error);
+  }
+}
+
+export type QueryCondition = {
+  fieldId: string; // Tên trường cần so sánh
+  operator: any; // Các toán tử: "==", "<=", "array-contains-any", v.v.
+  value: any; // Giá trị để so sánh
+};
+
+export async function getContainsAnyDataPagination({
+  collectionName,
+  conditions,
+  limitNumb,
+  startAfterDoc,
+  isAll,
+  callback,
+}: {
+  collectionName: string;
+  conditions?: QueryCondition[];
+  limitNumb?: number;
+  startAfterDoc?: any;
+  isAll?: boolean;
+  callback: ({
+    data,
+    totalRecord,
+    lastVisibleDoc,
+  }: {
+    data: any[];
+    totalRecord: number;
+    lastVisibleDoc: any;
+  }) => void;
+}) {
+  try {
+    const colRef = collection(db, collectionName);
+    let finalQuery = query(colRef);
+    let hasConditions = false;
+
+
+    if (conditions && conditions.length > 0) {
+      conditions.forEach(({ fieldId, operator, value }) => {
+        if (fieldId && operator && value !== undefined) {
+          finalQuery = query(finalQuery, where(fieldId, operator, value));
+          hasConditions = true;
+        }
+      });
+    }
+
+
+    if (!isAll && limitNumb) {
+      finalQuery = query(finalQuery, orderBy("createdAt", "desc"), limit(limitNumb));
+
+      if (startAfterDoc) {
+        finalQuery = query(finalQuery, startAfter(startAfterDoc));
+      }
+    } else {
+      finalQuery = query(finalQuery, orderBy("createdAt", "desc"));
+    }
+
+    if (!hasConditions) {
+
+      await getCollectionList({
+        collectionName,
+        callback({ data, totalRecord, lastVisibleDoc, }) {
+          return callback({ data, totalRecord, lastVisibleDoc, })
+        },
+        isAll: true,
+        limitNumb,
+        startAfterDoc
+      })
+      return;
+    }
+
+
+    const totalRecord = await getTotalRecord(collectionName);
+
+    const querySnapshot = await getDocs(finalQuery);
+    const results = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1] || null;
+
+
+    callback({
+      data: results,
+      totalRecord: totalRecord,
+      lastVisibleDoc: lastVisibleDoc,
+    });
   } catch (error) {
     throw new Error("Something went wrong: " + error);
   }

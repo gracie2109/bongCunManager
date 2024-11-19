@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="flex w-full h-full items-center justify-center cursor-pointer"
-    @click="() => (open = !open)"
-  >
+  <div class="flex w-full h-full items-center justify-center cursor-pointer" @click="() => (open = !open)">
     <Plus class="size-4 mr-2" />
     <span class="font-semibold" v-if="!props.title">
       {{ $t("common.create") }} {{ $t("pageMeta.services") }}
@@ -12,32 +9,25 @@
     </span>
   </div>
 
-  <Dialog
-    :open="open"
-    @update:open="
-      () => {
-        open = !open;
-        $emit('updateOpen', false);
-      }
-    "
-  >
+  <Dialog :open="open" @update:open="() => {
+      open = !open;
+      $emit('updateOpen', false);
+    }
+    ">
     <DialogContent>
       <DialogHeader>
         <DialogTitle>Add new service </DialogTitle>
       </DialogHeader>
-      <ServiceForm :form="form" :show-btn="false" @on-submit="handleForm" />
+      <div class="h-[650px] overflow-y-auto p-3">
+        <ServiceForm :elSelect="props.elSelect" :form="form" :show-btn="false" @on-submit="handleForm" />
+      </div>
       <DialogFooter class="p-6 pt-0">
-        <Button
-          type="button"
-          variant="outline"
-          @click="
-            () => {
-              open = !open;
-              form.resetForm();
-              $emit('updateOpen', false);
-            }
-          "
-        >
+        <Button type="button" variant="outline" @click="() => {
+            open = !open;
+            form.resetForm();
+            $emit('updateOpen', false);
+          }
+          ">
           Cancel
         </Button>
         <Button type="submit" @click="handleForm"> Save changes </Button>
@@ -63,12 +53,13 @@ import { usePetServices } from "@/stores";
 const props = defineProps<{
   title?: string;
   handleOpen?: boolean;
+  elSelect?: any;
 }>();
 const open = ref(false);
 const form = useForm();
 const store = usePetServices();
 
-defineEmits(["updateOpen"]);
+const emits = defineEmits(["updateOpen", "setElSelect"]);
 
 watch(
   () => props.handleOpen,
@@ -80,9 +71,27 @@ watch(
 );
 
 const handleForm = form.handleSubmit(async (values: any) => {
-  await store.createNewPetService(values).then(() => {
-    open.value = !open.value;
-    form.resetForm();
-  });
+  if (!props.elSelect) {
+    await store.createNewPetService(values).then(() => {
+      open.value = !open.value;
+      form.resetForm();
+    });
+  } else {
+    await store.updatePetService(values).then(() => {
+      open.value = !open.value;
+      form.resetForm();
+      emits('setElSelect');
+      emits('updateOpen')
+    });
+  }
 });
+
+watch(
+  () => props.elSelect,
+  () => {
+    if (props.elSelect) {
+      form.setValues({ ...props.elSelect }, true);
+    }
+  }
+);
 </script>

@@ -1,31 +1,32 @@
 <template>
   <div>
     <div
-      class="w-[250px] shadow-lg border-b-primary bg-white fixed top-12 h-12 z-40"
+      class="w-[250px] shadow-lg border-b-primary bg-custom-white fixed top-12 h-12 z-40 p-3"
       id="sub_navigation"
     >
-      <div
-        class="h-full w-full flex items-center justify-center gap-3 cursor-pointer"
-      >
+      <div class="h-full w-full flex items-center justify-center gap-3 cursor-pointer">
         <TooltipProvider>
-          <Tooltip v-if="$route.name !== 'petOverview'">
+          <Tooltip>
             <TooltipTrigger
               @click="$router.push({ name: 'petOverview' })"
               class="tooltip_card"
             >
-              <Image class="size-6" />
-              <span class="tooltip_span">Overview</span>
+              <Image
+                class="size-6"
+                :class="{ 'text-primary': $route.name === 'petOverview' }"
+              />
+              <span class="tooltip_span "  :class="{ 'text-primary': $route.name === 'petOverview' }">Overview</span>
             </TooltipTrigger>
             <TooltipContent>Overview</TooltipContent>
           </Tooltip>
 
-          <Tooltip v-if="$route.name !== 'pets'">
-            <TooltipTrigger
-              @click="$router.push({ name: 'pets' })"
-              class="tooltip_card"
-            >
-              <PawPrint />
-              <span class="tooltip_span">List pet</span>
+          <Tooltip>
+            <TooltipTrigger @click="$router.push({ name: 'pets' })" class="tooltip_card">
+              <PawPrint
+                class="size-6"
+                :class="{ 'text-primary': $route.name === 'pets' }"
+              />
+              <span class="tooltip_span"  :class="{ 'text-primary': $route.name === 'pets' }">Pets</span>
             </TooltipTrigger>
             <TooltipContent>Pets</TooltipContent>
           </Tooltip>
@@ -35,19 +36,26 @@
               @click="$router.push({ name: 'petService' })"
               class="tooltip_card"
             >
-              <Icon icon="carbon:settings-services" class="size-6" />
-              <span class="tooltip_span">Services</span>
+              <Icon
+                icon="carbon:settings-services"
+                class="size-6"
+                :class="{ 'text-primary': $route.name === 'petService' }"
+              />
+              <span class="tooltip_span"   :class="{ 'text-primary': $route.name === 'petService' }">Services</span>
             </TooltipTrigger>
             <TooltipContent>Services</TooltipContent>
           </Tooltip>
 
-          <Tooltip v-if="$route.name !== 'petServiceCombo'">
+          <Tooltip>
             <TooltipTrigger
               @click="$router.push({ name: 'petServiceCombo' })"
               class="tooltip_card"
             >
-              <Layers2 class="size-6" />
-              <span class="tooltip_span">Combo</span>
+              <Layers2
+                class="size-6"
+                :class="{ 'text-primary': $route.name === 'petServiceCombo' }"
+              />
+              <span class="tooltip_span"  :class="{ 'text-primary': $route.name === 'petServiceCombo' }">Combo</span>
             </TooltipTrigger>
             <TooltipContent>Services Combo</TooltipContent>
           </Tooltip>
@@ -59,17 +67,15 @@
                   <span class="tooltip_span">Weights</span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuLabel class="font-bold">
-                    Weights
-                  </DropdownMenuLabel>
+                  <DropdownMenuLabel class="font-bold"> Weights </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem v-for="tag in contents" :key="tag.id">
                     <!-- @ts-ignore -->
                     {{ (tag.lang as any)[String(locale)] }}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu></TooltipTrigger
-            >
+              </DropdownMenu>
+            </TooltipTrigger>
             <TooltipContent>Pet weight</TooltipContent>
           </Tooltip>
         </TooltipProvider>

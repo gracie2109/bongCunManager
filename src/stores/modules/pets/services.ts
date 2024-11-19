@@ -22,9 +22,6 @@ export const usePetServices = defineStore("petServices", () => {
   const lastVisibleDoc = ref(null);
   const lastVisibleDocsCache = ref<Record<number, any>>({});
 
-  type IPrice = {
-    [key: string]: string | number;
-  };
   async function createNewPetService(payload: any) {
     try {
       loading.value = true;
@@ -38,7 +35,7 @@ export const usePetServices = defineStore("petServices", () => {
           ...payload,
           uid: uuidv7(),
         });
-        pageCount.value = totalRecord;
+        pageCount.value = totalRecord.data;
         sendMessageToast("success", "create", "success");
       }
     } catch (error: any) {
@@ -47,7 +44,25 @@ export const usePetServices = defineStore("petServices", () => {
       loading.value = false;
     }
   }
-
+  async function updatePetService(payload: any) {
+    try {
+      loading.value = true;
+      const totalRecord = await updateCollection(
+        COLLECTION.PETS_SERVICES,
+        payload.id,
+        {
+          ...payload,
+        }
+      );
+      pageCount.value = totalRecord;
+      sendMessageToast("success", "create", "success");
+      // }
+    } catch (error: any) {
+      sendMessageToast("fail", "create", "error", error.message);
+    } finally {
+      loading.value = false;
+    }
+  }
   async function getListPetService({
     pageIndex,
     pageSize,
@@ -118,6 +133,10 @@ export const usePetServices = defineStore("petServices", () => {
       return await getContainsAnyData({
         collectionName: COLLECTION.PETS_SERVICES,
         conditions: [{ fieldId: "petIds", dataSearch: petIds }],
+        // callback({ data, totalRecord, lastVisibleDoc, }) {
+        //   console.log('serviceOfper', data)
+        //     return data
+        // },
       });
     } catch (error) {
       console.log("err", error);
@@ -184,6 +203,21 @@ export const usePetServices = defineStore("petServices", () => {
     }
   }
 
+  async function createAndUpdateTypeAllService({
+    data,
+    isAdd,
+  }: {
+    data: any;
+    isAdd: true;
+  }) {
+    try {
+      loading.value = true;
+    } catch (e) {
+      console.log("error", e);
+    } finally {
+      loading.value = false;
+    }
+  }
   async function getServicePriceByPetId({
     petId,
     serviceId,
@@ -262,6 +296,6 @@ export const usePetServices = defineStore("petServices", () => {
     getServicePriceByPetId,
     getAllServicePriceByPetId,
     searchServiceOfPet,
-    
+    updatePetService,
   };
 });

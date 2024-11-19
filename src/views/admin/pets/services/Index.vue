@@ -1,7 +1,9 @@
 <template>
   <PageTitle />
   <ContentWrap>
-    <div class="bg-white h-auto min-h-screen p-3">
+    <SubMenu />
+    <div class="bg-white min-h-svh p-5 space-y-6 mt-20">
+  
       <DataTable
         :headerAdvanced="headerAdvanced"
         :data="petServices"
@@ -10,7 +12,7 @@
         :page-data="pageData"
         :saveColumnVisible="{
           name: 'petServices',
-          isRemeber: false,
+          isRemeber: true,
         }"
         :add-new-handle="{
           content: null,
@@ -49,7 +51,8 @@
     :title="$t('common.create')"
     :handle-open="open && !selectedItem"
     @updateOpen="(vl) => (open = vl)"
-    :rowEditting="rowEditSelected"
+    :elSelect="rowEditSelected"
+    @setElSelect="setElSelect"
   />
 </template>
 
@@ -72,6 +75,7 @@ import PageTitle from "../PageTitle.vue";
 import ModalCreateService from "../components/ModalCreateService.vue";
 import { contents as unit, type } from "@/data/pet-service.json";
 import { useI18n } from "vue-i18n";
+import SubMenu from "../components/SubMenu.vue";
 
 const { locale } = useI18n();
 const store = usePetServices();
@@ -134,6 +138,18 @@ const columns: ColumnDef<any>[] = reactive([
         "span",
         { class: "max-w-[500px] truncate font-medium" },
         petType[locale.value]
+      );
+    },
+  },
+  {
+    accessorKey: "isShow",
+    header: ({ column }) =>
+      h(DataTableColumnHeader, { column, title: "Service single" }),
+    cell: ({ row }) => {
+      return h(
+        "span",
+        { class: "max-w-[500px] truncate font-medium" },
+        row.getValue("isShow")
       );
     },
   },
@@ -234,6 +250,10 @@ function clearFilter() {
 function setOpen() {
   open.value = !open.value;
 }
+function setElSelect() {
+  selectedItem.value =null
+}
+
 
 function updatePageSize(newPs: number) {
   pageData.value.pageSize = +newPs;

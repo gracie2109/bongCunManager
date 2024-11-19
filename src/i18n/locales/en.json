@@ -59,7 +59,8 @@
     },
     "pets": {
       "placeholder": "Select the representative icon",
-      "dontHasService": "You do not have any services yet!"
+      "dontHasService": "You do not have any services yet!",
+      "editPrice": "Edit service price"
     }
   }
 }

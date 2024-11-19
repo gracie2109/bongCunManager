@@ -1,4 +1,5 @@
-import { getLocalStorage, getCurrentDateTime, valueUpdater } from "@/lib/utils";
+import { getCurrentDateTime, getLocalStorage, valueUpdater } from "@/lib/utils";
+import { endOfDay, endOfMonth, endOfYear, startOfDay, startOfMonth, startOfYear, subMonths } from "date-fns";
 
 export const USER_LOCALE = JSON.parse(getLocalStorage("user-locale"));
 export const CURRENT_DATE = getCurrentDateTime();
@@ -13,6 +14,8 @@ export const COLLECTION = {
   PET_SERVICES_COMBO: "pet-service-combo",
   ROLE: "roles",
   PERMISSIONS: "permissions",
+  ORDER_SERVICES: 'order-services',
+  ORDER_SERVICES_SERVICE: 'order-services-service'
 };
 
 export const DEFINE_PRODUCT_CATEGORIES = [
@@ -52,6 +55,7 @@ export const LOCAL_STORAGE_KEY = {
   LAYOUT: "layout",
   THEME: "theme",
   VISIBLE_COLUMN: "visibleColumn",
+  SETTING_KEY: "settingKey",
 };
 
 export const HEADER_ADVANCE_FUNCTION = {
@@ -132,3 +136,43 @@ export const baseMethods = [
     value: "ALL",
   },
 ] as const;
+
+export const BASE_GENDER = [
+  {
+    value: "MALE",
+    name: {
+      vi: "Nam",
+      en: "Male",
+    },
+  },
+  {
+    value: "FEMALE",
+    name: {
+      vi: "Nữ",
+      en: "Female",
+    },
+  },
+  {
+    value: "OTHER",
+    name: {
+      vi: "Khác",
+      en: "Other",
+    },
+  },
+];
+
+
+export const TIME_OPTIONS = [
+  {
+    label: "Today",
+    value: [startOfDay(new Date()), endOfDay(new Date())],
+  },
+  { label: "This month", value: [startOfMonth(new Date()), endOfMonth(new Date())] },
+  {
+    label: "Last month",
+    value: [startOfMonth(subMonths(new Date(), 1)), endOfMonth(subMonths(new Date(), 1))],
+  },
+  { label: "This year", value: [startOfYear(new Date()), endOfYear(new Date())] },
+]
+
+export const TIME_FORMAT = 'MM/dd/yyyy hh:mm:ss'

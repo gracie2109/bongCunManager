@@ -28,7 +28,7 @@
         <FormItem v-auto-animate>
           <FormLabel> Description</FormLabel>
           <FormControl
-            ><div class="h-[200px] overflow-y-auto">
+            ><div class="h-[280px] overflow-y-auto">
               <TreePermission
                 v-bind="componentField"
                 :data="props.permissions"

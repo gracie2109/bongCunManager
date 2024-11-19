@@ -14,16 +14,19 @@ defineProps<{
   open: boolean;
   title: string;
   desc?: string;
+  okBtn?: string;
 }>();
 
-defineEmits([ "cancel", "openChange","handleOk"]);
+defineEmits(["cancel", "openChange", "handleOk"]);
 </script>
 
 <template>
   <AlertDialog :open="open" @update:open="$emit('openChange')">
     <AlertDialogContent>
       <AlertDialogHeader>
-        <AlertDialogTitle>{{ title || "Are you absolutely sure?" }}</AlertDialogTitle>
+        <AlertDialogTitle>{{
+          title || "Are you absolutely sure?"
+        }}</AlertDialogTitle>
         <AlertDialogDescription>
           {{
             desc ||
@@ -33,7 +36,9 @@ defineEmits([ "cancel", "openChange","handleOk"]);
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel @click="$emit('cancel')">Cancel</AlertDialogCancel>
-        <AlertDialogAction @click="$emit('handleOk')">Continue</AlertDialogAction>
+        <AlertDialogAction @click="$emit('handleOk')">{{
+          okBtn || "Continue"
+        }}</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>

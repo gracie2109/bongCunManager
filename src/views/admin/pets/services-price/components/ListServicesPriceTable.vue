@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <div>
-      <table class="w-[550px]">
+      <table id="service_apply_for_all" class="w-[550px]">
         <thead>
           <tr>
             <th>Service</th>
@@ -9,14 +9,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(i, ii) in serviceTypeAll"
-            :key="ii"
-            :class="{
-              'bg-[#dcdcdc]': props.isMouseId === i.id,
-            }"
-          >
-            <td>{{ i.name }}</td>
+          <tr v-for="(i, ii) in serviceTypeAll" :key="ii" :class="{
+            'bg-[#dcdcdc]': props.isMouseId === i.id,
+          }">
+            <td @mouseenter="() => onMouseOver(String(i.id))" @mouseleave="() => onMouseLeave()">
+              {{ i.name }}
+            </td>
             <td>{{ formatPrice(i.generalPrice || "") }}</td>
           </tr>
         </tbody>
@@ -28,15 +26,10 @@
         <thead>
           <tr>
             <th class="fixed-column">Weight</th>
-            <th
-              v-for="(i, ii) in serviceTypeWeight"
-              :key="ii"
-              @mouseenter="() => onMouseOver(String(i.id))"
-              @mouseleave="() => onMouseLeave()"
-              :class="{
+            <th v-for="(i, ii) in serviceTypeWeight" :key="ii" @mouseenter="() => onMouseOver(String(i.id))"
+              @mouseleave="() => onMouseLeave()" :class="{
                 'bg-[#dcdcdc]': props.isMouseId === i.id,
-              }"
-            >
+              }">
               {{ i.name }}
             </th>
           </tr>
@@ -47,29 +40,22 @@
               {{ (contents[ii].lang as any)[String(locale)] }}
             </td>
             <template v-for="(k, kk) in serviceTypeWeight" :key="kk">
-              <td
-                v-if="
+              <td v-if="
                 data &&
                 data[k.id] &&
                 data[k.id].some((m: any) => m.weightId === i.id)
-              "
-                class="font-semibold text-left pl-3"
-                :class="{
-                  'bg-[#dcdcdc]': props.isMouseId === k.id,
-                }"
-              >
+              " class="font-semibold text-left pl-3" :class="{
+                'bg-[#dcdcdc]': props.isMouseId === k.id,
+              }">
                 {{
                   formatPrice(
                     data[k.id].find((m: any) => m.weightId === i.id)?.price
                   )
                 }}
               </td>
-              <td
-                v-else
-                :class="{
-                  'bg-[#dcdcdc]': props.isMouseId === k.id,
-                }"
-              ></td>
+              <td v-else :class="{
+                'bg-[#dcdcdc]': props.isMouseId === k.id,
+              }"></td>
             </template>
           </tr>
         </tbody>

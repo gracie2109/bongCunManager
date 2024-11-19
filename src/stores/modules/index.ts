@@ -7,3 +7,6 @@ export * from "./pets/services";
 export * from "./pets/combo";
 export * from "./permissions-and-roles";
 export * from "./roles";
+export * from "./users";
+
+export * from "./schedule/order-service";
