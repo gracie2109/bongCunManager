@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="w-[250px] shadow-lg border-b-primary bg-white fixed top-12 h-12 z-40"
+      class="w-[250px] shadow-lg border-b-primary bg-custom-white fixed top-12 h-12 z-40 p-3"
       id="sub_navigation"
     >
       <div class="h-full w-full flex items-center justify-center gap-3 cursor-pointer">
@@ -15,7 +15,7 @@
                 class="size-6"
                 :class="{ 'text-primary': $route.name === 'petOverview' }"
               />
-              <span class="tooltip_span">Overview</span>
+              <span class="tooltip_span "  :class="{ 'text-primary': $route.name === 'petOverview' }">Overview</span>
             </TooltipTrigger>
             <TooltipContent>Overview</TooltipContent>
           </Tooltip>
@@ -26,7 +26,7 @@
                 class="size-6"
                 :class="{ 'text-primary': $route.name === 'pets' }"
               />
-              <span class="tooltip_span">Pets</span>
+              <span class="tooltip_span"  :class="{ 'text-primary': $route.name === 'pets' }">Pets</span>
             </TooltipTrigger>
             <TooltipContent>Pets</TooltipContent>
           </Tooltip>
@@ -41,7 +41,7 @@
                 class="size-6"
                 :class="{ 'text-primary': $route.name === 'petService' }"
               />
-              <span class="tooltip_span">Services</span>
+              <span class="tooltip_span"   :class="{ 'text-primary': $route.name === 'petService' }">Services</span>
             </TooltipTrigger>
             <TooltipContent>Services</TooltipContent>
           </Tooltip>
@@ -55,7 +55,7 @@
                 class="size-6"
                 :class="{ 'text-primary': $route.name === 'petServiceCombo' }"
               />
-              <span class="tooltip_span">Combo</span>
+              <span class="tooltip_span"  :class="{ 'text-primary': $route.name === 'petServiceCombo' }">Combo</span>
             </TooltipTrigger>
             <TooltipContent>Services Combo</TooltipContent>
           </Tooltip>

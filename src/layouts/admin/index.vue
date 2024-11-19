@@ -1,92 +1,51 @@
-<script lang="ts" setup>
-import { provide, ref, withDefaults, defineProps } from "vue";
-import Nav from "./components/Nav.vue";
-import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
+<script setup lang="ts">
 import AppLogo from "@/components/common/AppLogo.vue";
-import { PROVIDER_KEYS } from "@/lib/constants";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup, 
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarRail,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import Nav from "./components/Nav.vue";
 import { ADMIN_NAVIGATOR } from "@/lib/navigations";
-interface Props {
-  defaultLayout?: number[];
-  defaultCollapsed?: boolean;
-  navCollapsedSize: number;
-}
 
-const props = withDefaults(defineProps<Props>(), {
-  defaultCollapsed: false,
-  defaultLayout: () => [265, 655 + 445],
-});
-
-const isCollapsed = ref(props.defaultCollapsed);
-
-function onCollapse() {
-  isCollapsed.value = true;
-}
-
-function onExpand() {
-  isCollapsed.value = false;
-}
-
-provide(PROVIDER_KEYS.IS_COLLAPSE, isCollapsed);
 </script>
 
 <template>
-  <div class="hidden flex-col md:flex min-h-screen relative">
-    <div class="relative h-screen">
-      <TooltipProvider :delay-duration="0">
-        <ResizablePanelGroup
-          id="resize-panel-group-1"
-          direction="horizontal"
-          class="h-screen items-stretch"
-          :collapsible="isCollapsed"
-          :auto-save-id="'resize-panel-1'"
-        >
-          <ResizablePanel
-            id="resize-panel-1"
-            :default-size="defaultLayout[0]"
-            :collapsed-size="navCollapsedSize"
-            collapsible
-            :min-size="15"
-            :max-size="15"
-            :class="
-              cn(
-                isCollapsed &&
-                  'min-w-[60px] transition-all duration-300 ease-in-out'
-              )
-            "
-            @expand="onExpand"
-            @collapse="onCollapse"
-          >
-            <div
-              :class="
-                cn(
-                  'flex h-[52px] items-center justify-center',
-                  isCollapsed ? 'h-[52px]' : 'px-2'
-                )
-              "
-            >
-              <AppLogo :is-collapsed="isCollapsed" />
-            </div>
-            <Separator />
-            <Nav :is-collapsed="isCollapsed" :links="ADMIN_NAVIGATOR" />
-          </ResizablePanel>
+  <SidebarProvider>
+    <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <AppLogo />
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
 
-          <ResizableHandle id="resize-handle-1" with-handle />
-
-          <ResizablePanel id="resize-panel-2" :default-size="defaultLayout[1]">
-            <ScrollArea class="h-screen flex bg-[#f5f5f5]">
-              <slot />
-            </ScrollArea>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      </TooltipProvider>
-    </div>
-  </div>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarMenu class="mt-5">
+            <Nav :items="ADMIN_NAVIGATOR"/>
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarRail />
+    </Sidebar>
+    <SidebarInset>
+      <div class="relative">
+        <div class="relative -left-3 top-[50%]">
+          <SidebarTrigger class="-ml-1" />
+        </div>
+        <div class="relative top-[-2rem]">
+          <slot />
+        </div>
+      </div>
+    </SidebarInset>
+  </SidebarProvider>
 </template>

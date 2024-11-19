@@ -59,7 +59,8 @@
     },
     "pets": {
       "placeholder": "Chọn biểu tượng đại diện",
-      "dontHasService": "Bạn chưa có bất kỳ dịch vụ nào!"
+      "dontHasService": "Bạn chưa có bất kỳ dịch vụ nào!",
+      "editPrice": "Chỉnh sửa giá dịch vụ"
     }
   }
 }

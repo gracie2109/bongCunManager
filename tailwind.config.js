@@ -58,17 +58,8 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         "custom-bg": "#0f0e17",
-        "custom-foreground": "#fffffe",
         "custom-primary": "#ff8906",
-        "custom-secondary": "#a7a9be",
-        "custom-tertiary": "#e53170",
-        "custom-accent": "#f25f4c",
-        "custom-success": '#22C55E',
-        "cara-secondary": "#112035",
-        "cara-primary": "#0f172a",
-        "cara-blue": "#38bdf8",
-        'cara-border': '#2d364a',
-        'custom-red': '#e70505',
+        "custom-white": "#eeeee4"
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",

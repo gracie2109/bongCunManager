@@ -20,6 +20,7 @@ import {
   defineAsyncComponent,
   markRaw,
   onMounted,
+  provide,
   ref,
   watch,
   watchEffect,
@@ -27,8 +28,11 @@ import {
 import { useRoute } from "vue-router";
 import { useAppStore } from "@/stores";
 import ServerOffline from "./components/ServerOffline.vue";
+import { PROVIDER_KEYS } from "@/lib/constants";
+import { getLocalStorage } from "./lib/utils";
 
 const layouts = new Map();
+
 
 function getLayout(name: string) {
   if (layouts.get(name)) return layouts.get(name);

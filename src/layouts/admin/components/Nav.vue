@@ -1,96 +1,75 @@
-<script lang="ts" setup>
-import { Icon } from "@iconify/vue";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { useRoute, useRouter } from "vue-router";
-import clsx from "clsx";
-import type { LinkProp } from "@/types";
-import * as _ from "lodash-es"
-interface NavProps {
-  isCollapsed: boolean;
-  links: LinkProp[];
-}
-
-const props = defineProps<NavProps>();
-const route = useRoute();
-
-console.log('route.fullPath',route.fullPath)
-</script>
-
 <template>
-  <div
-    :data-collapsed="props.isCollapsed"
-    class="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2"
-  >
-    <nav
-      class="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2"
-    >
-      <template v-for="(link, index) of props.links">
-        <Tooltip
-          v-if="props.isCollapsed"
-          :key="`1-${index}`"
-          :delay-duration="0"
-        >
-          <TooltipTrigger as-child>
-            <router-link
-              :to="{ name: link.name }"
-              :class="
-                cn(
-                  buttonVariants({ variant: link.variant, size: 'icon' }),
-                  'h-9 w-9',
-                  link.variant === 'default' &&
-                    'dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white'
-                )
-              "
-            >
-              <Icon
-                :icon="link.icon"
-                class="size-4"
-                :class="clsx({ 'text-primary': route.fullPath?.includes(link.name)})"
-              />
-              <span class="sr-only capitalize">{{ link.title }}</span>
-            </router-link>
-          </TooltipTrigger>
-          <TooltipContent side="right" class="flex items-center gap-4">
-            {{ link.title }}
-          </TooltipContent>
-        </Tooltip>
-
-        <router-link
-          :to="{ name: link.name }"
-          v-else
-          :key="`2-${index}`"
-          :class="
-            cn(
-              buttonVariants({ variant: 'ghost', size: 'sm' }),
-              link.variant === 'default' &&
-                'dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white',
-              'justify-start'
-            )
-          "
-        >
+  <SidebarMenuItem v-for="item in props.items" :key="item.title">
+    <Collapsible as-child v-if="item.children" class="group/collapsible">
+      <CollapsibleTrigger as-child>
+        <SidebarMenuButton :tooltip="item.title">
           <Icon
-            :icon="link.icon"
-            class="mr-2 size-4"
-            :class="clsx({ 'text-primary': route.fullPath?.includes(_.toLower(link.name))})"
-            />
-          <span
+            :icon="item.icon || 'lucide:dot'"
             :class="
-              clsx(
-                'capitalize',
-                route.fullPath?.includes(_.toLower(link.name))? 'text-primary font-semibold' : ''
-              )
+              clsx({ 'text-primary': route.fullPath?.includes(item.name) })
+            "
+          />
+          <span
+            class="font-semibold capitalize"
+            :class="
+              clsx({ 'text-primary': route.fullPath?.includes(item.name) })
             "
           >
-            {{ link.title }}
+            {{ item.title }}
+          </span>
+          <ChevronRight
+            class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
+          />
+        </SidebarMenuButton>
+      </CollapsibleTrigger>
+      <CollapsibleContent class="ml-4 space-y-1 my-2">
+        <Nav :items="item.children" />
+      </CollapsibleContent>
+    </Collapsible>
+    <template v-else>
+      <SidebarMenuSubButton as-child>
+        <router-link
+          :to="{ name: item.name }"
+          class="pl-2 hover:text-primary-subb"
+        >
+          <Icon
+            :icon="item.icon || 'lucide:dot'"
+            class="size-4"
+            :class="{
+              'text-primary': route.name?.toString() === item.name,
+            }"
+          />
+          <span
+            class="font-semibold capitalize"
+            :class="{
+              'text-primary': route.name?.toString() === item.name,
+            }"
+          >
+            {{ item.title }}
           </span>
         </router-link>
-      </template>
-    </nav>
-  </div>
+      </SidebarMenuSubButton>
+    </template>
+  </SidebarMenuItem>
 </template>
+
+<script lang="ts" setup>
+import { useRoute } from "vue-router";
+import { Icon } from "@iconify/vue";
+import clsx from "clsx";
+import { ChevronRight } from "lucide-vue-next";
+import type { LinkProp } from "@/types";
+import {
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarMenuSubButton,
+} from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+
+const route = useRoute();
+const props = defineProps<{ items: LinkProp[] }>();
+</script>

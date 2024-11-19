@@ -1,47 +1,51 @@
 import type { LinkProp } from "@/types";
+import { Settings2 } from "lucide-vue-next";
 
 export const ADMIN_NAVIGATOR: LinkProp[] = [
   {
     title: "customers",
     icon: "lucide:user-2",
-    variant: "ghost",
     name: "users",
   },
-  // {
-  //   title: "Groups",
-  //   icon: "lucide:users-round",
-  //   variant: "ghost",
-  //   name: "usersGroup",
-  // },
-
   {
     title: "pets",
     icon: "lucide:paw-print",
-    variant: "ghost",
     name: "pets",
     children: [
       {
-        title: "Combo",
-        icon: "lucide:paw-print",
+        title: "Overview",
+        icon: "lucide:image",
+        name: "petOverview",
+      },
+      {
+        title: "Manager Pets",
+        icon: "lucide:align-left",
         name: "pets",
-        variant: "ghost",
+      },
+      {
+        title: "Manager Pets Service",
+        icon: "carbon:settings-services",
+        name: "petService",
+        
+      },
+      {
+        title: "Combo",
+        icon: "lucide:layers-2",
+        name: "petServiceCombo",
       },
     ],
   },
   {
     title: "schedule",
     icon: "lucide:calendar-days",
-    variant: "ghost",
     name: "listOrderSchedule",
   },
   {
     title: "settings",
     icon: "lucide:cog",
-    variant: "ghost",
     name: "settings",
   },
 ];
-
 export const navigation = {
   profileNav: [
     {
