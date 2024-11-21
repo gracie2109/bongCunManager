@@ -13,7 +13,7 @@
       "></div>
     <div class="relative container md:px-12 lg:px-20">
       <div class="flex items-start justify-between">
-        <AppLogo />
+        <AppLogo :is-collapsed="true" />
         <nav class="hidden lg:block">
           <MenuLinks type="desktop" />
         </nav>
