@@ -46,6 +46,15 @@ export const ADMIN_NAVIGATOR: LinkProp[] = [
     name: "settings",
   },
 ];
+
+
+export const ADMIN_NAVIGATOR2: LinkProp[] = [
+  {
+    title: "customers",
+    icon: "lucide:user-2",
+    name: "users",
+  },
+];
 export const navigation = {
   profileNav: [
     {
@@ -73,13 +82,13 @@ export const navigation = {
       text: "About Us",
       name: "home",
     },
-    {
-      text: "Contact",
-      name: "contact",
-    },
-    {
-      text: "Coupons",
-      name: "home",
-    },
+    // {
+    //   text: "Contact",
+    //   name: "contact",
+    // },
+    // {
+    //   text: "Coupons",
+    //   name: "home",
+    // },
   ],
 };

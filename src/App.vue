@@ -1,12 +1,14 @@
 <template>
   <!--  <AppHeader/>-->
   <div class="app_xcontent">
+    <SidebarProvider>
     <router-view v-if="Layout" v-slot="{ Component, route: curRoute }">
       <component :is="Layout" v-if="isOnline">
         <component :is="Component" :key="curRoute.fullPath" />
       </component>
       <div v-else><ServerOffline /></div>
     </router-view>
+    </SidebarProvider>
   </div>
   <div class="absolute right-0 top-36 z-[9999] border">
     <Toaster position="top-right" rich-colors />
@@ -30,6 +32,7 @@ import { useAppStore } from "@/stores";
 import ServerOffline from "./components/ServerOffline.vue";
 import { PROVIDER_KEYS } from "@/lib/constants";
 import { getLocalStorage } from "./lib/utils";
+import SidebarProvider from "./components/ui/sidebar/SidebarProvider.vue";
 
 const layouts = new Map();
 

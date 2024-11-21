@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<PrimitiveProps & {
             'data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground',
             size === 'sm' && 'text-xs',
             size === 'md' && 'text-sm',
-            'group-data-[collapsible=icon]:hidden',
+            '',
             props.class,
         )">
         <slot />

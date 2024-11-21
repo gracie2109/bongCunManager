@@ -7,7 +7,7 @@
   </Header>
 
   <ContentWrap>
-    <div class="p-5 bg-white min-h-dvh relative top-10">
+    <div class="p-5 bg-white min-h-dvh relative top-10 hidden">
           <DataTable
             :headerAdvanced="headerAdvanced"
             :data="users"
@@ -43,6 +43,10 @@
           />
         </DialogContent>
       </Dialog>
+    </div>
+
+    <div  class="p-5 bg-white min-h-dvh relative top-10">
+      Data table
     </div>
   </ContentWrap>
 </template>

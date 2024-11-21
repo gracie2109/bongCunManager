@@ -12,9 +12,9 @@ import SwitchLang from "@/components/common/SwitchLang.vue";
           <slot />
         </div>
         <div class="flex gap-6 items-stretch">
-          <Notification />
-          <SwitchLang />
-          <BaseAvatar />
+          <!-- <Notification /> -->
+          <!-- <SwitchLang /> -->
+          <!-- <BaseAvatar /> -->
         </div>
       </div>
     </div>

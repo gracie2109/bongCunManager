@@ -11,19 +11,26 @@ import {
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
+  useSidebar
 } from "@/components/ui/sidebar";
 import Nav from "./components/Nav.vue";
-import { ADMIN_NAVIGATOR } from "@/lib/navigations";
+import { ADMIN_NAVIGATOR, ADMIN_NAVIGATOR2 } from "@/lib/navigations";
+import { provideSidebarContext } from "@/components/ui/sidebar/utils";
+
+
+const {  open } = useSidebar()
+
+
 
 </script>
 
 <template>
-  <SidebarProvider>
+  
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <AppLogo />
+            <AppLogo :is-collapsed="open" />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
@@ -31,7 +38,7 @@ import { ADMIN_NAVIGATOR } from "@/lib/navigations";
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu class="mt-5">
-            <Nav :items="ADMIN_NAVIGATOR"/>
+            <Nav :items="ADMIN_NAVIGATOR2"/>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
@@ -47,5 +54,4 @@ import { ADMIN_NAVIGATOR } from "@/lib/navigations";
         </div>
       </div>
     </SidebarInset>
-  </SidebarProvider>
 </template>

@@ -1,8 +1,8 @@
 <template>
   <div class="flex items-center gap-x-2 md:gap-x-4 will-change-auto">
-    <div class="hidden lg:block">
+    <!-- <div class="hidden lg:block">
       <SwitchLang />
-    </div>
+    </div> -->
 
     <Separator class="hidden !h-5 lg:block z-[10]" orientation="vertical" />
     <CartMenu :type="String(route.name)" />
