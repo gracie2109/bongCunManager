@@ -39,7 +39,7 @@ import { ADMIN_NAVIGATOR } from "@/lib/navigations";
     </Sidebar>
     <SidebarInset>
       <div class="relative">
-        <div class="relative -left-3 top-[50%]">
+        <div class="relative -left-3 top-[25rem]">
           <SidebarTrigger class="-ml-1" />
         </div>
         <div class="relative top-[-2rem]">
