@@ -26,10 +26,9 @@
                         <Label class="font-bold mb-2">{{ $t("common.icon") }}</Label>
                         <multiselect v-model="iconValue" :placeholder="$t('pageFields.pets.placeholder')" label="label"
                             track-by="label" :options="options" :option-height="104" :show-labels="false"
-                            @update:modelValue="(value:any) => {
-                               form.setFieldValue('icon', value.value)
-                            }"
-                            >
+                            @update:modelValue="(value: any) => {
+                                form.setFieldValue('icon', value.value)
+                            }">
                             <template #singleLabel="props">
                                 <div class="flex items-center gap-3">
                                     <Icon :icon="props.option.icon || iconValue" class="size-4" />
@@ -128,16 +127,25 @@ const form = useForm({
     validationSchema: toTypedSchema(PetsValid),
 });
 
-const onSubmit = form.handleSubmit(async (values: z.infer<typeof PetsValid>) => {
-    await store.createNewPet(values);
-    form.resetForm();
-    emit("changeOpen");
-    iconValue.value = ""
+const onSubmit = form.handleSubmit(async (values: any) => {
+    const formVals = form.values as any;
+    if (!formVals.id) {
+        await store.createNewPet(values);
+        form.resetForm();
+        emit("changeOpen");
+        iconValue.value = ""
+    }else{
+        await store.updatePet(formVals);
+        form.resetForm();
+        emit("changeOpen");
+        iconValue.value = ""
+    }
+
 });
 
 watch(
     () => props.rowEditting,
-    (newVal:z.infer<typeof PetsValid>) => {
+    (newVal: z.infer<typeof PetsValid>) => {
         if (newVal) {
             form.resetForm();
             form.setValues({ ...newVal }, true);

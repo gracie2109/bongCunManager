@@ -246,6 +246,7 @@ import Multiselect from "vue-multiselect";
 import { Slider } from "@/components/ui/slider";
 import { TIME_OPTIONS } from "@/lib/constants";
 
+
 const props = defineProps<{
   form: FormContext<any>;
   open: boolean;
@@ -318,13 +319,15 @@ watch(
     }
   }
 );
-
+console.log('props.rowEditting',props.rowEditting)
 watch(
   () => props.rowEditting,
   (newVal) => {
-    props.form.setValues({ ...newVal }, true);
-    price.value = newVal["price"];
-    time.value = newVal["duration"];
+    console.log("newVal", props.rowEditting);
+    props.form.setValues({ ...props.rowEditting }, true);
+    petSelected.value = props.rowEditting["petIds"];
+    price.value = props.rowEditting["price"];
+    time.value = props.rowEditting["duration"];
   }
 );
 

@@ -6,6 +6,7 @@ import {
   getCollectionList,
   deleteItem,
   checkItemNotExist,
+  updateCollection,
 } from "@/lib/firebaseFn";
 import { v7 as uuidv7 } from "uuid";
 import { COLLECTION } from "@/lib/constants";
@@ -41,7 +42,26 @@ export const usePets = defineStore("pets", () => {
       loading.value = false;
     }
   }
-
+  async function updatePet(payload: any) {
+      try {
+        loading.value = true;
+      
+        const totalRecord = await updateCollection(
+          COLLECTION.PETS,
+          payload.id,
+          {
+            ...payload,
+          }
+        );
+        pageCount.value = totalRecord;
+        sendMessageToast("success", "create", "success");
+        // }
+      } catch (error: any) {
+        sendMessageToast("fail", "create", "error", error.message);
+      } finally {
+        loading.value = false;
+      }
+    }
   async function getListPets({
     pageIndex,
     pageSize,
@@ -109,6 +129,7 @@ export const usePets = defineStore("pets", () => {
     pageCount,
     lastVisibleDoc,
     createNewPet,
+    updatePet,
     getListPets,
     deleteServiceProvider,
   };
