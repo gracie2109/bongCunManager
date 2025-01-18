@@ -9,37 +9,37 @@
   },
   "common": {
     "submit": "Submit",
-    "success": "{action} successfully!",
+    "success": "{action} succeeded",
     "fail": "{action} failed, {mess}!",
     "create": "Create",
     "update": "Update",
     "delete": "Delete",
-    "dataExisted": "{field} is existed!",
-    "dataNotExisted": "{field} not existed!",
+    "dataExisted": "{field} already exists!",
+    "dataNotExisted": "{field} does not exist!",
     "addNew": "Add new {field}",
     "name": "Name",
     "description": "Description",
-    "phone": "Phone Number",
-    "settingView": "Setting View",
+    "phone": "Phone number",
+    "settingView": "Column display settings",
     "icon": "Icon",
     "row_per_page": "Rows per page",
     "price": "Price"
   },
   "pageMeta": {
-    "home": "HOME",
-    "product_list": "List Products",
+    "home": "Home",
+    "product_list": "Product List",
     "login": "Login",
     "register": "Register",
     "forgotPw": "Forgot Password",
     "suppliers": "Suppliers",
     "pets": "Pets",
-    "services": "Service",
-    "settingPetServicePrice": "Setting Pet's service price",
-    "petService": "Pet's services",
+    "services": "Services",
+    "settingPetServicePrice": "Manage Pet Service Pricing",
+    "petService": "Manage Pet Services",
     "customers": "Customers"
   },
   "validation": {
-    "min": "{name} must be at least {min} characters"
+    "min": "{name} must have at least {min} characters"
   },
   "pageFields": {
     "products": {
@@ -48,20 +48,21 @@
     },
     "authen": {
       "prefSignup": "Enter your information to create an account",
-      "prefLogin": "Enter your email below to login to your account",
+      "prefLogin": "Enter your information to log into your account",
       "alreadyHasAccount": "Already have an account?",
       "dontHaveAccount": "Don't have an account?",
-      "createAcc": "Create an account",
-      "prefForgotPw": "Enter your email to receive password recovery mail"
+      "createAcc": "Create Account",
+      "prefForgotPw": "Enter your email to receive a password recovery email"
     },
     "serviceProvider": {
-      "desc": "More information about the product supplier for you"
+      "desc": "Add information about your product supplier"
     },
     "pets": {
       "placeholder": "Select a representative icon",
       "dontHasService": "You don't have any services yet!",
       "editPrice": "Edit service price",
       "choosePet": "Choose a pet",
+      "chooseService": "Choose a service",
       "duration": "Estimated completion time",
       "serviceTypeSelect": "Select application condition",
       "serviceTypeSelectPlaceholder": "Select display type",
@@ -70,7 +71,13 @@
       "status": "Status",
       "markSale": "Mark this service for sale",
       "addNewServiceTitle": "Add a new service",
-      "editServiceTitle": "Edit service"
+      "editServiceTitle": "Edit service",
+      "display": "Display",
+      "displayPlaceholder": "Select display type",
+      "comboFromTime": "Start time",
+      "comboToTime": "End time",
+      "comboTime": "Combo duration",
+      "originPrice": "Original price"
     }
   }
 }
