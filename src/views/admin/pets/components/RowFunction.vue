@@ -19,7 +19,7 @@
       </TooltipContent>
     </Tooltip>
 
-    <DropdownMenu>
+    <DropdownMenu v-if="showSettingPrice">
       <DropdownMenuTrigger>
         <EllipsisVertical class="text-primary-subb" />
       </DropdownMenuTrigger>
@@ -55,7 +55,7 @@ import { Button } from "@/components/ui/button";
 
 import type { T_ROW_FUNCTION } from "@/types";
 import type { Row } from "@tanstack/vue-table";
-import { onMounted, reactive } from "vue";
+import { computed, onMounted, reactive } from "vue";
 import { EllipsisVertical, Settings } from "lucide-vue-next";
 import {
   DropdownMenu,
@@ -88,7 +88,7 @@ const type = reactive<T_ROW_FUNCTION[]>([
 ]);
 
 const route = useRoute();
-
+const showSettingPrice = computed(() => route.name !== "pets")
 function handleEmit({ action, row }: { action: T_ROW_FUNCTION; row: any }) {
   emits("click", { action, row });
 }

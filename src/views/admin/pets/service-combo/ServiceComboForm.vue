@@ -2,8 +2,7 @@
   <div id="service_combo_form">
     <Dialog :open="props.open" @update:open="$emit('changeOpen')">
       <DialogContent
-        class="sm:max-w-[425px] lg:max-w-[950px] grid-rows-[auto_minmax(0,1fr)_auto] p-0 h-auto max-h-[90dvh]"
-      >
+        class="sm:max-w-[425px] lg:max-w-[950px] grid-rows-[auto_minmax(0,1fr)_auto] p-0 h-auto max-h-[90dvh]">
         <DialogHeader class="p-6 pb-0">
           <DialogTitle> {{ $t("common.addNew") }}</DialogTitle>
           <DialogDescription>
@@ -16,38 +15,23 @@
               <FormItem>
                 <FormLabel>{{ $t("common.name") }}</FormLabel>
                 <FormControl>
-                  <Input
-                    type="text"
-                    placeholder="shadcn"
-                    v-bind="componentField"
-                    size="lg"
-                  />
+                  <Input type="text" placeholder="shadcn" v-bind="componentField" size="lg" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             </FormField>
             <FormField v-slot="{ componentField }" name="petIds">
               <FormItem>
-                <FormLabel>PetIds</FormLabel>
+                <FormLabel>{{ $t("pageFields.pets.choosePet") }}</FormLabel>
                 <FormControl>
-                  <Multiselect
-                    v-bind="componentField"
-                    v-model="petSelected"
-                    :options="listPet"
-                    :multiple="true"
-                    :close-on-select="false"
-                    :clear-on-select="false"
-                    :preserve-search="true"
-                    placeholder="choose service"
-                    label="name"
-                    track-by="name"
-                    :taggable="true"
-                    @update:modelValue="(value:any) => {
-                               props.form.setFieldValue('petIds', value?.map((i:any) => i.id));
-                               props.form.setFieldValue('petProfiles', value?.map((i:any) => i))
+                  <Multiselect v-bind="componentField" v-model="petSelected" :options="listPet" :multiple="true"
+                    :close-on-select="false" :clear-on-select="false" :preserve-search="true"
+                    :placeholder="$t('pageFields.pets.choosePet')" label="name" track-by="name" :taggable="true"
+                    @update:modelValue="(value: any) => {
+                      props.form.setFieldValue('petIds', value?.map((i: any) => i.id));
+                      props.form.setFieldValue('petProfiles', value?.map((i: any) => i))
 
-                            }"
-                  >
+                    }">
                   </Multiselect>
                 </FormControl>
                 <FormMessage />
@@ -55,43 +39,40 @@
             </FormField>
             <FormField v-slot="{ componentField }" name="serviceIds">
               <FormItem>
-                <FormLabel>serviceIds</FormLabel>
+                <FormLabel>
+                  {{ $t("pageFields.pets.chooseService") }}
+                </FormLabel>
                 <FormControl>
-                  <Multiselect
-                    v-bind="componentField"
-                    v-model="serviceSelected"
-                    :options="listServices"
-                    :multiple="true"
-                    :close-on-select="false"
-                    :clear-on-select="false"
-                    :preserve-search="true"
-                    placeholder="choose service"
-                    label="name"
-                    track-by="name"
-                    :taggable="true"
-                    @update:modelValue="(value:any) => {
-                               props.form.setFieldValue('serviceIds', value?.map((i:any) => i.id));
-                               props.form.setFieldValue('serviceProfiles', value?.map((i:any) => i))
-                            }"
-                  >
+                  <Multiselect v-bind="componentField" v-model="serviceSelected" :options="listServices"
+                    :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true"
+                    :placeholder="$t('pageFields.pets.chooseService')" label="name" track-by="name" :taggable="true"
+                    @update:modelValue="(value: any) => {
+                      props.form.setFieldValue('serviceIds', value?.map((i: any) => i.id));
+                      props.form.setFieldValue('serviceProfiles', value?.map((i: any) => i))
+                    }">
                   </Multiselect>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             </FormField>
             <div class="grid grid-cols-2 gap-3">
+        
+              <FormField v-slot="{ componentField }" name="origin_price">
+                <FormItem>
+                  <FormLabel>{{ $t("pageFields.pets.originPrice") }}</FormLabel>
+                  <FormControl>
+                    <InputContent v-bind="componentField" :placeholder="$t('pageFields.pets.originPrice')"
+                      :contentValue="formatPrice(origin_price)" :form="props.form" name="origin_price" disabled />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              </FormField>
               <FormField v-slot="{ componentField }" name="price">
                 <FormItem>
                   <FormLabel>{{ $t("common.price") }}</FormLabel>
                   <FormControl>
-                    <InputContent
-                      v-bind="componentField"
-                      placeholder="price"
-                      @update-value="(vl) => (price = vl)"
-                      :contentValue="formatPrice(price)"
-                      :form="props.form"
-                      name="price"
-                    />
+                    <InputContent v-bind="componentField" placeholder="price" @update-value="(vl) => (price = vl)"
+                      :contentValue="formatPrice(price)" :form="props.form" name="price" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -99,15 +80,11 @@
 
               <FormField v-slot="{ componentField, value }" name="duration">
                 <FormItem>
-                  <FormLabel>Duration</FormLabel>
+                  <FormLabel>
+                    {{ $t("pageFields.pets.duration") }}
+                  </FormLabel>
                   <FormControl>
-                    <Slider
-                      v-bind="componentField"
-                      :default-value="[0]"
-                      :max="1439"
-                      :min="0"
-                      :step="5"
-                    />
+                    <Slider v-bind="componentField" :default-value="[0]" :max="1439" :min="0" :step="5" />
                     <FormDescription class="flex justify-between">
                       <span>{{ convertNumberToTime(value?.[0] || 0) }} m</span>
                     </FormDescription>
@@ -119,23 +96,20 @@
             <div class="grid grid-cols-2 gap-3">
               <FormField v-slot="{ componentField }" name="markAsId">
                 <FormItem>
-                  <FormLabel>Mark as</FormLabel>
+                  <FormLabel>
+                    {{ $t("pageFields.pets.display") }}
+                  </FormLabel>
 
                   <Select v-bind="componentField">
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue
-                          placeholder="Select a verified email to display"
-                        />
+                        <SelectValue :placeholder="$t('pageFields.pets.displayPlaceholder')
+                          " />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem
-                          :value="String(i.id)"
-                          :key="ii"
-                          v-for="(i, ii) in status"
-                        >
+                        <SelectItem :value="String(i.id)" :key="ii" v-for="(i, ii) in status">
                           <span>
                             {{ (i.name as any)[locale] }}
                           </span>
@@ -148,24 +122,12 @@
               </FormField>
               <FormField v-slot="{ componentField }" name="markTime">
                 <FormItem>
-                  <FormLabel>Mark time</FormLabel>
-                  <VueDatePicker
-                    v-bind="componentField"
-                    v-model="date"
-                    range
-                    :preset-dates="presetDates"
-                    :readonly="props.form.values['markAsId'] === '4'"
-                  >
-                    <template
-                      #preset-date-range-button="{ label, value, presetDate }"
-                    >
-                      <span
-                        role="button"
-                        :tabindex="0"
-                        @click="presetDate(value)"
-                        @keyup.enter.prevent="presetDate(value)"
-                        @keyup.space.prevent="presetDate(value)"
-                      >
+                  <FormLabel>{{ $t("pageFields.pets.comboTime") }}</FormLabel>
+                  <VueDatePicker v-bind="componentField" v-model="date" range :preset-dates="presetDates"
+                    :readonly="props.form.values['markAsId'] === '4'">
+                    <template #preset-date-range-button="{ label, value, presetDate }">
+                      <span role="button" :tabindex="0" @click="presetDate(value)"
+                        @keyup.enter.prevent="presetDate(value)" @keyup.space.prevent="presetDate(value)">
                         {{ label }}
                       </span>
                     </template>
@@ -179,21 +141,14 @@
               <FormItem>
                 <FormLabel>{{ $t("common.description") }}</FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="Tell us a little bit about yourself"
-                    class="resize-none"
-                    v-bind="componentField"
-                  />
+                  <Textarea placeholder="Tell us a little bit about yourself" class="resize-none"
+                    v-bind="componentField" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             </FormField>
             <DialogFooter class="p-6 pt-0">
-              <Button
-                type="button"
-                variant="outline"
-                @click="$emit('changeOpen')"
-              >
+              <Button type="button" variant="outline" @click="$emit('changeOpen')">
                 Cancel
               </Button>
               <Button type="submit"> Save changes </Button>
@@ -246,7 +201,6 @@ import Multiselect from "vue-multiselect";
 import { Slider } from "@/components/ui/slider";
 import { TIME_OPTIONS } from "@/lib/constants";
 
-
 const props = defineProps<{
   form: FormContext<any>;
   open: boolean;
@@ -265,6 +219,7 @@ const price = ref();
 const serviceSelected = ref<any[]>([]);
 const petSelected = ref<any[]>([]);
 const listServices = ref<any[]>([]);
+const origin_price = ref();
 
 function resetAll() {
   props.form.resetForm();
@@ -273,6 +228,7 @@ function resetAll() {
   price.value = null;
   serviceSelected.value = [];
   petSelected.value = [];
+  origin_price.value = 0;
 }
 const onSubmit = props.form.handleSubmit(async (values: any) => {
   if (!dataItem.value) {
@@ -319,7 +275,7 @@ watch(
     }
   }
 );
-console.log('props.rowEditting',props.rowEditting)
+
 watch(
   () => props.rowEditting,
   (newVal) => {
@@ -336,6 +292,22 @@ watch(
   () => {
     if (!props.open) {
       resetAll();
+    }
+  }
+);
+
+watch(
+  () => serviceSelected.value,
+  () => {
+    if (serviceSelected.value.length > 0) {
+      const data = serviceSelected.value.reduce(
+        (accumulator, currentValue) =>
+          accumulator + (currentValue?.generalPrice || 0),
+        0
+      );
+      origin_price.value = data;
+      const formVals = props.form?.values;
+      props.form.setValues({ ...formVals, origin_price: data }, true);
     }
   }
 );

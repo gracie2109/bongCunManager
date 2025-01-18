@@ -58,9 +58,19 @@
       "desc": "More information about the product supplier for you"
     },
     "pets": {
-      "placeholder": "Select the representative icon",
-      "dontHasService": "You do not have any services yet!",
-      "editPrice": "Edit service price"
+      "placeholder": "Select a representative icon",
+      "dontHasService": "You don't have any services yet!",
+      "editPrice": "Edit service price",
+      "choosePet": "Choose a pet",
+      "duration": "Estimated completion time",
+      "serviceTypeSelect": "Select application condition",
+      "serviceTypeSelectPlaceholder": "Select display type",
+      "generalPrice": "Price (general price)",
+      "unit": "Unit",
+      "status": "Status",
+      "markSale": "Mark this service for sale",
+      "addNewServiceTitle": "Add a new service",
+      "editServiceTitle": "Edit service"
     }
   }
 }

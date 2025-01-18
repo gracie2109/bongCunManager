@@ -20,15 +20,15 @@
         {
             "id": "by_weight",
             "lang": {
-              "vi": "Theo cân nặng",
+              "vi": "Theo từng cân nặng",
               "en": "By Pet Weight"
             }
           },
           {
             "id": "all",
             "lang": {
-              "vi": "Áp dụng cho tất cả",
-              "en": "Apply all"
+              "vi": "Áp dụng cho mọi hạng cân",
+              "en": "Applicable to all weight classes"
             }
           }
     ]

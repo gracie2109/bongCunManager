@@ -65,6 +65,7 @@ export const HEADER_ADVANCE_FUNCTION = {
   IMPORT: "import",
   ADD_NEW: "addNew",
   SETTING_COLUMN: "settingColumn",
+  RANGE_DATE: 'rangeDate'
 } as const;
 
 export const PROVIDER_KEYS = {
