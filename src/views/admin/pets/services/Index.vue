@@ -50,7 +50,10 @@
   <ModalCreateService
     :title="$t('common.create')"
     :handle-open="open && !selectedItem"
-    @updateOpen="(vl) => (open = vl)"
+    @updateOpen="(vl) => {
+       open = vl;
+       rowEditSelected = null;
+    }"
     :elSelect="rowEditSelected"
     @setElSelect="setElSelect"
   />

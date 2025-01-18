@@ -1,5 +1,8 @@
 <template>
-  <div class="flex w-full h-full items-center justify-center cursor-pointer" @click="() => (open = !open)">
+  <div
+    class="flex w-full h-full items-center justify-center cursor-pointer"
+    @click="() => (open = !open)"
+  >
     <Plus class="size-4 mr-2" />
     <span class="font-semibold" v-if="!props.title">
       {{ $t("common.create") }} {{ $t("pageMeta.services") }}
@@ -9,25 +12,46 @@
     </span>
   </div>
 
-  <Dialog :open="open" @update:open="() => {
-      open = !open;
-      $emit('updateOpen', false);
-    }
-    ">
-    <DialogContent>
+  <Dialog
+    :open="open"
+    @update:open="
+      () => {
+        open = !open;
+        $emit('updateOpen', false);
+      }
+    "
+  >
+    <DialogContent class="w-[90vw]">
       <DialogHeader>
-        <DialogTitle>Add new service </DialogTitle>
+        <DialogTitle>
+          {{
+            !props.elSelect
+              ? $t("pageFields.pets.addNewServiceTitle")
+              : $t("pageFields.pets.editServiceTitle")
+          }}
+        </DialogTitle>
       </DialogHeader>
       <div class="h-[650px] overflow-y-auto p-3">
-        <ServiceForm :elSelect="props.elSelect" :form="form" :show-btn="false" @on-submit="handleForm" />
+  
+        <ServiceForm
+          :elSelect="props.elSelect"
+          :form="form"
+          :show-btn="false"
+          @on-submit="handleForm"
+        />
       </div>
       <DialogFooter class="p-6 pt-0">
-        <Button type="button" variant="outline" @click="() => {
-            open = !open;
-            form.resetForm();
-            $emit('updateOpen', false);
-          }
-          ">
+        <Button
+          type="button"
+          variant="outline"
+          @click="
+            () => {
+              open = !open;
+              form.resetForm();
+              $emit('updateOpen', false);
+            }
+          "
+        >
           Cancel
         </Button>
         <Button type="submit" @click="handleForm"> Save changes </Button>
@@ -80,12 +104,11 @@ const handleForm = form.handleSubmit(async (values: any) => {
     await store.updatePetService(values).then(() => {
       open.value = !open.value;
       form.resetForm();
-      emits('setElSelect');
-      emits('updateOpen')
+      emits("setElSelect");
+      emits("updateOpen");
     });
   }
 });
-
 watch(
   () => props.elSelect,
   () => {

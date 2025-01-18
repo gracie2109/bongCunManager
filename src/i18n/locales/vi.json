@@ -60,7 +60,25 @@
     "pets": {
       "placeholder": "Chọn biểu tượng đại diện",
       "dontHasService": "Bạn chưa có bất kỳ dịch vụ nào!",
-      "editPrice": "Chỉnh sửa giá dịch vụ"
+      "editPrice": "Chỉnh sửa giá dịch vụ",
+      "choosePet": "Chọn thú cưng",
+      "chooseService": "Chọn dịch vụ",
+
+      "duration": "Thời gian hoàn thành dự tính",
+      "serviceTypeSelect": "Chọn điều kiện áp dụng",
+      "serviceTypeSelectPlaceholder": "Chọn loại hiển thị",
+      "generalPrice": "Giá (giá chung)",
+      "unit": "Đơn vị",
+      "status": "Trạng thái",
+      "markSale": "Đánh dấu sẽ kinh doanh dịch vụ này",
+      "addNewServiceTitle": "Thêm mới dịch vụ",
+      "editServiceTitle": "Chỉnh sửa dịch vụ",
+      "display": "Hiển thị",
+      "displayPlaceholder": "Chọn loại hiển thị",
+      "comboFromTime": "Thời gian bắt đầu",
+      "comboToTime": "Thời gian kết thúc",
+      "comboTime": "Thời gian chạy combo",
+      "originPrice": "Giá gốc"
     }
   }
 }

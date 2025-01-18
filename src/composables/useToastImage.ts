@@ -14,7 +14,7 @@ type Props = {
 }
 
 const renderUi = (payload: Props) => {
-    return   markRaw(h('div', { class: 'flex items-start justify-between w-full gap-4' }, [
+    return markRaw(h('div', { class: 'flex items-start justify-between w-full gap-4' }, [
         h('img', {
             src: payload.data.image,
             alt: '',

@@ -1,6 +1,7 @@
 <template>
-  <div class="space-y-6">
-    <div>
+  <div class="space-y-6" v-if="props.services.length > 0">
+    
+    <div v-if="serviceTypeAll.length > 0">
       <table id="service_apply_for_all" class="w-[550px]">
         <thead>
           <tr>
@@ -62,6 +63,10 @@
       </table>
     </div>
   </div>
+
+  <div v-else>
+    No data
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -79,7 +84,7 @@ const props = defineProps<{
   isMouseId: string;
 }>();
 const emits = defineEmits(["setMouseEl"]);
-
+console.log('pops', props.services)
 const { locale } = useI18n();
 const data = ref();
 const serviceTypeWeight = computed(() =>
@@ -114,34 +119,25 @@ tr {
 
 .table-container {
   overflow-y: auto;
-  /* Cho phép cuộn ngang */
   width: 100%;
   height: 100%;
-  /* Đảm bảo container chiếm toàn bộ chiều rộng */
 }
 
 #table_full {
   width: 100%;
   border-collapse: collapse;
-  /* Xóa khoảng cách giữa các ô */
 }
 
 th,
 td {
   padding: 8px;
-  /* Tùy chọn: thêm khoảng đệm cho ô */
   text-align: left;
-  /* Căn trái cho văn bản */
 }
 
 .fixed-column {
   position: sticky;
-  /* Giữ cột cố định */
   left: 0;
-  /* Cố định ở bên trái */
   background: white;
-  /* Để đảm bảo màu nền khi cuộn */
   z-index: 1;
-  /* Đảm bảo cột nằm trên các cột khác */
 }
 </style>

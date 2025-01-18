@@ -1,150 +1,175 @@
 <template>
-  <form class="space-y-6" @submit.prevent="onSubmit">
-    <FormField v-slot="{ componentField }" name="name">
-      <FormItem>
-        <FormLabel>{{ $t("common.name") }}</FormLabel>
-        <FormControl>
-          <Input type="text" placeholder="shadcn" v-bind="componentField" size="sm" />
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    </FormField>
-    <FormField v-slot="{ componentField, value }" name="duration">
-      <FormItem>
-        <FormLabel>Duration</FormLabel>
-        <FormControl>
-          <Slider
-            v-bind="componentField"
-            :default-value="[0]"
-            :max="1439"
-            :min="0"
-            :step="5"
-          />
-          <FormDescription class="flex justify-between">
-            <span>{{ convertNumberToTime(value?.[0] || 0) }} m</span>
-          </FormDescription>
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    </FormField>
-    <div id="choose_pets">
-      <Label class="font-bold mb-3">Choose pets</Label>
-      <multiselect
-        v-model="petsSelected"
-        :options="pets"
-        :multiple="true"
-        :close-on-select="false"
-        :clear-on-select="false"
-        :preserve-search="true"
-        placeholder="choose pets"
-        label="name"
-        track-by="name"
-        :taggable="true"
-        @update:modelValue="(value:any) => {
+  <form @submit.prevent="onSubmit">
+    <div class="grid grid-cols-2 gap-x-8">
+      <div class="space-y-6">
+        <FormField v-slot="{ componentField }" name="name">
+          <FormItem>
+            <FormLabel>{{ $t("common.name") }}</FormLabel>
+            <FormControl>
+              <Input
+                type="text"
+                placeholder="shadcn"
+                v-bind="componentField"
+                size="sm"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <FormField v-slot="{ componentField, value }" name="duration">
+          <FormItem>
+            <FormLabel> {{ $t("pageFields.pets.duration") }}</FormLabel>
+            <FormControl>
+              <Slider
+                v-bind="componentField"
+                :default-value="[0]"
+                :max="1439"
+                :min="0"
+                :step="5"
+              />
+              <FormDescription class="flex justify-between">
+                <span>{{ convertNumberToTime(value?.[0] || 0) }} m</span>
+              </FormDescription>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+
+        <FormField v-slot="{ componentField }" name="type">
+          <FormItem>
+            <FormLabel>
+              {{ $t("pageFields.pets.serviceTypeSelect") }}</FormLabel
+            >
+            <Select v-bind="componentField">
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue
+                    :placeholder="$t('pageFields.pets.serviceTypeSelect')"
+                  />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem v-for="(i, ii) in type" :value="i.id">
+                    {{ (type[ii].lang as any)[String(locale)] }}
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <FormField
+          v-slot="{ componentField }"
+          type="radio"
+          name="unit"
+          v-if="props.form.values['type'] === 'all'"
+        >
+          <FormItem class="space-y-3">
+            <FormLabel>
+              {{ $t("pageFields.pets.unit") }}
+            </FormLabel>
+
+            <FormControl>
+              <RadioGroup class="flex gap-6 space-y-1" v-bind="componentField">
+                <FormItem
+                  class="flex items-center space-y-0 gap-x-3"
+                  v-for="(i, ii) in unit"
+                >
+                  <FormControl>
+                    <RadioGroupItem :value="i.id" />
+                  </FormControl>
+                  <FormLabel class="font-normal">
+                    {{ (unit[ii].lang as any)[String(locale)] }}
+                  </FormLabel>
+                </FormItem>
+              </RadioGroup>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+
+        <FormField
+          v-slot="{ componentField }"
+          type="radio"
+          name="generalPrice"
+          v-if="props.form.values['type'] === 'all'"
+        >
+          <FormItem class="space-y-3">
+            <FormLabel>
+              {{ $t("pageFields.pets.generalPrice") }}
+            </FormLabel>
+
+            <FormControl>
+              <Input
+                type="number"
+                v-bind="componentField"
+                size="sm"
+                placeholder="Enter general price"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+      </div>
+
+      <div class="space-y-6">
+        <div id="choose_pets" class="space-y-1">
+          <Label class="font-bold mb-3">
+            {{ $t("pageFields.pets.choosePet") }}
+          </Label>
+          <multiselect
+            v-model="petsSelected"
+            :options="pets"
+            :multiple="true"
+            :close-on-select="false"
+            :clear-on-select="false"
+            :preserve-search="true"
+            placeholder="choose pets"
+            label="name"
+            track-by="name"
+            :taggable="true"
+            @update:modelValue="(value:any) => {
                                props.form.setFieldValue('petIds', value?.map((i:any) => i.id));
                                props.form.setFieldValue('petsProfiles', value?.map((i:any) => i))
                             }"
-      >
-      </multiselect>
-    </div>
-
-    <div class="grid grid-cols-2 gap-3">
-      <FormField v-slot="{ componentField }" name="type">
-        <FormItem>
-          <FormLabel>Type</FormLabel>
-
-          <Select v-bind="componentField">
-            <FormControl>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a verified type to display" />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem v-for="(i, ii) in type" :value="i.id">
-                  {{ (type[ii].lang as any)[String(locale)] }}
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <FormMessage />
-        </FormItem>
-      </FormField>
-      <FormField
-        v-slot="{ componentField }"
-        type="radio"
-        name="unit"
-        v-if="props.form.values['type'] === 'all'"
-      >
-        <FormItem class="space-y-3">
-          <FormLabel>Unit</FormLabel>
-
-          <FormControl>
-            <RadioGroup class="flex gap-6 space-y-1" v-bind="componentField">
-              <FormItem
-                class="flex items-center space-y-0 gap-x-3"
-                v-for="(i, ii) in unit"
-              >
-                <FormControl>
-                  <RadioGroupItem :value="i.id" />
-                </FormControl>
-                <FormLabel class="font-normal">
-                  {{ (unit[ii].lang as any)[String(locale)] }}
-                </FormLabel>
-              </FormItem>
-            </RadioGroup>
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      </FormField>
-    </div>
-    <FormField
-      v-slot="{ componentField }"
-      type="radio"
-      name="generalPrice"
-      v-if="props.form.values['type'] === 'all'"
-    >
-      <FormItem class="space-y-3">
-        <FormLabel>General Price</FormLabel>
-
-        <FormControl>
-          <Input
-            type="number"
-            v-bind="componentField"
-            size="sm"
-            placeholder="Enter general price"
-          />
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    </FormField>
-    <FormField v-slot="{ value, handleChange }" name="isShow">
-      <FormItem>
-        <FormLabel>Selling status</FormLabel>
-        <div class="flex flex-row items-center justify-between rounded-lg border p-4">
-          <div class="space-y-0.5">
-            <FormDescription> Show via selling sevice </FormDescription>
-          </div>
-          <FormControl>
-            <Switch :checked="value" @update:checked="handleChange" />
-          </FormControl>
+          >
+          </multiselect>
         </div>
-      </FormItem>
-    </FormField>
-    <FormField v-slot="{ componentField }" name="desc">
-      <FormItem>
-        <FormLabel>{{ $t("common.description") }}</FormLabel>
-        <FormControl>
-          <Textarea
-            placeholder="Tell us a little bit about yourself"
-            class="resize-none"
-            v-bind="componentField"
-          />
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    </FormField>
-
+        <FormField v-slot="{ value, handleChange }" name="isShow">
+          <FormItem>
+            <FormLabel>
+              {{ $t("pageFields.pets.status") }}
+            </FormLabel>
+            <div
+              class="flex flex-row items-center justify-between rounded-lg border p-4"
+            >
+              <div class="space-y-0.5">
+                <FormDescription
+                  >{{ $t("pageFields.pets.markSale") }}
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Switch :checked="value" @update:checked="handleChange" />
+              </FormControl>
+            </div>
+          </FormItem>
+        </FormField>
+        <FormField v-slot="{ componentField }" name="desc">
+          <FormItem>
+            <FormLabel>{{ $t("common.description") }}</FormLabel>
+            <FormControl>
+              <Textarea
+                placeholder="Tell us a little bit about yourself"
+                class="resize-none"
+                v-bind="componentField"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+      </div>
+    </div>
     <div v-if="props.showBtn">
       <Button type="button" variant="outline"> Cancel </Button>
       <Button type="submit"> Save changes </Button>
@@ -201,7 +226,7 @@ const emits = defineEmits(["onSubmit"]);
 const petStore = usePets();
 const petServiceStore = usePetServices();
 const { loading, pets } = storeToRefs(petStore);
-const petsSelected = ref<any[]>([]);
+const petsSelected = ref<any[]>( props?.elSelect?.petsProfiles || null);
 
 const onFormSubmit = props.form.handleSubmit(
   async (values: z.infer<typeof PetsServicesValid>) => {}
@@ -219,13 +244,4 @@ onMounted(async () => {
   await petStore.getListPets({ pageIndex: 1, pageSize: 500 });
 });
 
-watch(
-  () => props.elSelect,
-  () => {
-    console.log('props.elSelect',props.elSelect)
-    if (props.elSelect) {
-      petsSelected.value = props.elSelect.petIds;
-    }
-  }
-);
 </script>
