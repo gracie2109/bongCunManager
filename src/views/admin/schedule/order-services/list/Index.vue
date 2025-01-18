@@ -209,7 +209,7 @@ watch(
       await $store.searchServiceOrder({
         pageIndex: 1,
         pageSize: 25,
-        dataSearch: raw
+        dataSearch:  []
       });
     } else {
       await $store.searchServiceOrder({

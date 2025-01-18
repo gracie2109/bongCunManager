@@ -14,10 +14,17 @@
       <div>
         <TooltipProvider>
           <div class="flex items-center gap-2">
+           <div 
+           v-if="
+                props.headerAdvanced.includes(HEADER_ADVANCE_FUNCTION.RANGE_DATE)
+              "
+           
+           >
             <SearchRangeTime
               :range-date="date"
               @change-date="handleChangeDate"
             />
+           </div>
             <div v-if="props.buttonFunctions">
               <Suspense>
                 <div v-if="props.buttonFunctions">
@@ -79,7 +86,7 @@
                     <Columns2 color="hsl(var(--primary))" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>View({{ openSettingView }}) </TooltipContent>
+                <TooltipContent>View </TooltipContent>
               </Tooltip>
             </div>
             <div
@@ -153,13 +160,13 @@ import {
   Plus,
   CloudUpload,
   CloudDownload,
-  Columns2
+  Columns2,
 } from "lucide-vue-next";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { ref } from "vue";
@@ -197,7 +204,7 @@ const emit = defineEmits([
   "addNew",
   "setOpen",
   "onInput",
-  "changeDate"
+  "changeDate",
 ]);
 
 function clickAddNew() {
@@ -208,7 +215,7 @@ function clickAddNew() {
   }
 }
 
-function handleChangeDate(val:any) {
-  emit('changeDate', val)
+function handleChangeDate(val: any) {
+  emit("changeDate", val);
 }
 </script>

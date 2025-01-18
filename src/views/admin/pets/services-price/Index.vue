@@ -13,7 +13,11 @@
           >
             <ModalCreateService />
           </div>
-          <div v-for="(i, j) in petServices">
+          <div
+            v-for="(i, j) in petServices.filter((i) =>
+              i.petIds.includes(params?.petId)
+            )"
+          >
             <ServiceCard
               :data="i"
               :key="j"
@@ -30,7 +34,7 @@
         >
           <div class="w-full h-full" id="short_cut_service">
             <ListServicesPriceTable
-              :services="petServices"
+              :services="petServices.filter((i) => i.petIds.includes(params?.petId))"
               :isMouseId="isMouseId"
               @set-mouse-el="handleMouseEv"
             />
@@ -51,11 +55,12 @@ import ServiceCard from "../services/components/ServiceCard.vue";
 import ListServicesPriceTable from "./components/ListServicesPriceTable.vue";
 import ModalCreateService from "../components/ModalCreateService.vue";
 import SubMenu from "../components/SubMenu.vue";
+import { useRoute } from "vue-router";
 
 const store = usePetServices();
 const { petServices, loading } = storeToRefs(store);
 const isMouseId = ref("");
-
+const { params } = useRoute();
 const handleMouseEv = (value: string) => {
   isMouseId.value = value;
 };
@@ -63,4 +68,16 @@ const handleMouseEv = (value: string) => {
 onMounted(async () => {
   await store.getListPetService({ pageIndex: 1, pageSize: 500 });
 });
+// console.log('petServices.value0', petServices);
+// console.log('params0', params.petId)
+// const serviceList = computed(() => {
+//   if (petServices.value && params?.petId) {
+//     return petServices.value.filter((record) =>{
+
+//       record.petIds.includes(params?.petId)}
+//     );
+//   }
+// });
+
+// console.log('serviceList0', serviceList)
 </script>
