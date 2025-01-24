@@ -7,6 +7,7 @@ import {
   deleteItem,
   checkItemNotExist,
   updateCollection,
+  getDetailData
 } from "@/lib/firebaseFn";
 import { v7 as uuidv7 } from "uuid";
 import { COLLECTION } from "@/lib/constants";
@@ -31,7 +32,7 @@ export const usePets = defineStore("pets", () => {
       if (notExist) {
         const totalRecord = await createCollection(COLLECTION.PETS, {
           ...payload,
-          uid: uuidv7(),
+          uid: uuidv7()
         });
         pageCount.value = totalRecord;
         sendMessageToast("success", "create", "success");
@@ -43,28 +44,24 @@ export const usePets = defineStore("pets", () => {
     }
   }
   async function updatePet(payload: any) {
-      try {
-        loading.value = true;
-      
-        const totalRecord = await updateCollection(
-          COLLECTION.PETS,
-          payload.id,
-          {
-            ...payload,
-          }
-        );
-        pageCount.value = totalRecord;
-        sendMessageToast("success", "create", "success");
-        // }
-      } catch (error: any) {
-        sendMessageToast("fail", "create", "error", error.message);
-      } finally {
-        loading.value = false;
-      }
+    try {
+      loading.value = true;
+
+      const totalRecord = await updateCollection(COLLECTION.PETS, payload.id, {
+        ...payload
+      });
+      pageCount.value = totalRecord;
+      sendMessageToast("success", "create", "success");
+      // }
+    } catch (error: any) {
+      sendMessageToast("fail", "create", "error", error.message);
+    } finally {
+      loading.value = false;
     }
+  }
   async function getListPets({
     pageIndex,
-    pageSize,
+    pageSize
   }: {
     pageIndex: number;
     pageSize: number;
@@ -83,15 +80,15 @@ export const usePets = defineStore("pets", () => {
               ...i,
               index: getIndex({
                 dataPage: { page: pageIndex, page_size: pageSize },
-                index: j,
-              }),
+                index: j
+              })
             };
           });
         },
         collectionName: COLLECTION.PETS,
         isAll: false,
         limitNumb: pageSize,
-        startAfterDoc: lastVisibleDocForPage,
+        startAfterDoc: lastVisibleDocForPage
       });
     } catch (error) {
       loading.value = false;
@@ -117,11 +114,31 @@ export const usePets = defineStore("pets", () => {
     }
   }
 
-  onUnmounted(() => {
-    if (unsubscribe.value) {
-      unsubscribe.value();
+  async function getPetInfo(id: string) {
+    try {
+      loading.value = true;
+      const exist = await checkItemNotExist(COLLECTION.PETS, "__name__", id);
+      if (exist) {
+        const data = await getDetailData(COLLECTION.PETS, "__name__", id);
+        if (!data.empty) {
+          return {
+            ...data.docs[0].data(),
+            id: data.docs[0].id,
+          };
+        }
+      }
+    } catch (error: any) {
+      sendMessageToast("fail", "get", "error", error.message);
+    } finally {
+      loading.value = false;
     }
-  });
+  }
+
+  // onUnmounted(() => {
+  //   if (unsubscribe.value) {
+  //     unsubscribe.value();
+  //   }
+  // });
 
   return {
     pets,
@@ -132,5 +149,6 @@ export const usePets = defineStore("pets", () => {
     updatePet,
     getListPets,
     deleteServiceProvider,
+    getPetInfo
   };
 });

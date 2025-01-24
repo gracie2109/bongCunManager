@@ -6,7 +6,7 @@ import {
   HEADER_ADVANCE_FUNCTION
 } from "@/lib/constants";
 
-export type RestfullMethod = "create" | "update" | "delete";
+export type RestfullMethod = "create" | "update" | "delete" | "get";
 export type ResponseStatus = "fail" | "success";
 
 export type SelectOptionValue = {

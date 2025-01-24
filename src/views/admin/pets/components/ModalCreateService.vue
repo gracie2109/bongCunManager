@@ -17,7 +17,7 @@
     @update:open="
       () => {
         open = !open;
-        $emit('updateOpen', false);
+        $emit('updateOpen', open);
       }
     "
   >
@@ -32,14 +32,15 @@
         </DialogTitle>
       </DialogHeader>
       <div class="h-[650px] overflow-y-auto p-3">
-  
         <ServiceForm
           :elSelect="props.elSelect"
           :form="form"
           :show-btn="false"
           @on-submit="handleForm"
+          :default-pet="props.defaultPet  || []"
         />
       </div>
+
       <DialogFooter class="p-6 pt-0">
         <Button
           type="button"
@@ -48,7 +49,7 @@
             () => {
               open = !open;
               form.resetForm();
-              $emit('updateOpen', false);
+              $emit('updateOpen', open);
             }
           "
         >
@@ -78,6 +79,7 @@ const props = defineProps<{
   title?: string;
   handleOpen?: boolean;
   elSelect?: any;
+  defaultPet?:any[]
 }>();
 const open = ref(false);
 const form = useForm();
@@ -94,7 +96,7 @@ watch(
   }
 );
 
-const handleForm = form.handleSubmit(async (values: any) => {
+const handleForm = form.handleSubmit(async (values: any) => {  
   if (!props.elSelect) {
     await store.createNewPetService(values).then(() => {
       open.value = !open.value;

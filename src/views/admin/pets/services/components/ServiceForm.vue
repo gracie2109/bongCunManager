@@ -129,6 +129,7 @@
             label="name"
             track-by="name"
             :taggable="true"
+            
             @update:modelValue="(value:any) => {
                                props.form.setFieldValue('petIds', value?.map((i:any) => i.id));
                                props.form.setFieldValue('petsProfiles', value?.map((i:any) => i))
@@ -194,6 +195,7 @@ import {
   onMounted,
   ref,
   watch,
+  watchEffect,
   type Ref,
 } from "vue";
 import Multiselect from "vue-multiselect";
@@ -220,13 +222,13 @@ const props = defineProps<{
   form: FormContext<any>;
   showBtn: boolean;
   elSelect?: any;
+  defaultPet?:any[]
 }>();
 const { locale } = useI18n();
 const emits = defineEmits(["onSubmit"]);
 const petStore = usePets();
-const petServiceStore = usePetServices();
 const { loading, pets } = storeToRefs(petStore);
-const petsSelected = ref<any[]>( props?.elSelect?.petsProfiles || null);
+const petsSelected = ref<any[]>(props?.elSelect?.petsProfiles || props?.defaultPet || null);
 
 const onFormSubmit = props.form.handleSubmit(
   async (values: z.infer<typeof PetsServicesValid>) => {}
@@ -244,4 +246,10 @@ onMounted(async () => {
   await petStore.getListPets({ pageIndex: 1, pageSize: 500 });
 });
 
+watchEffect(() => {
+  if(props.defaultPet) {
+    props.form.setFieldValue('petIds', props.defaultPet?.map((i:any) => i.id));
+    props.form.setFieldValue('petsProfiles', props.defaultPet?.map((i:any) => i))
+  }
+})
 </script>

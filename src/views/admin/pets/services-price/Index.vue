@@ -2,6 +2,7 @@
   <PageTitle />
 
   <ContentWrap>
+
     <SubMenu />
 
     <div class="relative top-20 h-auto overflow-y-auto bg-white w-[93vw]">
@@ -11,11 +12,12 @@
             class="border border-primary h-[100px] rounded-lg"
             id="create_btn"
           >
-            <ModalCreateService />
+            <ModalCreateService :default-pet="petInfo" />
           </div>
           <div
+            v-if="!_.isEmpty(petServices) && !loading"
             v-for="(i, j) in petServices.filter((i) =>
-              i.petIds.includes(params?.petId)
+              i?.petIds?.includes(params?.petId)
             )"
           >
             <ServiceCard
@@ -27,7 +29,6 @@
             />
           </div>
         </div>
-
         <div
           class="w-full h-auto overflow-y-auto overflow-x-auto"
           v-if="petServices.length > 0"
@@ -46,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { usePetServices } from "@/stores";
+import { usePetServices, usePets } from "@/stores";
 import { ContentWrap } from "@/views/admin/components";
 import PageTitle from "../PageTitle.vue";
 import { computed, onMounted, ref } from "vue";
@@ -56,9 +57,12 @@ import ListServicesPriceTable from "./components/ListServicesPriceTable.vue";
 import ModalCreateService from "../components/ModalCreateService.vue";
 import SubMenu from "../components/SubMenu.vue";
 import { useRoute } from "vue-router";
-
+import _ from "lodash"
 const store = usePetServices();
+const petStore = usePets();
 const { petServices, loading } = storeToRefs(store);
+
+const petInfo = ref()
 const isMouseId = ref("");
 const { params } = useRoute();
 const handleMouseEv = (value: string) => {
@@ -67,17 +71,7 @@ const handleMouseEv = (value: string) => {
 
 onMounted(async () => {
   await store.getListPetService({ pageIndex: 1, pageSize: 500 });
+  const data= await petStore.getPetInfo(params?.petId.toString());
+  petInfo.value = [data]
 });
-// console.log('petServices.value0', petServices);
-// console.log('params0', params.petId)
-// const serviceList = computed(() => {
-//   if (petServices.value && params?.petId) {
-//     return petServices.value.filter((record) =>{
-
-//       record.petIds.includes(params?.petId)}
-//     );
-//   }
-// });
-
-// console.log('serviceList0', serviceList)
 </script>
