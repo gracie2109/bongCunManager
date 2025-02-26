@@ -35,6 +35,7 @@
     --input: 20 5.9% 90%;
     --ring: 24.6 95% 53.1%;
     --radius: 0.5rem;
+    
   }
 
   .dark {
@@ -205,4 +206,26 @@ body {
 
 .dp__input_wrap{
   width: 340px !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-primary rounded-full;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: theme("colors.primary.DEFAULT") #ffff;
+}
+
+.custom-scrollbar2 {
+  scrollbar-width: thin;
+  scrollbar-color: theme("colors.primary.DEFAULT") #bd994b;
 }

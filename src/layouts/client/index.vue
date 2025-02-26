@@ -1,16 +1,22 @@
 <template>
-
-  <header class="fixed left-0 top-0  py-6 py-3  z-40 w-full transition-transform duration-300 border-b bg-[rgb(255, 255, 255)]"
-    :class="clsx({
-      'translate-y-0': isShow,
-      '-translate-y-96': !isShow,
-    })
-      ">
-    <div class="absolute inset-0 w-full  duration-200 opacity-0" :class="clsx({
-      'opacity-100': isShow,
-      hidden: route.name !== 'home',
-    })
-      "></div>
+  <header
+    class="fixed left-0 top-0 py-6  z-40 w-full transition-transform duration-300 border-b bg-[rgb(255, 255, 255)]"
+    :class="
+      clsx({
+        'translate-y-0': isShow,
+        '-translate-y-96': !isShow
+      })
+    "
+  >
+    <div
+      class="absolute inset-0 w-full duration-200 opacity-0 bg-white"
+      :class="
+        clsx({
+          'opacity-100': isShow,
+          hidden: route.name !== 'home'
+        })
+      "
+    ></div>
     <div class="relative container md:px-12 lg:px-20">
       <div class="flex items-start justify-between">
         <AppLogo />
@@ -20,15 +26,16 @@
         <MenuExtras @toggle-menu="toggleMenu" />
 
         <div
-          class="bg-[rgb(255, 255, 255)] fixed backdrop-blur  right-0 top-0 w-full transition-transform duration-500 md:w-2/4 lg:hidden"
-          :class="[isOpen ? 'translate-x-0' : 'translate-x-full']">
-            <MenuLinks />
+          class="bg-[rgb(255, 255, 255)] fixed backdrop-blur right-0 top-0 w-full transition-transform duration-500 md:w-2/4 lg:hidden"
+          :class="[isOpen ? 'translate-x-0' : 'translate-x-full']"
+        >
+          <MenuLinks />
         </div>
       </div>
     </div>
   </header>
-  <main class="relative py-5 px-12 top-[5em] h-auto min-h-screen w-full">
-    <div class="">
+  <main class="relative top-[5em] h-auto min-h-screen w-full">
+    <div class="relative clear-both">
       <slot />
     </div>
   </main>

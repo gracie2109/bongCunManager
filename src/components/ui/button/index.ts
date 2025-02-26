@@ -18,7 +18,8 @@ export const buttonVariants = cva(
           'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
-        white: "bg-[#ffff]"
+        white: "bg-[#ffff]",
+        black: "bg-zinc-950 text-white border-none  hover:bg-zinc-800 "
       },
       size: {
         default: 'h-9 px-4 py-2',
@@ -26,7 +27,8 @@ export const buttonVariants = cva(
         sm: 'h-8 rounded-md px-3 text-xs',
         lg: 'h-10 rounded-md px-8',
         icon: 'h-9 w-9',
-        xss: 'h-7 w-7 rounded-md'
+        xss: 'h-7 w-7 rounded-md',
+        large: 'h-14 rounded-full'
       },
     },
     defaultVariants: {

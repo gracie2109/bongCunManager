@@ -1,8 +1,7 @@
 <template>
-  <ul :class="clsx(`flex relative font-semibold list-none ${navLinksClass}`, {
-    'text-black': route.name === 'home',
-    'text-primary': route.name !== 'home',
-  })
+  <ul :class="clsx(`flex relative font-semibold list-none ${navLinksClass}`,
+  
+  )
     ">
     <li :class="langClass">
       <SwitchLang />

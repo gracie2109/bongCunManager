@@ -71,15 +71,20 @@ export const navigation = {
     },
     {
       text: "About Us",
-      name: "home",
+      name: "about-us",
     },
     {
       text: "Contact",
       name: "contact",
     },
     {
+      text: "Products",
+      name: "products",
+      type: 'multi'
+    },
+    {
       text: "Coupons",
-      name: "home",
+      name: "coupons",
     },
   ],
 };

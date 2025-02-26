@@ -8,7 +8,7 @@ import DashboardView from "@/views/admin/dashboard/DashboardView.vue";
 import DetailPetServicePrice from "@/views/admin/pets/services-price/Detail.vue";
 import DetailScheduleOrder from "@/views/admin/schedule/order-services/detail/Index.vue"
 import ForgotPassView from "@/views/auth/ForgotPassView.vue";
-import HomeView from "@/views/HomeView.vue";
+import HomeView from "@/views/home/HomeView.vue";
 import ListPetServices from "@/views/admin/pets/services/Index.vue";
 import ListPets from "@/views/admin/pets/Index.vue";
 import ListScheduleOrder from "@/views/admin/schedule/order-services/list/Index.vue";
@@ -78,6 +78,33 @@ const router = createRouter({
       component: ContactView,
       meta: {
         key: "contact",
+        layout: PAGE_LAYOUT.CLIENT,
+      },
+    },
+    {
+      path: "/about-us",
+      name: "about-us",
+      component: HomeView,
+      meta: {
+        key: "about-us",
+        layout: PAGE_LAYOUT.CLIENT,
+      },
+    },
+    {
+      path: "/coupons",
+      name: "coupons",
+      component: HomeView,
+      meta: {
+        key: "coupons",
+        layout: PAGE_LAYOUT.CLIENT,
+      },
+    },
+    {
+      path: "/products",
+      name: "products",
+      component: HomeView,
+      meta: {
+        key: "products",
         layout: PAGE_LAYOUT.CLIENT,
       },
     },
@@ -165,6 +192,7 @@ const router = createRouter({
             // },
           ],
         },
+        
         {
           path: "schedule",
           children: [
