@@ -35,7 +35,7 @@
     --input: 20 5.9% 90%;
     --ring: 24.6 95% 53.1%;
     --radius: 0.5rem;
-    
+
   }
 
   .dark {
@@ -67,6 +67,11 @@
     --input: 12 6.5% 15.1%;
     --ring: 20.5 90.2% 48.2%;
   }
+}
+
+*, html, body {
+  scroll-behavior: smooth;
+
 }
 
 @layer components {
@@ -120,7 +125,7 @@
   }
 
   .hamburger--slider .hamburger-inner {
-    @apply top-[2px] before:top-[8px] before:transition-all after:top-4;
+    @apply top-[2px] before: top-[8px] before:transition-all after:top-4;
   }
 
   .hamburger--slider.is-active .hamburger-inner {
@@ -139,7 +144,7 @@
   }
 
   .dots-container {
-    @apply !bottom-0.5 sm: !bottom-3;
+    @apply  !bottom-0.5 sm:  !bottom-3;
   }
 
   /* width */
@@ -204,7 +209,7 @@ body {
 }
 
 
-.dp__input_wrap{
+.dp__input_wrap {
   width: 340px !important;
 }
 

@@ -3,7 +3,7 @@
     <img 
       :src="dfData[0]" 
       alt="" 
-      class="w-full object-cover h-[200px] sm:h-[300px] md:h-[500px] lg:h-[600px] xl:h-[650px]" 
+      class="w-full object-cover h-[300px] sm:h-[300px] md:h-[500px] lg:h-[600px] xl:h-[650px]" 
     /> 
   </div>
 </template>
