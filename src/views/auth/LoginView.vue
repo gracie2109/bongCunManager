@@ -1,5 +1,11 @@
 <template>
-  <section class="mx-auto grid gap-6">
+  <section class="mx-auto grid gap-6 w-full"
+  
+    :class="{
+      'mt-5 p-5': !isExactPath
+    }"
+  
+  >
     <div class="grid gap-2 text-center">
       <h1 class="text-3xl font-bold">
         {{ $t("pageMeta.login") }}
@@ -45,10 +51,12 @@
             />
             <div class="error">{{ getError("password") }}</div>
           </div>
-          <Button type="submit" class="w-full" @click="handleSubmit()">
+          <Button type="submit" class="w-full h-[50px]" @click="handleSubmit()">
             {{ $t("pageMeta.login") }}
           </Button>
-          <Button variant="outline" class="w-full"> Login with Google </Button>
+          <Button variant="outline" class="w-full h-[50px]">
+            Login with Google
+          </Button>
         </div>
       </form>
       <div class="mt-4 text-center text-sm">
@@ -81,6 +89,7 @@ import useValidation from "@/composables/useValidation";
 const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
+const isExactPath = route.fullPath?.toString()?.split('/')[1] === ""
 
 const formSchema = ref({
   email: "",

@@ -5,6 +5,8 @@ import Categories from "./components/Categories.vue";
 import Products from "./components/Products.vue";
 import { rawProducts } from "./constants";
 import CardProduct from "@/components/CardProduct.vue";
+import RegisterForm from "@/components/RegisterForm.vue";
+import Footer from "@/components/Footer.vue";
 </script>
 <template>
   <div>
@@ -19,7 +21,7 @@ import CardProduct from "@/components/CardProduct.vue";
       </div>
     </div>
 
-    <div class="my-[15rem] space-y-16">
+    <div class="mt-[15rem] space-y-16">
       <div class="bg-[#bd994b] min-h-[550px] pt-5">
         <div class="container py-5">
           <h1
@@ -44,10 +46,10 @@ import CardProduct from "@/components/CardProduct.vue";
       </div>
 
       <div class="md:container">
-        <div class=" min-h-[550px] pt-5 w-full">
+        <div class="min-h-[550px] pt-5 w-full">
           <div class="container py-5">
             <h1
-              class="text-center uppercase font-bold  text-3xl md:text-4xl lg:text-4xl sm:text-3xl mb-8"
+              class="text-center uppercase font-bold text-3xl md:text-4xl lg:text-4xl sm:text-3xl mb-8"
             >
               Sản phẩm được yêu thích
             </h1>
@@ -70,5 +72,11 @@ import CardProduct from "@/components/CardProduct.vue";
         </div>
       </div>
     </div>
+
+    <div class="relative" id="home_register">
+      <RegisterForm />
+    </div>
+
+    <Footer />
   </div>
 </template>

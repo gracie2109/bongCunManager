@@ -17,7 +17,7 @@ import { INTRO_CATEGORIES } from "../constants";
         <div
           v-for="(i, j) of INTRO_CATEGORIES"
           :key="j"
-          class="flex-none first:pl-4 last:pr-4 cursor-pointer h-[150px]"
+          class="flex-none first:pl-4 last:pr-4 cursor-pointer md:h-[200px] sm:h-[150px]"
         >
           <div
             class="grid gap-3 p-3 w-[160px] sm:w-[180px] h-full md:w-[200px] place-content-center bg-[#F7C860] text-white rounded-md snap-start hover:shadow-lg transition-all duration-300 flex flex-col items-center"

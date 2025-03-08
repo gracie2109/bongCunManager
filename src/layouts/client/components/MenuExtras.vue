@@ -16,7 +16,7 @@
     <MenuButton @toggle-menu="emit('toggleMenu')" />
   </div>
   <Dialog :open="open" @update:open="open = !open" class="w-full">
-    <DialogContent class="w-[calc(100vw-10rem)] min-h-[550px] h-auto">
+    <DialogContent class="sm:w-[550px] w-[90%]  h-[620px]  rounded-lg">
       <LoginView
         v-if="!component || component?.includes('login')"
         @directPath="directPath"

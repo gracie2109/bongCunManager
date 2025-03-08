@@ -1,5 +1,10 @@
 <template>
-  <section class="mx-auto min-w-[350px] w-96">
+  <section class="mx-auto  w-full" 
+  
+  :class="{
+      'mt-5 p-5': !isExactPath
+    }"
+  >
     <div class="grid gap-2 text-center">
       <h1 class="text-3xl font-bold">
         {{ $t("pageMeta.register") }}
@@ -69,13 +74,13 @@
             </div>
             <Button
               type="submit"
-              class="w-full"
+              class="w-full h-[50px]"
               @click="handleSubmit()"
               :disabled="loading"
             >
               {{ $t("pageFields.authen.createAcc") }}
             </Button>
-            <Button variant="outline" class="w-full" :disabled="loading">
+            <Button variant="outline" class="w-full  h-[50px]" :disabled="loading">
               Login with Google
             </Button>
           </div>
@@ -110,6 +115,7 @@ import { registerSchema } from "@/validations/auth";
 const route = useRoute();
 const router = useRouter();
 const emits = defineEmits(["directPath"]);
+const isExactPath = route.fullPath?.toString()?.split('/')[1] === ""
 
 const isCheckStt = ref(false);
 const authStore = useAuthStore();
