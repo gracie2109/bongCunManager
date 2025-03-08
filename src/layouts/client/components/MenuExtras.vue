@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center gap-x-2 md:gap-x-4 will-change-auto">
+  <div class="flex items-center gap-x-6 md:gap-x-4 will-change-auto">
     <div class="hidden lg:block">
       <SwitchLang />
     </div>
@@ -16,7 +16,7 @@
     <MenuButton @toggle-menu="emit('toggleMenu')" />
   </div>
   <Dialog :open="open" @update:open="open = !open" class="w-full">
-    <DialogContent class="sm:w-[550px] w-[90%]  h-[620px]  rounded-lg">
+    <DialogContent class="sm:w-[550px] w-[90%] h-auto max-h-[690px]   rounded-lg">
       <LoginView
         v-if="!component || component?.includes('login')"
         @directPath="directPath"

@@ -17,7 +17,7 @@
       <div class="mt-5">
         <form @submit.prevent="handleSubmit">
           <div class="grid gap-4">
-            <div class="grid gap-2">
+            <div class="grid gap-1">
               <Label for="email">Email</Label>
               <Input
                 id="email"
@@ -31,8 +31,8 @@
               />
               <div class="error">{{ getError("email") }}</div>
             </div>
-            <div class="grid gap-2">
-              <Label for="password">displayName</Label>
+            <div class="grid gap-1">
+              <Label for="password">Display Name</Label>
               <Input
                 id="password"
                 type="text"
@@ -46,8 +46,8 @@
               <div class="error">{{ getError("displayName") }}</div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
-              <div class="grid gap-2">
+            <div class="grid grid-cols-2 gap-x-3 gap-y-0">
+              <div class="grid gap-1">
                 <Label for="password">Password</Label>
                 <InputPassword
                   id="password"
@@ -57,7 +57,7 @@
                   :class="{ 'p-invalid': !!getError('password') }"
                 />
               </div>
-              <div class="grid gap-2">
+              <div class="grid">
                 <Label for="password">Reset Password</Label>
                 <InputPassword
                   id="password"
@@ -68,7 +68,7 @@
                 />
               </div>
             </div>
-            <div class="grid gap-y-1.5">
+            <div class="grid gap-y-1">
               <div class="error">{{ getError("password") }}</div>
               <div class="error">{{ getError("confirm") }}</div>
             </div>
@@ -85,7 +85,7 @@
             </Button>
           </div>
         </form>
-        <div class="mt-4 text-center text-sm">
+        <div class="mt-4 text-center text-sm flex justify-center items-center gap-3">
           {{ $t("pageFields.authen.alreadyHasAccount") }}
           <p @click="redirectPath" class="underline cursor-pointer">
             {{ $t("pageMeta.login") }}
@@ -170,6 +170,5 @@ onMounted(async () => {
 .error {
   font-size: 14px;
   color: red;
-  margin-top: 4px;
 }
 </style>

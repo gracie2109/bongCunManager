@@ -37,70 +37,77 @@
           <span v-else>(0)</span>
         </div>
       </SheetHeader>
-      <div v-if="cart" class="relative top-5 h-screen overflow-y-auto">
-        <div v-for="(i, j) in cart">
-          <div>CartItem</div>
-        </div>
-      </div>
 
-      <div v-else>
-        <img :src="cart_empty" alt="cart empty" />
-        <p class="text-center">Cart Empty</p>
-        <div class="flex items-center justify-between mt-5">
-          <router-link to="#" class="hover:text-custom-primary hover:underline"
-            >Go <b>Products </b>Page</router-link
-          >
-          <router-link to="#" class="hover:text-custom-primary hover:underline"
-            >Go <b>Voucher</b> Page</router-link
-          >
+      <template v-if="cart && cart.length > 0">
+        <div class="relative top-5 h-screen overflow-y-auto">
+          <div v-for="(i, j) in cart">
+            <div>CartItem</div>
+          </div>
         </div>
-      </div>
+        <div
+          class="bg-white sticky bottom-12 right-0 h-14 hidden_padding border-t-2"
+        >
+          <div class="flex items-center justify-between h-full">
+            <div class="flex gap-x-2">
+              <b>Total Price:</b>
+              <p>{{ formatPrice(totalPrice) }}</p>
+            </div>
 
-      <div
-        class="bg-white sticky bottom-12 right-0 h-14 hidden_padding border-t-2"
-        v-if="cart"
-      >
-        <div class="flex items-center justify-between h-full">
-          <div class="flex gap-x-2">
-            <b>Total Price:</b>
-            <p>{{ formatPrice(totalPrice) }}</p>
+            <Button>
+              <router-link
+                :to="$router.resolve({ name: 'home' })"
+                class="flex gap-x-2 items-center"
+              >
+                Checkout<ChevronsRight class="w-4 h-4" />
+              </router-link>
+            </Button>
           </div>
 
-          <Button>
-            <router-link
-              :to="$router.resolve({ name: 'home' })"
-              class="flex gap-x-2 items-center"
+          <div class="flex items-center justify-between h-full w-full py-2">
+            <div
+              class="text-red-600 flex items-center cursor-pointer"
+              @click="clearCart"
             >
-              Checkout<ChevronsRight class="w-4 h-4" />
-            </router-link>
-          </Button>
+              <X class="w-4 h-4 mr-2" />Clear cart
+            </div>
+            <div>
+              <router-link
+                :to="$router.resolve({ name: 'home' })"
+                class="hover:text-custom-primary hover:underline"
+                >Cart Page</router-link
+              >
+            </div>
+          </div>
         </div>
 
-        <div class="flex items-center justify-between h-full w-full py-2">
-          <div class="text-red-600 flex items-center cursor-pointer" @click="clearCart">
-            <X class="w-4 h-4 mr-2" />Clear cart
+
+      </template v-else>
+          <div class=" h-full mt-5 grid ">
+              <div class="container my-auto relative">
+                <img :src="cartEmpty" alt="">
+                <p class="text-center">Empty cart</p>
+              </div>
           </div>
-          <div>
-            <router-link
-              :to="$router.resolve({ name: 'home' })"
-              class="hover:text-custom-primary hover:underline"
-              >Cart Page</router-link
-            >
-          </div>
-        </div>
-      </div>
+      <template>
+
+      </template>
     </SheetContent>
   </Sheet>
 </template>
 <script setup lang="ts">
 import { ChevronsRight, X } from "lucide-vue-next";
-import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet";
-import { Dialog, DialogClose, DialogContent,DialogDescription,DialogFooter, DialogHeader, DialogScrollContent,  } from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
 
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import { onMounted, ref, watchEffect } from "vue";
-import { cart_empty } from "@/setting";
+import cartEmpty from "../../../assets/empty-box.png";
 
 const prop = defineProps<{
   type: string;

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 
 import {
   FormControl,
@@ -13,17 +13,42 @@ import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useFormField } from "./ui/form/useFormField";
 import useValidation from "@/composables/useValidation";
+import { format } from "date-fns";
 
-const form = useForm({
-  validationSchema: toTypedSchema(registerFormSchema),
+import FormItemInline from "@/components/FormFieldInline.vue";
+const errors = ref({
+  filed: "",
+  error: "null",
+});
+const formSchema = ref({
+  name: "",
+  time: new Date(),
+  phone_number: "",
+  email: "",
+  content: "",
 });
 
-const onSubmit = form.handleSubmit((values) => {
-  console.log("Form submitted!", values);
-});
+const { validate, isValid, getError, isInValid, scrolltoError } = useValidation(
+  registerFormSchema,
+  formSchema,
+  {
+    mode: "lazy",
+  }
+);
+async function handleSubmit() {
+  await validate();
 
+  if (isValid.value) {
+    const payload = {
+      ...formSchema.value,
+      time: format(formSchema.value.time, "MM/dd/yyyy hh:mm:ss")
+    };
+    console.log("formSchema",payload);
+  } else {
+    scrolltoError(".p-invalid", { offset: 24 });
+  }
+}
 
-const date = ref(new Date());
 </script>
 
 <template>
@@ -45,58 +70,29 @@ const date = ref(new Date());
                 <div class="title-form2">
                   <span class="font-semibold">Đặt lịch ngay</span>
                 </div>
-
-                <form @submit="onSubmit">
+                <form @submit.prevent="handleSubmit">
                   <div class="grid md:grid-cols-2 gap-8 sm:grid-cols-1">
-                    <FormField
-                      v-slot="{ componentField }"
+                    <FormItemInline
                       :name="REGISTER_PARAMS.NAME"
-                    >
-                      <FormItem>
-                        <FormControl>
-                          <input
-                            type="text"
-                            class="text-sm w-full"
-                            placeholder="Họ và tên (*)"
-                            v-bind="componentField"
-                          
-                      />
-                        </FormControl>
-                        
-                      </FormItem>
-                    </FormField>
-
-                    <FormField
-                      v-slot="{ componentField }"
+                      placeholder="Họ và tên (*)"
+                      :error="getError(REGISTER_PARAMS.NAME)"
+                      :isInValid="!!getError(REGISTER_PARAMS.NAME)"
+                      v-model="formSchema.name"
+                    />
+                    <FormItemInline
                       :name="REGISTER_PARAMS.PHONE_NUMBER"
-                    >
-                      <FormItem>
-                        <FormControl>
-                          <input
-                            type="text"
-                            class="text-sm w-full"
-                            v-bind="componentField"
-                            placeholder="Số điện thoại (*)"
-                          />
-                        </FormControl>
-                      </FormItem>
-                    </FormField>
-
-                    <FormField
-                      v-slot="{ componentField }"
+                      placeholder="Số điện thoại (*)"
+                      :error="getError(REGISTER_PARAMS.PHONE_NUMBER)"
+                      :isInValid="!!getError(REGISTER_PARAMS.PHONE_NUMBER)"
+                      v-model="formSchema.phone_number"
+                    />
+                    <FormItemInline
                       :name="REGISTER_PARAMS.EMAIL"
-                    >
-                      <FormItem>
-                        <FormControl>
-                          <input
-                            type="text"
-                            class="text-sm form w-full"
-                            placeholder="Địa chỉ email (*)"
-                            v-bind="componentField"
-                          />
-                        </FormControl>
-                      </FormItem>
-                    </FormField>
+                      placeholder="Địa chỉ email (*)"
+                      :error="getError(REGISTER_PARAMS.EMAIL)"
+                      :isInValid="!!getError(REGISTER_PARAMS.EMAIL)"
+                      v-model="formSchema.email"
+                    />
 
                     <FormField
                       v-slot="{ componentField }"
@@ -108,7 +104,7 @@ const date = ref(new Date());
                             <VueDatePicker
                               class="custom-datepicker"
                               id="date-picker-cs"
-                              v-model="date"
+                              v-model="formSchema.time"
                               :enable-time-picker="true"
                               v-bind="componentField"
                               placeholder="Chọn thời gian"
@@ -129,6 +125,7 @@ const date = ref(new Date());
                             class="textarea text-sm"
                             placeholder="Lời nhắn"
                             v-bind="componentField"
+                            v-model="formSchema.content"
                           />
                         </FormControl>
                       </FormItem>
@@ -158,6 +155,7 @@ const date = ref(new Date());
   font-size: 0.875rem !important;
   line-height: 1.25rem !important;
   color: #582e15 !important;
+  z-index: 999 !important;
 }
 :deep(.dp__input) {
   border: none !important;
@@ -173,6 +171,10 @@ const date = ref(new Date());
 }
 :deep(.dp__input_icons) {
   padding: 0 !important;
+}
+
+.invalid {
+  border-bottom: 1px solid red;
 }
 input {
   height: 52px;

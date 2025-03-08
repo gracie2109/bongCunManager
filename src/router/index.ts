@@ -22,6 +22,7 @@ import PetOverview from "@/views/admin/pets/overview/Index.vue";
 import RegisterView from "@/views/auth/RegisterView.vue";
 import SettingPetServicePrice from "@/views/admin/pets/services-price/Index.vue";
 import SettingView from "@/views/admin/settings/SettingView.vue";
+import RegisterPetView from "@/views/admin/pets/register-pets/index.vue"
 import i18n from "@/i18n";
 import { useAuthStore } from "@/stores";
 
@@ -138,6 +139,14 @@ const router = createRouter({
               path: "",
               name: "pets",
               component: ListPets,
+              meta: {
+                key: "pets",
+              },
+            },
+            {
+              path: "",
+              name: "register-pets",
+              component: RegisterPetView,
               meta: {
                 key: "pets",
               },
