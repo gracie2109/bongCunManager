@@ -18,7 +18,12 @@ export const ADMIN_NAVIGATOR: LinkProp[] = [
         name: "petOverview",
       },
       {
-        title: "Manager Pets",
+        title: "Manager Pets Register",
+        icon: "lucide:align-left",
+        name: "register-pets",
+      },
+      {
+        title: "Manager Pets Type",
         icon: "lucide:align-left",
         name: "pets",
       },
@@ -26,7 +31,6 @@ export const ADMIN_NAVIGATOR: LinkProp[] = [
         title: "Manager Pets Service",
         icon: "carbon:settings-services",
         name: "petService",
-        
       },
       {
         title: "Combo",
@@ -80,7 +84,7 @@ export const navigation = {
     {
       text: "Products",
       name: "products",
-      type: 'multi'
+      type: "multi",
     },
     {
       text: "Coupons",

@@ -17,7 +17,7 @@
     <div>
       <form action="" @submit.prevent="handleSubmit">
         <div class="grid gap-4">
-          <div class="grid gap-2">
+          <div class="grid gap-1">
             <Label for="email">Email</Label>
             <Input
               id="email"
@@ -30,7 +30,7 @@
             />
             <div class="error">{{ getError("email") }}</div>
           </div>
-          <div class="grid gap-2">
+          <div class="grid gap-1">
             <div class="flex items-center">
               <Label for="password">Password</Label>
               <span
@@ -59,7 +59,7 @@
           </Button>
         </div>
       </form>
-      <div class="mt-4 text-center text-sm">
+      <div class="mt-4 text-center text-sm flex justify-center items-center gap-3">
         {{ $t("pageFields.authen.dontHaveAccount") }}
 
         <p @click="redirectPath('register')" class="underline cursor-pointer">
@@ -141,6 +141,5 @@ async function handleSubmit() {
 .error {
   font-size: 14px;
   color: red;
-  margin-top: 4px;
 }
 </style>

@@ -92,84 +92,88 @@
 
   <Dialog :open="open" @update:open="() => (open = !open)">
     <DialogContent
-      class="sm:max-w-[425px] lg:max-w-[60%] h-[650px] overflow-y-scroll"
+      class="sm:max-w-[425px] lg:max-w-[60%] h-[650px] "
     >
-      <div class="py-5 relative">
-        <div
-          class="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 relative"
-        >
-          <div class="image h-[300px] md:h-full">
+      <div class="py-5 relative h-full"> 
+        <div class="block gap-4 sm:grid md:grid-cols-2 relative h-full">
+          <div class="image relative h-[200px] md:h-full">
             <img
               :src="props.data.images[0]"
               alt=""
               class="w-full h-full object-contain"
             />
           </div>
-          <div class="relative">
-            <div class="card_content grid mt-2 gap-4 relative">
-              <div class="h-[70px] relative">
-                <p
-                  class="font-semibold text-2xl h-full line-clamp-2 overflow-hidden"
-                >
-                  {{ props.data.name }}
-                </p>
-              </div>
-              <div class="space-y-1 my-5 relative">
-                <p>
-                  Thương hiệu:
-                  <span class="cursor-pointer">{{
-                    props.data.brand || "NAN"
-                  }}</span>
-                </p>
-                <p>
-                  Kho hàng:
-                  <span class="cursor-pointer">{{
-                    props.data.stock || "Đang cập nhật"
-                  }}</span>
-                </p>
-                <p>
-                  Loại sản phẩm:
-                  <span class="cursor-pointer">{{
-                    props.data.stock || "Đang cập nhật"
-                  }}</span>
-                </p>
-              </div>
-              <div class="relative">
-                <template v-if="!!props.data.sale_price">
-                  <div class="flex w-full gap-4 items-center h-full">
-                    <p class="line-through">
-                      {{ formatPrice(props.data.price) }}
-                    </p>
-                    <p class="text-xl font-bold text-primary">
-                      {{ formatPrice(props.data.sale_price) }}
+          <div class="relative  h-[calc(100% - 200px)] ">
+            <div class="h-full">
+              <div class="card_content h-full mt-2 gap-4 relative ">
+                <div class="sm:h-[80%] sm:max-h-[unset]  max-h-[260px] relative space-y-6 overflow-y-auto">
+                  <div class="h-[70px] relative">
+                    <p
+                      class="font-semibold text-2xl h-full line-clamp-2 overflow-hidden"
+                    >
+                      {{ props.data.name }}
                     </p>
                   </div>
-                </template>
+                
+                  <div class="space-y-1 relative">
+                    <p>
+                      Thương hiệu:
+                      <span class="cursor-pointer">{{
+                        props.data.brand || "NAN"
+                      }}</span>
+                    </p>
+                    <p>
+                      Kho hàng:
+                      <span class="cursor-pointer">{{
+                        props.data.stock || "Đang cập nhật"
+                      }}</span>
+                    </p>
+                    <p>
+                      Loại sản phẩm:
+                      <span class="cursor-pointer">{{
+                        props.data.stock || "Đang cập nhật"
+                      }}</span>
+                    </p>
+                  </div>
+                  <div class="relative">
+                    <template v-if="!!props.data.sale_price">
+                      <div class="flex w-full gap-4 items-center h-full">
+                        <p class="line-through">
+                          {{ formatPrice(props.data.price) }}
+                        </p>
+                        <p class="text-xl font-bold text-primary">
+                          {{ formatPrice(props.data.sale_price) }}
+                        </p>
+                      </div>
+                    </template>
 
-                <template v-else>
-                  <p>{{ formatPrice(props.data.price) }}</p>
-                </template>
-              </div>
-            </div>
-            <div class="grid gap-3 mt-12">
-              <div class="flex gap-3">
-                <Button
-                  variant="black"
-                  class="text-xl w-[90%] bg-zinc-950 h-14"
-                  @click="() => addToCart()"
-                  >Thêm vào giỏ hàng</Button
-                >
-                <Button
-                  class="w-[10%] h-full text-xl"
-                  @click="() => addToWhistlist()"
-                >
-                  <Heart />
-                </Button>
-              </div>
+                    <template v-else>
+                      <p>{{ formatPrice(props.data.price) }}</p>
+                    </template>
+                  </div>
+                </div>
 
-              <Button class="w-full text-xl h-14" @click="() => buyNow()"
-                >Mua ngay</Button
-              >
+                <div class="grid gap-3 w-full h-[18%]">
+                  <div class="flex gap-3 h-full">
+                    <Button
+                      variant="black"
+                      class="text-xl w-[80%] bg-zinc-950 h-12"
+                      @click="() => addToCart()"
+                      >Thêm vào giỏ hàng</Button
+                    >
+                    <Button
+                      class="w-[20%] h-12 text-xl"
+                      @click="() => addToWhistlist()"
+                    >
+                      <Heart />
+                    </Button>
+                  </div>
+
+                  <Button class="w-full text-xl h-12" @click="() => buyNow()"
+                    >Mua ngay</Button
+                  >
+                </div>
+              </div>
             </div>
           </div>
         </div>

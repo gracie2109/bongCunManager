@@ -1,10 +1,10 @@
 <template>
   <header
-    class="fixed left-0 top-0 py-6  z-40 w-full transition-transform duration-300 border-b bg-[rgb(255, 255, 255)]"
+    class="fixed left-0 top-0 py-6 z-40 w-full transition-transform duration-300 border-b bg-[rgb(255, 255, 255)]"
     :class="
       clsx({
         'translate-y-0': isShow,
-        '-translate-y-96': !isShow
+        '-translate-y-96': !isShow,
       })
     "
   >
@@ -13,12 +13,12 @@
       :class="
         clsx({
           'opacity-100': isShow,
-          hidden: route.name !== 'home'
+          // hidden: route.name !== 'home',
         })
       "
     ></div>
     <div class="relative container md:px-12 lg:px-20">
-      <div class="flex items-start justify-between">
+      <div class="flex items-start justify-between gap-3">
         <AppLogo />
         <nav class="hidden lg:block">
           <MenuLinks type="desktop" />
@@ -26,7 +26,7 @@
         <MenuExtras @toggle-menu="toggleMenu" />
 
         <div
-          class="bg-[rgb(255, 255, 255)] fixed backdrop-blur right-0 top-0 w-full transition-transform duration-500 md:w-2/4 lg:hidden"
+          class="bg-[rgb(255, 255, 255)]   fixed backdrop-blur right-0 top-0 w-full transition-transform duration-500 md:w-2/4 lg:hidden"
           :class="[isOpen ? 'translate-x-0' : 'translate-x-full']"
         >
           <MenuLinks />

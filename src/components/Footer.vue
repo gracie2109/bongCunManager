@@ -15,10 +15,10 @@
               <RouterLink
                 :to="i.name"
             
-                class="hover:text-primary after:ml-2 after:text-[#828282]"
+                class="hover:text-primary after:ml-2 after:text-[#828282] after:content-['|']"
                 :class="{
-                  'after:content-[\'|\']':
-                    ii !== navigation.clientNav.length - 1,
+                  'after:content-[]':
+                    ii === navigation.clientNav.length - 1,
                 }"
               >
                 {{ i.text }}
@@ -29,7 +29,7 @@
           <p>Powered by @gracie2109</p>
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-3  ">
           <p>🏡 Địa chỉ: <span>Yên Nghĩa, Hà Đông, Hà Nội</span></p>
           <p>☎️ Liên hệ:: <span>0327072255</span></p>
           <p>💌 Emai: <span>admin@gmail.com</span></p>
