@@ -1,5 +1,10 @@
 <template>
-  <section class="mx-auto grid gap-6">
+  <section
+    class="mx-auto grid gap-6 w-full"
+    :class="{
+      'mt-5 p-5': !isExactPath,
+    }"
+  >
     <div class="grid gap-2 text-center">
       <h1 class="text-3xl font-bold">
         {{ $t("pageMeta.forgotPw") }}
@@ -24,10 +29,16 @@
             />
             <div class="error">{{ getError("email") }}</div>
           </div>
-          <Button type="submit" class="w-full" @click="submitHdl()">
+          <Button type="submit" class="w-full h-[50px]" @click="submitHdl()">
             {{ $t("common.submit") }}
           </Button>
-          <Button variant="outline" class="w-full" @click="redirectPath()"> Back </Button>
+          <Button
+            variant="outline"
+            class="w-full h-[50px] mt-3"
+            @click="redirectPath()"
+          >
+            Back
+          </Button>
         </form>
       </div>
     </div>
@@ -56,6 +67,7 @@ const { isSuccess, loading } = storeToRefs(store);
 const emit = defineEmits(["directPath", "closeDialog"]);
 const route = useRoute();
 const router = useRouter();
+const isExactPath = route.fullPath?.toString()?.split("/")[1] === "";
 
 function redirectPath() {
   if (route.fullPath?.includes("forgot-password")) {
