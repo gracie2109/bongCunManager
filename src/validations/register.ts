@@ -16,4 +16,4 @@ export const registerFormSchema = z.object({
   [REGISTER_PARAMS.PHONE_NUMBER]: validPhoneNumber,
 });
 
-export type InferRegsiterFormInfo = z.infer<typeof registerFormSchema>;
+export type InferRegsiterBooking = z.infer<typeof registerFormSchema>;

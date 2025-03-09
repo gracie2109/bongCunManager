@@ -13,12 +13,13 @@
               class="capitalize cursor-pointer + text-sm"
             >
               <RouterLink
-                :to="i.name"
-            
+                :to="{
+                  name: i.name,
+                }"
+                @click="scrollToTop"
                 class="hover:text-primary after:ml-2 after:text-[#828282] after:content-['|']"
                 :class="{
-                  'after:content-[]':
-                    ii === navigation.clientNav.length - 1,
+                  'after:content-[]': ii === navigation.clientNav.length - 1,
                 }"
               >
                 {{ i.text }}
@@ -29,9 +30,9 @@
           <p>Powered by @gracie2109</p>
         </div>
 
-        <div class="space-y-3  ">
+        <div class="space-y-3">
           <p>🏡 Địa chỉ: <span>Yên Nghĩa, Hà Đông, Hà Nội</span></p>
-          <p>☎️ Liên hệ:: <span>0327072255</span></p>
+          <p>☎️ Liên hệ:: <span>0123456789</span></p>
           <p>💌 Emai: <span>admin@gmail.com</span></p>
           <p>🔍 Website: <span>admin@gmail.com</span></p>
         </div>
@@ -45,6 +46,13 @@ import AppLogo from "./common/AppLogo.vue";
 import { Separator } from "@/components/ui/separator";
 
 import { navigation } from "@/lib/navigations";
+
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
 </script>
 
 <style scoped>

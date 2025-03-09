@@ -16,7 +16,8 @@ export const COLLECTION = {
   PERMISSIONS: "permissions",
   ORDER_SERVICES: 'order-services',
   ORDER_SERVICES_SERVICE: 'order-services-service',
-  BANNERS: 'banners'
+  BANNERS: 'banners',
+  REGISTER_BOOKING: "register-booking"
 };
 
 export const DEFINE_PRODUCT_CATEGORIES = [

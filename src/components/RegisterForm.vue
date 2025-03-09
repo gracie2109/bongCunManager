@@ -1,32 +1,23 @@
 <script lang="ts" setup>
-import { ref, watchEffect } from "vue";
+import { ref } from "vue";
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import VueDatePicker from "@vuepic/vue-datepicker";
+import { FormControl, FormField, FormItem } from "@/components/ui/form";
+import VueDatePicker, { type DatePickerInstance } from "@vuepic/vue-datepicker";
 import { REGISTER_PARAMS, registerFormSchema } from "@/validations/register";
-import { useForm } from "vee-validate";
-import { toTypedSchema } from "@vee-validate/zod";
-import { useFormField } from "./ui/form/useFormField";
 import useValidation from "@/composables/useValidation";
 import { format } from "date-fns";
-
+import { useBookingService } from "@/stores";
 import FormItemInline from "@/components/FormFieldInline.vue";
-const errors = ref({
-  filed: "",
-  error: "null",
-});
-const formSchema = ref({
+
+const formSchema = ref<any>({
   name: "",
   time: new Date(),
   phone_number: "",
   email: "",
   content: "",
 });
+const $store = useBookingService();
+const datepicker = ref<DatePickerInstance>(null);
 
 const { validate, isValid, getError, isInValid, scrolltoError } = useValidation(
   registerFormSchema,
@@ -35,20 +26,32 @@ const { validate, isValid, getError, isInValid, scrolltoError } = useValidation(
     mode: "lazy",
   }
 );
+
 async function handleSubmit() {
   await validate();
 
   if (isValid.value) {
     const payload = {
       ...formSchema.value,
-      time: format(formSchema.value.time, "MM/dd/yyyy hh:mm:ss")
+      time: format(formSchema.value.time, "MM/dd/yyyy hh:mm:ss"),
     };
-    console.log("formSchema",payload);
+
+    $store.registerBooking(payload, () => {
+      formSchema.value = {
+        name: "",
+        time: new Date(),
+        phone_number: "",
+        email: "",
+        content: "",
+      };
+      if (datepicker.value) {
+        datepicker.value.clearValue();
+      }
+    });
   } else {
     scrolltoError(".p-invalid", { offset: 24 });
   }
 }
-
 </script>
 
 <template>
@@ -102,12 +105,25 @@ async function handleSubmit() {
                         <FormControl>
                           <div class="pt-3 w-full">
                             <VueDatePicker
+                              ref="datepicker"
                               class="custom-datepicker"
                               id="date-picker-cs"
                               v-model="formSchema.time"
-                              :enable-time-picker="true"
                               v-bind="componentField"
                               placeholder="Chọn thời gian"
+                              teleport-center
+                              :start-date="new Date()"
+                              :enable-time-picker="true"
+                              auto-apply
+                              :min-date="new Date()"
+                              :start-time="{
+                                hours: new Date().getHours() + 1,
+                                minutes: new Date().getMinutes(),
+                              }"
+                              :max-time="{
+                                hours: 23,
+                                minutes: 0,
+                              }"
                             />
                           </div>
                         </FormControl>
