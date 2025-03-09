@@ -11,3 +11,4 @@ export * from "./users";
 
 export * from "./schedule/order-service";
 export * from "./schedule/register-booking";
+export * from "./cartProduct";
