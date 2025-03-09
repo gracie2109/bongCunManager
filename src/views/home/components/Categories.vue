@@ -24,7 +24,8 @@ useResizeObserver(el, (entries) => {
 const carouselConfig = ref<Partial<CarouselConfig>>({
   wrapAround: true,
   itemsToShow: 6,
-  snapAlign:'start'
+  snapAlign:'start',
+  gap: 8
 });
 
 watch(widthEl, (newWidth:Number) => {
