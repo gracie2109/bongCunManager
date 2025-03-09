@@ -25,7 +25,7 @@ const carouselConfig = ref<Partial<CarouselConfig>>({
   wrapAround: true,
   itemsToShow: 6,
   snapAlign:'start',
-  gap: 8
+  gap: 4
 });
 
 watch(widthEl, (newWidth:Number) => {
