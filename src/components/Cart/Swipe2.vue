@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script setup >
+<script setup lang="ts">
 import { ref } from "vue";
 import { useGesture } from "@vueuse/gesture";
 import { useTransition } from "@vueuse/core";
