@@ -44,8 +44,8 @@
         </div>
       </div>
 
-      <div class="absolute -top-2 -right-0 cursor-pointer" @click="handleClick">
-        <Trash2 class="text-red-600 bg-transparent w-[17px] h-[17px]" />
+      <div class="absolute -top-2 -right-1 cursor-pointer bg-red-600 p-1 w-[20px] h-[20px] rounded-full" @click="handleClick">
+        <Trash2 class="text-white bg-transparent w-full h-full" />
       </div>
     </div>
   </div>

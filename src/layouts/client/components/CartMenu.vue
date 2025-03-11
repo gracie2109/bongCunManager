@@ -74,7 +74,7 @@
                 >
                 <div class="flex justify-between items-center">
                   <div
-                    class="cursor-pointer flex text-red-600"
+                    class="cursor-pointer flex text-red-600 "
                     @click="() => $store.clearCart()"
                   >
                     <X /> Clear Cart
