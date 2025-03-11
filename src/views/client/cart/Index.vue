@@ -1,22 +1,26 @@
 <script lang="ts" setup>
-import { Swipe1, Swipe2, Swipe3 } from '@/components/Cart';
+import { ArrowLeft } from "lucide-vue-next";
+import { useCartLocal } from "@/stores"
+import { storeToRefs } from "pinia";
+import { Checkbox } from "@/components/ui/checkbox";
+import CartMobile from "@/components/Cart/CartMobile/Index.vue";
+
+const $cart = useCartLocal()
+
+const { carts, cartTotal } = storeToRefs($cart);
+
+
 
 </script>
 
 
 <template>
-  <div class="mb-5">
-    <p>Day la swipe 1</p>
-    <Swipe1 />
-  </div>
 
-  <div>
-    <p>Day la swipe 2</p>
-    <Swipe2 />
-  </div>
+<div class="w-full h-screen border border-blue-800">
 
-  <div>
-    <p>Day la swipe 3</p>
-    <Swipe3 />
-  </div>
+
+     <div class="sm:hidden block  w-full h-full relative">
+          <CartMobile />
+     </div>
+</div>
 </template>

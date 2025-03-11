@@ -116,7 +116,7 @@ const router = createRouter({
       component: CartPageView,
       meta: {
         key: "cart",
-        layout: PAGE_LAYOUT.CLIENT,
+        layout: PAGE_LAYOUT.NO_LAYOUT,
       },
     },
     {

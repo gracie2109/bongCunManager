@@ -34,7 +34,7 @@
       </div>
     </div>
   </header>
-  <main class="relative top-[5em] h-auto min-h-screen w-full">
+  <main class="relative top-[5em] h-auto  w-full">
     <div class="relative clear-both">
       <slot />
     </div>
