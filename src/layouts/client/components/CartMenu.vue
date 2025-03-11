@@ -27,7 +27,7 @@
     :open="open"
     @update:open="open = !open"
   >
-    <SheetContent class="w-[400px] sm:w-[540px]">
+    <SheetContent class="w-full sm:w-[540px]">
       <SheetHeader
         class="absolute top-3 font-semibold text-sm hover:underline hover:cursor-pointer"
         @click="
