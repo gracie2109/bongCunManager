@@ -1,4 +1,3 @@
-o
 <template>
   <div class="relative" @click="open = !open">
     <div class="relative">
@@ -28,7 +27,7 @@ o
     :open="open"
     @update:open="open = !open"
   >
-    <SheetContent>
+    <SheetContent class="w-[400px] sm:w-[540px]">
       <SheetHeader
         class="absolute top-3 font-semibold text-sm hover:underline hover:cursor-pointer"
         @click="
@@ -62,7 +61,7 @@ o
               </div>
             </ScrollArea>
 
-            <div class="w-full h-[15vh] absolute bottom-2">
+            <div class="w-full h-[15vh] absolute bottom-10">
               <div class="space-y-3">
                 <h1 class="text-md">
                   Tổng tiền:
@@ -106,7 +105,7 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
-  SheetTrigger,
+  SheetTrigger
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -129,8 +128,7 @@ function closeSheet() {
 
 function goCheckoutPage() {}
 const goCartPage = () => {
-
-  router.resolve({ name: "cart" }); 
-   closeSheet();
+  router.resolve({ name: "cart" });
+  closeSheet();
 };
 </script>
