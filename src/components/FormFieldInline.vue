@@ -2,64 +2,61 @@
   <FormField :name="name">
     <template #default="scope">
       <FormItem>
-        <FormControl class="relative">
+        <FormControl class="relative rounded-none">
           <div class="relative">
             <input
               type="text"
-              class="text-sm w-full relative"
+              class="text-sm w-full relative rounded-none"
               :placeholder="placeholder"
               v-bind="scope"
-              :value="modelValue" 
-              @input="onInput" 
+              :value="modelValue"
+              @input="onInput"
               :class="{
-                'invalid p-invalid': isInValid,
+                'invalid p-invalid': isInValid
               }"
             />
-            <div class="absolute right-0 bottom-2 cursor-pointer" v-if="isInValid">
-              <TooltipProvider>
-                <Tooltip as="p">
-                  <TooltipTrigger>
-                    <InfoIcon class="h-5 w-5" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{{ error }}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+            <div
+              class="absolute right-0 bottom-2 cursor-pointer"
+              v-if="isInValid"
+            >
+              <Popover>
+                <PopoverTrigger> <InfoIcon class="h-5 w-5" /></PopoverTrigger>
+                <PopoverContent>
+                  <p>{{ error }}</p>
+                 
+                  <PopoverArrow />
+                  </PopoverContent
+                >
+              </Popover>
             </div>
           </div>
         </FormControl>
       </FormItem>
-    </template> 
+    </template>
   </FormField>
 </template>
 <script lang="ts" setup>
-import { computed, ref, defineProps, defineEmits } from 'vue';
+import { ref, defineProps, defineEmits } from "vue";
 
 import { InfoIcon } from "lucide-vue-next";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { PopoverArrow, PopoverClose } from "radix-vue";
 
 defineProps<{
   name: String;
   placeholder: String;
   error: any;
   isInValid: Boolean;
-  modelValue: String,  
+  modelValue: String;
 }>();
-
+const openTooltip = ref(false);
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void;
+  (e: "update:modelValue", value: string): void;
 }>();
 const onInput = (event: Event) => {
   const input = event.target as HTMLInputElement;
-  emit('update:modelValue', input.value);
+  emit("update:modelValue", input.value);
 };
-
 </script>
 
 <style scoped>
@@ -98,7 +95,6 @@ input:-moz-autofill {
   background: transparent !important;
   box-shadow: 0 0 0px 1000px transparent inset !important;
 }
-
 
 input:-webkit-autofill:focus {
   background: transparent !important;
