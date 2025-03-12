@@ -17,7 +17,7 @@ function reset() {
 }
 
 function handleOverlayClick() {
-  console.log('Overlay clicked!');
+  alert('Overlay clicked!');
   
 }
 
