@@ -1,63 +1,61 @@
 <script setup lang="ts">
-import type { UseSwipeDirection } from '@vueuse/core'
 import { useSwipe } from '@vueuse/core'
-import { computed, shallowRef } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 
 const target = shallowRef<HTMLElement | null>(null)
 const container = shallowRef<HTMLElement | null>(null)
-const containerWidth = computed(() => container.value?.offsetWidth)
-const left = shallowRef('0')
-const opacity = shallowRef(1)
+const containerWidth = computed(() => container.value?.offsetWidth || 1)
+const overlayWidth = computed(() => containerWidth.value * 0.3)
+const right = ref('-30%')
+const opacity = ref(0)
+const isVisible = ref(false)
 
 function reset() {
-  left.value = '0'
-  opacity.value = 1
+  right.value = '-30%'
+  opacity.value = 0
+  isVisible.value = false
 }
 
-const { direction, isSwiping, lengthX, lengthY } = useSwipe(
-  target,
-  {
-    passive: false,
-    onSwipe(e: TouchEvent) {
-      if (containerWidth.value) {
-        if (lengthX.value < 0) {
-          const length = Math.abs(lengthX.value)
-          left.value = `${length}px`
-          opacity.value = 1.1 - length / containerWidth.value
-        }
-        else {
-          left.value = '0'
-          opacity.value = 1
-        }
-      }
-    },
-    onSwipeEnd(e: TouchEvent, direction: UseSwipeDirection) {
-      if (lengthX.value < 0 && containerWidth.value && (Math.abs(lengthX.value) / containerWidth.value) >= 0.5) {
-        left.value = '100%'
-        opacity.value = 0
-      }
-      else {
-        left.value = '0'
-        opacity.value = 1
-      }
-    },
+function handleOverlayClick() {
+  console.log('Overlay clicked!');
+  
+}
+
+const { lengthX } = useSwipe(container, {
+  passive: false,
+  onSwipe() {
+    if (!isVisible.value && lengthX.value > 0) {
+      // Kéo từ trái qua phải để mở
+      const length = Math.min(lengthX.value, overlayWidth.value)
+      right.value = `${-30 + (length / overlayWidth.value) * 30}%`
+      opacity.value = length / overlayWidth.value
+    } else if (isVisible.value && lengthX.value < 0) {
+      // Kéo từ phải qua trái để đóng
+      const length = Math.min(Math.abs(lengthX.value), overlayWidth.value)
+      right.value = `${-(length / overlayWidth.value) * 30}%`
+      opacity.value = 1 - length / overlayWidth.value
+    }
   },
-)
+  onSwipeEnd() {
+    if (!isVisible.value && lengthX.value > overlayWidth.value / 2) {
+      right.value = '0%'
+      opacity.value = 1
+      isVisible.value = true
+    } else if (isVisible.value && lengthX.value < -overlayWidth.value / 2) {
+      reset()
+    }
+  }
+})
 </script>
 
 <template>
-  <div>
-    <div ref="container" class="container select-none">
-      <button @click="reset">
-        Reset
-      </button>
-      <div ref="target" class="overlay" :class="{ animated: !isSwiping }" :style="{ left, opacity }">
-        <p>Swipe right</p>
-      </div>
+  <div ref="container" class="container select-none">
+    <button @click="reset">Reset</button>
+    <div ref="target" class="overlay" :class="{ animated: true }" :style="{ right, opacity, width: '30%' }" @mousedown="handleOverlayClick">
+      <p>Hidden Content</p>
     </div>
     <p class="status">
-      Direction: {{ direction ? direction : '-' }} <br>
-      lengthX: {{ lengthX }} | lengthY: {{ lengthY }}
+      Swipe right to reveal content, swipe left to hide
     </p>
   </div>
 </template>
@@ -65,35 +63,31 @@ const { direction, isSwiping, lengthX, lengthY } = useSwipe(
 <style scoped>
 .container {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 300px;
+  height: 150px;
   border: 2px dashed #ccc;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .overlay {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   position: absolute;
+  top: 0;
+  right: -30%;
+  width: 30%;
+  height: 100%;
   background: #3fb983;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  pointer-events: auto; /* Đảm bảo phần tử nhận sự kiện click */
 }
 
 .overlay.animated {
-  transition: all 0.2s ease-in-out;
-}
-
-.overlay > p {
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.status {
-  text-align: center;
+  transition: all 0.3s ease-in-out;
 }
 </style>
