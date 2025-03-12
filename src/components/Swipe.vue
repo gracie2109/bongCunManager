@@ -8,6 +8,8 @@
         transform: `translateX(${translateX}px)`,
         willChange: 'transform'
       }"
+
+      
     >
       <!-- Card Content -->
       <div class="flex-shrink-0 w-full border p-4">
