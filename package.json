@@ -46,6 +46,7 @@
     "vue-swipe-actions": "^2.0.0-beta.20",
     "vue-zoomable": "^1.2.3",
     "vue3-carousel": "^0.14.0",
+    "vue3-touch-events": "^5.0.13",
     "zod": "^3.23.8"
   },
   "devDependencies": {
