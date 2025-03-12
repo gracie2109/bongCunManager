@@ -1,18 +1,21 @@
 <template>
   <div class="relative overflow-hidden w-full h-full">
     <!-- Main Card -->
-    <div ref="cardRef" class="flex transition-transform duration-300 ease-in-out w-full h-full" :style="{
-      transform: `translateX(${translateX}px)`,
-      willChange: 'transform'
-    }" @mousedown="startDrag" @mousemove="onDrag" @mouseup="endDrag" @mouseleave="endDrag" @touchstart="startDrag"
-      @touchmove="onDrag" @touchend="endDrag">
+    <div
+      ref="cardRef"
+      class="flex transition-transform duration-300 ease-in-out w-full h-full"
+      :style="{
+        transform: `translateX(${translateX}px)`,
+        willChange: 'transform'
+      }"
+    >
       <!-- Card Content -->
       <div class="flex-shrink-0 w-full border p-4">
         <slot name="content" />
       </div>
 
       <!-- Delete Section -->
-      <div ref="swipeHiddenRef">
+      <div ref="swipeHiddenRef" @click.stop="handleSwipeHiddenClick">
         <slot name="swipe_hidden"></slot>
       </div>
     </div>
@@ -20,11 +23,17 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref, watch, onMounted, onUnmounted } from "vue";
+import { useGesture } from "@vueuse/gesture";
 
+const props = defineProps<{
+  isOpen: boolean;
+  click: boolean
+   // Trạng thái đóng/mở từ component cha
+}>();
 
-const startX = ref(0);
-const initialTranslateX = ref(0);
+const emit = defineEmits(['updateOpen', 'swipe-hidden-click']);
+
 const cardRef = ref<HTMLElement | null>(null);
 const swipeHiddenRef = ref<HTMLElement | null>(null);
 const translateX = ref(0);
@@ -33,39 +42,51 @@ const velocity = ref(0);
 const animationFrame = ref<number | null>(null);
 const swipeHiddenWidth = ref(0);
 
-const startDrag = (event: any) => {
-  isDragging.value = true;
-  startX.value = event.clientX;
-  initialTranslateX.value = translateX.value;
-};
-
-const onDrag = (event: any) => {
-  if (!isDragging.value) return;
-
-  const currentX = event.clientX;
-  const diffX = currentX - startX.value;
-  translateX.value = initialTranslateX.value + diffX;
-
-  // Giới hạn kéo sang phải tối đa 96px (chiều rộng của section xóa)
-  if (translateX.value > 0) {
-    translateX.value = 0;
-  } else if (translateX.value < -swipeHiddenWidth.value) {
-    translateX.value = -swipeHiddenWidth.value;
+// Theo dõi thay đổi của isOpen và cập nhật translateX
+watch(
+  () => props.isOpen,
+  () => {
+    translateX.value = props.isOpen ? -swipeHiddenWidth.value : 0;
   }
+);
+
+
+
+console.log('__', props.isOpen, translateX.value, isDragging.value,swipeHiddenWidth.value )
+
+// Xử lý click vào swipe_hidden
+const handleSwipeHiddenClick = (event: MouseEvent) => {
+  event.stopPropagation(); // Ngăn chặn sự kiện click lan ra toàn bộ card
+  emit('swipe-hidden-click'); // Phát ra sự kiện
 };
 
-const endDrag = () => {
-  isDragging.value = false;
-
-  // Nếu kéo quá 50% chiều rộng section xóa, tự động mở section xóa
-  if (translateX.value < -swipeHiddenWidth.value / 2) {
-    translateX.value = -swipeHiddenWidth.value;
-  } else {
-    // Nếu không, đóng section xóa
-    translateX.value = 0;
+// Sử dụng useGesture để xử lý kéo
+useGesture(
+  {
+    onDrag: ({ movement: [mx], dragging, vxvy: [vx] }) => {
+      isDragging.value = dragging;
+      translateX.value = mx;
+      if (dragging) {
+        velocity.value = vx;
+      } else {
+        // Khi thả tay, thông báo cho component cha để cập nhật isOpen
+        if (translateX.value < -swipeHiddenWidth.value / 2) {
+          emit('updateOpen', true); // Mở section xóa
+        } else {
+          emit('updateOpen', false); // Đóng section xóa
+        }
+        velocity.value = vx;
+      }
+    },
+  },
+  {
+    domTarget: cardRef,
+    eventOptions: { passive: true },
   }
-};
+);
 
+console.log('translateX.value', translateX.value)
+console.log('swipeHiddenWidth.value', swipeHiddenWidth.value)
 
 onMounted(() => {
   if (swipeHiddenRef.value) {
@@ -73,9 +94,11 @@ onMounted(() => {
   }
 });
 
-
-
-
+onUnmounted(() => {
+  if (animationFrame.value !== null) {
+    cancelAnimationFrame(animationFrame.value);
+  }
+});
 </script>
 
 <style scoped>

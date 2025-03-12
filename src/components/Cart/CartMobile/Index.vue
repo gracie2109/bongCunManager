@@ -20,7 +20,7 @@
             <!-- cart-content -->
             <div class="relative cart_mobile_content p-3 mt-5">
                 <ScrollArea class="h-full">
-                    <div v-for="i in carts" v-if="carts" :key="i.id" class="mb-3">
+                    <div v-for="i in carts.splice(0,1)" v-if="carts" :key="i.id" class="mb-3">
                         <CartItem :data="i"  />
                     </div>
                 </ScrollArea>
