@@ -16,10 +16,10 @@ const { carts, cartTotal } = storeToRefs($cart);
 
 <template>
 
-<div class="w-full h-screen border border-blue-800">
+<div class="w-full h-screen">
 
 
-     <div class="sm:hidden block  w-full h-full relative">
+     <div class="block  w-full h-full relative">
           <CartMobile />
      </div>
 </div>
