@@ -14,8 +14,22 @@
             <span class="font-semibold text-xl"> Giỏ hàng </span>
             <span>({{ carts.length }})</span>
           </div>
-          <div class="w-[30px] mr-3 cursor-pointer" @click="edit = !edit">
-            {{ edit ? "Xong" : "Sửa" }}
+          <div
+            class="w-[30px] mr-3 cursor-pointer"
+            @click="
+              () => {
+                if (carts.length > 0) {
+                  edit = !edit;
+                }
+              }
+            "
+          >
+            <span
+              :class="{
+                'text-white': carts.length < 1
+              }"
+              >{{ edit ? "Xong" : "Sửa" }}</span
+            >
           </div>
         </div>
       </div>
@@ -23,13 +37,27 @@
       <!-- cart-content -->
       <div class="relative cart_mobile_content p-3 mt-5">
         <ScrollArea class="h-full">
-          <div v-for="i in carts" v-if="carts" :key="i.id" class="mb-3">
+          <div
+            v-for="i in carts"
+            v-if="carts.length > 0"
+            :key="i.id"
+            class="mb-3"
+          >
             <CartItem
-              :isSelected="selected?.some((record) => record === i.id)"
+              :isSelected="selected?.some((record) => record.id === i.id)"
               :data="i"
               @delete-item="deleteCartItem"
               @updateChecked="selectedItem"
             />
+          </div>
+
+          <div v-else>
+            <div class="h-full mt-5 grid">
+              <div class="container my-auto relative">
+                <img :src="cartEmpty" alt="" />
+                <p class="text-center">Empty cart</p>
+              </div>
+            </div>
           </div>
         </ScrollArea>
       </div>
@@ -41,8 +69,12 @@
           <div class="pl-2 flex items-center w-[26%]">
             <Checkbox
               id="all"
-              :checked="chooseAll || selected.length === carts.length"
+              :checked="
+                carts.length > 0 &&
+                (chooseAll || selected.length === carts.length)
+              "
               @update:checked="chooseAll = !chooseAll"
+              :disabled="carts.length < 1"
             />
             <label for="all" class="ml-1 cursor-pointer">Tất cả</label>
           </div>
@@ -58,6 +90,9 @@
           <!-- Checkout  -->
           <div
             class="bg-primary-subb text-white h-full flex gap-1 flex-wrap items-center justify-center text-center font-semibold p-3 w-[28%]"
+            :class="{
+              'cursor-default bg-slate-500': carts.length < 1
+            }"
           >
             <p>Mua hàng</p>
             <p>({{ selected.length || 0 }})</p>
@@ -73,10 +108,11 @@ import { ArrowLeft } from "lucide-vue-next";
 import { useCartLocal } from "@/stores";
 import { storeToRefs } from "pinia";
 import { Checkbox } from "@/components/ui/checkbox";
-import { computed, ref, watch, watchEffect } from "vue";
+import { ref, watchEffect } from "vue";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatPrice } from "@/lib/utils";
 import CartItem from "./CartItem.vue";
+import cartEmpty from "../../../assets/empty-box.png";
 
 const $cart = useCartLocal();
 
@@ -94,23 +130,33 @@ const getValue = () => {
     selected.value = [];
   } else {
     totalPay.value = cartTotal.value;
-    selected.value = carts.value.map((i) => i.id);
+    selected.value = carts.value;
   }
 };
 
+const calcTotalPay = () => {
+  const res = selected.value.reduce(
+    (acc, curr) => acc + (+curr.price * +curr.quantity || 0),
+    0
+  );
+  totalPay.value = formatPrice(res);
+};
 watchEffect(() => {
   getValue();
+});
+watchEffect(() => {
+  calcTotalPay();
 });
 
 const deleteCartItem = (id: string) => {
   deleteItem.value = id;
 };
-const selectedItem = (id: string) => {
-  const isIn = selected.value.find((i) => i === id);
+const selectedItem = (item: any) => {
+  const isIn = selected.value.find((i) => i.id === item.id);
   if (isIn) {
-    selected.value = selected.value.filter((i) => i !== id);
+    selected.value = selected.value.filter((i) => i.id !== item.id);
   } else {
-    selected.value = [...selected.value, id];
+    selected.value = [...selected.value, item];
   }
 };
 </script>

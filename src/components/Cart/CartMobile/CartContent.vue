@@ -3,8 +3,10 @@
     <div class="first_sc w-[40%]">
       <div class="grid grid-cols-5 w-full h-full">
         <div class="my-auto">
-        {{ props.isSelected }}
-          <Checkbox :checked="props.isSelected" @update:checked="updateChecked" />
+          <Checkbox
+            :checked="props.isSelected"
+            @update:checked="updateChecked"
+          />
         </div>
         <div class="w-full h-full col-span-4">
           <img
@@ -64,34 +66,22 @@ import {
   NumberFieldIncrement,
   NumberFieldInput
 } from "@/components/ui/number-field";
-import { Trash2 } from "lucide-vue-next";
-import { ref } from "vue";
 import { Checkbox } from "@/components/ui/checkbox";
 
 const props = defineProps<{
   data: any;
-  isSelected: boolean
-
+  isSelected: boolean;
 }>();
+
 const emits = defineEmits(["deleteCartItem", "updateQuanty", "updateChecked"]);
 
-const isClick = ref(false);
-
-const handleClick = () => {
-  isClick.value = true;
-};
-
-const handleDelete = () => {
-  emits("deleteCartItem", props.data);
-};
 const changeQuanty = (vl: number) => {
   emits("updateQuanty", vl, props.data.id);
 };
 
 const updateChecked = () => {
-  emits("updateChecked", props.data.id);
-
-}
+  emits("updateChecked", props.data);
+};
 </script>
 
 <style scoped></style>

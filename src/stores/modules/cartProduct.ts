@@ -31,8 +31,8 @@ export const useCartLocal = defineStore("cartLocal", () => {
     return formatPrice(res);
   });
 
-  const updateQuanty = (quantity: number, id: string) => {
-    const index = carts.value.findIndex((i) => i.id === id);
+  const updateQuanty = (quantity: number, id: string) => {    
+    const index = carts.value.findIndex((i) => i.id === id);    
     if (index !== -1) {
       carts.value[index] = {
         ...carts.value[index],

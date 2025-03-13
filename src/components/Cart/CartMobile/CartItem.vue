@@ -15,7 +15,12 @@
       @touchend="endDrag"
     >
       <div class="flex-shrink-0 w-full text-black h-[115px]">
-        <CartContent :data="props.data" :isSelected="props.isSelected" @update-checked="updateChecked" />
+        <CartContent
+          :data="props.data"
+          :isSelected="props.isSelected"
+          @update-checked="updateChecked"
+          @update-quanty="changeQuanty"
+        />
       </div>
 
       <div
@@ -32,12 +37,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import CartContent from "./CartContent.vue";
+import { useCartLocal } from "@/stores";
 
 const props = defineProps<{
   data: any;
-  isSelected: boolean
+  isSelected: boolean;
 }>();
-
+const $cart = useCartLocal();
 const emits = defineEmits(["deleteItem", "updateChecked"]);
 
 const translateX = ref(0);
@@ -84,11 +90,15 @@ onMounted(() => {
 });
 
 const handleClickDel = () => {
-  emits("deleteItem", props.data.id);
+  $cart.deleteCartItem(props.data);
 };
+const changeQuanty = (vl: number) => {
+  $cart.updateQuanty(+vl, props.data.id)
+};
+
 const updateChecked = () => {
-    emits("updateChecked",  props.data.id)
-}
+  emits("updateChecked", props.data);
+};
 </script>
 
 <style scoped>
