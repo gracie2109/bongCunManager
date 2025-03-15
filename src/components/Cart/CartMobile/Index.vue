@@ -31,7 +31,7 @@
               >{{ edit ? "Xong" : "Sửa" }}</span
             >
           </div>
-        </div>
+        </div>                                                                          
       </div>
 
       <!-- cart-content -->
@@ -48,6 +48,7 @@
               :data="i"
               @delete-item="deleteCartItem"
               @updateChecked="selectedItem"
+              :isEditOpen="edit"
             />
           </div>
 
@@ -61,7 +62,7 @@
           </div>
         </ScrollArea>
       </div>
-
+      
       <!-- cart footer -->
       <div class="absolute w-full border-t h-[70px] bottom-0" v-if="!edit">
         <div class="w-full h-full flex items-center justify-between">
@@ -81,7 +82,7 @@
 
           <!-- total price -->
           <div class="text-center flex flex-wrap gap-1 justify-center w-[46%]">
-            <p>Tổng thanh toán</p>
+            <p>Tổng thanh toán</p>  
             <p class="font-semibold text-primary">
               {{ totalPay || formatPrice(0) }}
             </p>
@@ -89,9 +90,10 @@
 
           <!-- Checkout  -->
           <div
+          @click="gotoCheckout"
             class="bg-primary-subb text-white h-full flex gap-1 flex-wrap items-center justify-center text-center font-semibold p-3 w-[28%]"
             :class="{
-              'cursor-default bg-slate-500': carts.length < 1
+              'cursor-default bg-slate-500': carts.length < 1 || selected.length < 1
             }"
           >
             <p>Mua hàng</p>
@@ -102,37 +104,40 @@
     </div>
   </div>
 </template>
-
 <script lang="ts" setup>
 import { ArrowLeft } from "lucide-vue-next";
 import { useCartLocal } from "@/stores";
 import { storeToRefs } from "pinia";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ref, watchEffect } from "vue";
+import { ref, watch, watchEffect } from "vue";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatPrice } from "@/lib/utils";
 import CartItem from "./CartItem.vue";
 import cartEmpty from "../../../assets/empty-box.png";
+import { useRouter } from "vue-router";
 
 const $cart = useCartLocal();
-
 const { carts, cartTotal } = storeToRefs($cart);
 
 const edit = ref(false);
 const chooseAll = ref(false);
 const selected = ref<any[]>([]);
 const totalPay = ref<any>();
-const deleteItem = ref<string | null | string[]>(null);
-
-const getValue = () => {
-  if (!chooseAll.value || selected.value?.length > 0) {
-    totalPay.value = formatPrice(0);
-    selected.value = [];
-  } else {
-    totalPay.value = cartTotal.value;
-    selected.value = carts.value;
-  }
-};
+const router = useRouter()
+// Cập nhật danh sách selected khi carts thay đổi
+watch(
+  carts,
+  (newCarts) => {
+    selected.value = selected.value
+      .map((item) => {
+        const updatedItem = newCarts.find((c) => c.id === item.id);
+        return updatedItem ? { ...item, quantity: updatedItem.quantity } : null;
+      })
+      .filter(Boolean);
+    calcTotalPay();
+  },
+  { deep: true }
+);
 
 const calcTotalPay = () => {
   const res = selected.value.reduce(
@@ -141,24 +146,39 @@ const calcTotalPay = () => {
   );
   totalPay.value = formatPrice(res);
 };
-watchEffect(() => {
-  getValue();
-});
-watchEffect(() => {
-  calcTotalPay();
-});
 
 const deleteCartItem = (id: string) => {
-  deleteItem.value = id;
+  $cart.deleteCartItem(id);
+  selected.value = selected.value.filter((i) => i.id !== id);
+  calcTotalPay();
 };
+
 const selectedItem = (item: any) => {
-  const isIn = selected.value.find((i) => i.id === item.id);
-  if (isIn) {
-    selected.value = selected.value.filter((i) => i.id !== item.id);
+  const index = selected.value.findIndex((i) => i.id === item.id);
+  if (index !== -1) {
+    selected.value.splice(index, 1);
   } else {
-    selected.value = [...selected.value, item];
+    selected.value.push(item);
   }
+  calcTotalPay();
 };
+
+const toggleChooseAll = () => {
+  if (chooseAll.value) {
+    selected.value = carts.value.slice();
+  } else {
+    selected.value = [];
+  }
+  calcTotalPay();
+};
+
+const gotoCheckout = () => {
+  if(selected.value.length < 1 || carts.value.length < 1) {
+    return;
+  }
+return router.push({name: 'checkout'})
+}
+watch(chooseAll, toggleChooseAll);
 </script>
 
 <style scoped>

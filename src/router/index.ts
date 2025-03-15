@@ -23,7 +23,9 @@ import RegisterView from "@/views/auth/RegisterView.vue";
 import SettingPetServicePrice from "@/views/admin/pets/services-price/Index.vue";
 import SettingView from "@/views/admin/settings/SettingView.vue";
 import RegisterPetView from "@/views/admin/pets/register-pets/Index.vue"
-import CartPageView from "@/views/client/cart/Index.vue"
+import CartPageView from "@/views/client/cart/Index.vue";
+import CheckoutPage from "@/views/client/checkout/Index.vue"
+
 import i18n from "@/i18n";
 import { useAuthStore } from "@/stores";
 
@@ -116,6 +118,15 @@ const router = createRouter({
       component: CartPageView,
       meta: {
         key: "cart",
+        layout: PAGE_LAYOUT.NO_LAYOUT,
+      },
+    },
+    {
+      path: "/checkout",
+      name: "checkout",
+      component: CheckoutPage,
+      meta: {
+        key: "checkout",
         layout: PAGE_LAYOUT.NO_LAYOUT,
       },
     },

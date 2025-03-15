@@ -4,7 +4,7 @@
       class="flex transition-transform duration-300 ease-in-out"
       :style="{
         transform: `translateX(${translateX}px)`,
-        willChange: 'transform'
+        willChange: 'transform',
       }"
       @mousedown="startDrag"
       @mousemove="onDrag"
@@ -35,13 +35,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import CartContent from "./CartContent.vue";
 import { useCartLocal } from "@/stores";
 
 const props = defineProps<{
   data: any;
   isSelected: boolean;
+  isEditOpen: boolean;
 }>();
 const $cart = useCartLocal();
 const emits = defineEmits(["deleteItem", "updateChecked"]);
@@ -93,12 +94,23 @@ const handleClickDel = () => {
   $cart.deleteCartItem(props.data);
 };
 const changeQuanty = (vl: number) => {
-  $cart.updateQuanty(+vl, props.data.id)
+  $cart.updateQuanty(+vl, props.data.id);
 };
 
 const updateChecked = () => {
   emits("updateChecked", props.data);
 };
+
+watch(
+  () => props.isEditOpen,
+  (newVal) => {
+    if (newVal) {
+      translateX.value = -actionWidth.value;
+    } else {
+      translateX.value = 0;
+    }
+  }
+);
 </script>
 
 <style scoped>
