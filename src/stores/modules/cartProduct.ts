@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { computed, ref, type Ref } from "vue";
 
 export const useCartLocal = defineStore("cartLocal", () => {
+  const checkoutList = ref([])
   const carts: Ref<any[]> = ref([
     {
       id: "sNzMj8yWPFYEAAzgzIVp",
@@ -52,6 +53,10 @@ export const useCartLocal = defineStore("cartLocal", () => {
     
   }
 
+  const addToCheckoutList = (data:any) => {
+    checkoutList.value = data
+  }
 
-  return { carts,cartTotal, updateQuanty, clearCart, deleteCartItem };
+
+  return { carts,cartTotal, updateQuanty, clearCart, deleteCartItem , addToCheckoutList, checkoutList};
 });

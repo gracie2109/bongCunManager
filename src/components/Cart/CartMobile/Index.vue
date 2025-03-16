@@ -26,12 +26,12 @@
           >
             <span
               :class="{
-                'text-white': carts.length < 1
+                'text-white': carts.length < 1,
               }"
               >{{ edit ? "Xong" : "Sửa" }}</span
             >
           </div>
-        </div>                                                                          
+        </div>
       </div>
 
       <!-- cart-content -->
@@ -62,7 +62,7 @@
           </div>
         </ScrollArea>
       </div>
-      
+
       <!-- cart footer -->
       <div class="absolute w-full border-t h-[70px] bottom-0" v-if="!edit">
         <div class="w-full h-full flex items-center justify-between">
@@ -82,7 +82,7 @@
 
           <!-- total price -->
           <div class="text-center flex flex-wrap gap-1 justify-center w-[46%]">
-            <p>Tổng thanh toán</p>  
+            <p>Tổng thanh toán</p>
             <p class="font-semibold text-primary">
               {{ totalPay || formatPrice(0) }}
             </p>
@@ -90,10 +90,11 @@
 
           <!-- Checkout  -->
           <div
-          @click="gotoCheckout"
+            @click="gotoCheckout"
             class="bg-primary-subb text-white h-full flex gap-1 flex-wrap items-center justify-center text-center font-semibold p-3 w-[28%]"
             :class="{
-              'cursor-default bg-slate-500': carts.length < 1 || selected.length < 1
+              'cursor-default bg-slate-500':
+                carts.length < 1 || selected.length < 1,
             }"
           >
             <p>Mua hàng</p>
@@ -123,7 +124,7 @@ const edit = ref(false);
 const chooseAll = ref(false);
 const selected = ref<any[]>([]);
 const totalPay = ref<any>();
-const router = useRouter()
+const router = useRouter();
 // Cập nhật danh sách selected khi carts thay đổi
 watch(
   carts,
@@ -173,11 +174,13 @@ const toggleChooseAll = () => {
 };
 
 const gotoCheckout = () => {
-  if(selected.value.length < 1 || carts.value.length < 1) {
+  if (selected.value.length < 1 || carts.value.length < 1) {
     return;
   }
-return router.push({name: 'checkout'})
-}
+
+  router.push({ name: "checkout" });
+  $cart.addToCheckoutList(selected.value);
+};
 watch(chooseAll, toggleChooseAll);
 </script>
 

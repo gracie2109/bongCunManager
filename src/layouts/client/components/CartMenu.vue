@@ -56,6 +56,7 @@
                     @updateQuanty="
                       (quanty, id) => $store.updateQuanty(quanty, id)
                     "
+                    show-editor
                   />
                 </div>
               </div>
@@ -128,7 +129,7 @@ function closeSheet() {
 
 function goCheckoutPage() {}
 const goCartPage = () => {
-  router.resolve({ name: "cart" });
+  router.push({ name: "cart" });
   closeSheet();
 };
 </script>

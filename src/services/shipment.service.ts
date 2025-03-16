@@ -2,46 +2,100 @@ import type { IGHNShippingPayload } from "@/types/shipment.type";
 
 const token = import.meta.env.VITE_APP_GHN_TOKEN;
 const shopId = import.meta.env.VITE_APP_GHN_SHOP_ID;
+const service_light_good = import.meta.env
+  .VITE_APP_GHN_SERVICE_ID_TYPE_LIGHT_GOODS;
 
 export async function calcShippingFee({
   shippingInfo,
   storeInfo,
   orderInfo,
-}: IGHNShippingPayload) {
+}: any) {
   try {
     const url =
       "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee";
     const controller = new AbortController();
     const signal = controller.signal;
-    const response = (
-      await (
-        await fetch(url, {
-          method: "GET",
-          //@ts-ignore
-          headers: {
-            "Content-Type": "application/json",
-            Token: token,
-            ShopId: shopId,
-            from_district_id: storeInfo.districtId,
-            from_ward_code: storeInfo.wardCode,
-            service_id: 53320,
-            service_type_id: null,
-            to_district_id: shippingInfo.districtId,
-            to_ward_code: shippingInfo.wardCode,
-            height: orderInfo.height,
-            length: orderInfo.length,
-            weight: orderInfo.weight,
-            width: orderInfo.width,
-            insurance_value: orderInfo.insurance_value,
-            cod_failed_amount: 30000,
-            coupon: null,
-          },
-          signal,
-        })
-      ).json()
-    ).data;
-    console.log("response", response);
+    const response = await (
+      await fetch(url, {
+        method: "POST",
+        //@ts-ignore
+        headers: {
+          "Content-Type": "application/json",
+          ShopId: "4950045",
+          token: "51f94fe2-e02f-11ee-a2c1-ca2feb4b63fa",
+        },
+        body: JSON.stringify({
+          service_type_id: 5,
+          from_district_id: 1442,
+          from_ward_code: "21211",
+          to_district_id: 1820,
+          to_ward_code: "030712",
+          length: 30,
+          width: 40,
+          height: 20,
+          weight: 3000,
+          insurance_value: 0,
+          coupon: null,
+          items: [
+            {
+              name: "TEST1",
+              quantity: 1,
+              length: 200,
+              width: 200,
+              height: 200,
+              weight: 1000,
+            },
+          ],
+        }),
+        signal,
+      })
+    ).json();
+    if (response) {
+      if (response.code !== 200) {
+        console.log("calcShippingFee fail", response?.message);
+      }
+      return response.data;
+    }
   } catch (err: any) {
     console.log(new Error(err));
+  }
+}
+
+// Tính thời gian dự kiến giao
+export async function getLeadTime() {
+  try {
+    const production_path =
+      "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/leadtime";
+
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    const response = await (
+      await fetch(production_path, {
+        method: "POST",
+        headers: {
+          ShopId: "4950045",
+          token: "51f94fe2-e02f-11ee-a2c1-ca2feb4b63fa",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from_district_id: 1750,
+          from_ward_code: "511110",
+          to_district_id: 1750,
+          to_ward_code: "511110",
+          service_id: service_light_good,
+        }),
+        signal,
+      })
+    ).json();
+
+    if (response) {
+      if (response.code !== 200) {
+        console.log("getLeadTime fail", response?.message);
+      }
+      return response.data?.leadtime;
+    }
+  } catch (err: any) {
+    console.log("getLeadTime fail", err?.message);
   }
 }

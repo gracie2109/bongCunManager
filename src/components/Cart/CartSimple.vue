@@ -1,12 +1,8 @@
 <template>
   <div class="w-full flex h-[100px] border rounded-sm relative box-border">
     <div class="image w-[30%] p-2 relative">
-      <img
-        :src="props.data.image || props.data.images[0]"
-        alt=""
-        class="w-full h-full object-cover rounded-sm relative"
-        loading="lazy"
-      />
+      <img :src="props.data.image || props.data.images[0]" alt="" class="w-full h-full object-cover rounded-sm relative"
+        loading="lazy" />
     </div>
 
     <div class="w-[70%] relative">
@@ -21,16 +17,12 @@
         </div>
 
         <div class="flex relative gap-2 items-baseline">
-          <div class="w-[40%] h-[90%]">
-            <NumberField
-              :default-value="props.data.quantity || 1"
-              :min="1"
-              @update:model-value="
-                (v) => {
-                  changeQuanty(v);
-                }
-              "
-            >
+          <div class="w-[40%] h-[90%]" v-if="props.showEditor === true">
+            <NumberField :default-value="props.data.quantity || 1" :min="1" @update:model-value="
+              (v) => {
+                changeQuanty(v);
+              }
+            ">
               <NumberFieldContent>
                 <NumberFieldDecrement />
                 <NumberFieldInput />
@@ -38,30 +30,30 @@
               </NumberFieldContent>
             </NumberField>
           </div>
-          <div class="w-auto">
-            {{ formatPrice(props.data.quantity * props.data.price || 0) }}
+
+          <div class="w-auto" :class="{
+            'flex justify-between w-full items-center': !props.showEditor
+          }">
+            <p> {{ formatPrice(props.data.quantity * props.data.price || 0) }}</p>
+            <p v-if="!props.showEditor" class="mr-2">x{{ props.data.quantity }}</p>
           </div>
         </div>
       </div>
 
-      <div class="absolute -top-2 -right-1 cursor-pointer bg-red-600 p-1 w-[20px] h-[20px] rounded-full" @click="handleClick">
+      <div class="absolute -top-2 -right-1 cursor-pointer bg-red-600 p-1 w-[20px] h-[20px] rounded-full"
+        @click="handleClick" v-if="props.showEditor === true">
         <Trash2 class="text-white bg-transparent w-full h-full" />
       </div>
     </div>
   </div>
 
-  <DialogConfirm
-    :open="isClick"
-    :ok-btn="'Delete'"
-    :desc="'You may be deleting user data. After you delete this, it can not be recovered.'"
-    :title="'Delete files'"
-    @handle-ok="handleDelete"
-    @cancel="
+  <DialogConfirm :open="isClick" :ok-btn="'Delete'"
+    :desc="'You may be deleting user data. After you delete this, it can not be recovered.'" :title="'Delete files'"
+    @handle-ok="handleDelete" @cancel="
       () => {
         isClick = false;
       }
-    "
-  />
+    " />
 </template>
 
 <script lang="ts" setup>
@@ -79,6 +71,7 @@ import { ref } from "vue";
 
 const props = defineProps<{
   data: any;
+  showEditor?: boolean
 }>();
 const emits = defineEmits(["deleteCartItem", "updateQuanty"]);
 
