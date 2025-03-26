@@ -25,7 +25,7 @@ import SettingView from "@/views/admin/settings/SettingView.vue";
 import RegisterPetView from "@/views/admin/pets/register-pets/Index.vue"
 import CartPageView from "@/views/client/cart/Index.vue";
 import CheckoutPage from "@/views/client/checkout/Index.vue"
-
+import ProfilePage from "@/views/client/profile/Index.vue"
 import i18n from "@/i18n";
 import { useAuthStore } from "@/stores";
 
@@ -128,6 +128,15 @@ const router = createRouter({
       meta: {
         key: "checkout",
         layout: PAGE_LAYOUT.NO_LAYOUT,
+      },
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: ProfilePage,
+      meta: {
+        key: "checkout",
+        layout: PAGE_LAYOUT.CLIENT,
       },
     },
     {

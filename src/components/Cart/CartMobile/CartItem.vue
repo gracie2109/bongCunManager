@@ -15,6 +15,7 @@
       @touchend="endDrag"
     >
       <div class="flex-shrink-0 w-full text-black h-[115px]">
+      {{ isEditOpen }}
         <CartContent
           :data="props.data"
           :isSelected="props.isSelected"
@@ -104,7 +105,7 @@ const updateChecked = () => {
 watch(
   () => props.isEditOpen,
   (newVal) => {
-    if (newVal) {
+    if (props.isEditOpen) {
       translateX.value = -actionWidth.value;
     } else {
       translateX.value = 0;

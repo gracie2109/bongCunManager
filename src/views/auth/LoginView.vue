@@ -1,11 +1,7 @@
 <template>
-  <section class="mx-auto grid gap-6 w-full"
-  
-    :class="{
-      'mt-5 p-5': !isExactPath
-    }"
-  
-  >
+  <section class="mx-auto grid gap-6 w-full" :class="{
+    'mt-5 p-5': !isExactPath
+  }">
     <div class="grid gap-2 text-center">
       <h1 class="text-3xl font-bold">
         {{ $t("pageMeta.login") }}
@@ -19,42 +15,26 @@
         <div class="grid gap-4">
           <div class="grid gap-1">
             <Label for="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="m@example.com"
-              required
-              name="email"
-              v-model:model-value="formSchema.email"
-              :class="{ 'p-invalid': !!getError('email') }"
-            />
+            <Input id="email" type="email" placeholder="m@example.com" required name="email"
+              v-model:model-value="formSchema.email" :class="{ 'p-invalid': !!getError('email') }" />
             <div class="error">{{ getError("email") }}</div>
           </div>
           <div class="grid gap-1">
             <div class="flex items-center">
               <Label for="password">Password</Label>
-              <span
-                @click="redirectPath('forgotPw')"
-                class="ml-auto inline-block text-sm underline cursor-pointer"
-              >
+              <span @click="redirectPath('forgotPw')" class="ml-auto inline-block text-sm underline cursor-pointer">
                 Forgot your password?
               </span>
             </div>
 
-            <InputPassword
-              id="password"
-              name="password"
-              @update-value="(vl) => (formSchema.password = vl)"
-              placeholder="********"
-              :class="{ 'p-invalid': !!getError('password') }"
-              class="w-full"
-            />
+            <InputPassword id="password" name="password" @update-value="(vl) => (formSchema.password = vl)"
+              placeholder="********" :class="{ 'p-invalid': !!getError('password') }" class="w-full" />
             <div class="error">{{ getError("password") }}</div>
           </div>
           <Button type="submit" class="w-full h-[50px]" @click="handleSubmit()">
             {{ $t("pageMeta.login") }}
           </Button>
-          <Button variant="outline" class="w-full h-[50px]">
+          <Button variant="outline" class="w-full h-[50px]" @click="handleSubmit('google')">
             Login with Google
           </Button>
         </div>
@@ -89,18 +69,18 @@ import useValidation from "@/composables/useValidation";
 const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
-const isExactPath = route.fullPath?.toString()?.split('/')[1] === ""
+const isExactPath = route.fullPath?.toString()?.split("/")[1] === "";
 
 const formSchema = ref({
   email: "",
-  password: "",
+  password: ""
 });
 
 const { validate, isValid, getError, scrolltoError } = useValidation(
   loginSchema,
   formSchema,
   {
-    mode: "lazy",
+    mode: "lazy"
   }
 );
 
@@ -115,10 +95,29 @@ function redirectPath(name: "register" | "forgotPw") {
   }
 }
 
-async function handleSubmit() {
-  await validate();
-  if (isValid.value) {
-    await authStore.login(formSchema.value);
+async function handleSubmit(type?: string) {
+
+  if (!type) {
+    await validate();
+    if (isValid.value) {
+      await authStore.login(formSchema.value);
+      if (isSuccess.value) {
+        if (route.fullPath?.includes("login")) {
+          router.push({ name: "home" });
+          setTimeout(() => {
+            router.go(0);
+          }, 500);
+        } else {
+          router.go(0);
+        }
+
+        emits("closeDialog");
+      }
+    } else {
+      scrolltoError(".p-invalid", { offset: 24 });
+    }
+  } else {
+    await authStore.loginGoogle();
     if (isSuccess.value) {
       if (route.fullPath?.includes("login")) {
         router.push({ name: "home" });
@@ -131,8 +130,6 @@ async function handleSubmit() {
 
       emits("closeDialog");
     }
-  } else {
-    scrolltoError(".p-invalid", { offset: 24 });
   }
 }
 </script>
