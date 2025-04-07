@@ -50,21 +50,31 @@ export const ADMIN_NAVIGATOR: LinkProp[] = [
     name: "settings",
   },
 ];
+
+export const PROFILE_KEYS = {
+  GENERAL: "general",
+  ADDRESS: 'address',
+  TRANSACTION: 'transactions'
+
+}
 export const navigation = {
   profileNav: [
     {
       path: "general",
-      name: "general",
+      key: PROFILE_KEYS.GENERAL,
+      label: "general",
       icon: "",
     },
     {
       path: "address",
-      name: "address",
+      key:  PROFILE_KEYS.ADDRESS,
       icon: "",
+      label: "address",
     },
     {
       path: "transactions",
-      name: "transactions",
+      key: PROFILE_KEYS.TRANSACTION,
+      label: "transactions",
       icon: "",
     },
   ],

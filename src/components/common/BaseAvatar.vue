@@ -3,18 +3,15 @@
     <DropdownMenuTrigger as-child class="cursor-pointer">
       <Avatar size="xs">
         <AvatarImage
-          :src="currentUser.photoURL || 'https://github.com/radix-vue.png'"
+          :src="avatar"
+
           alt="@radix-vue"
         />
-        <AvatarFallback
-          class="leading-1 flex h-full w-full items-center justify-center text-[15px] font-medium"
-        >
-          YN
-        </AvatarFallback>
       </Avatar>
     </DropdownMenuTrigger>
     <DropdownMenuContent class="w-56">
-      <DropdownMenuLabel>{{ currentUser.email }}</DropdownMenuLabel>
+
+      <DropdownMenuLabel>{{  currentUser.email ?? ""}}</DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
         <DropdownMenuItem>
@@ -46,13 +43,18 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { placeholderImg } from "@/setting";
 import { useAuthStore } from "@/stores";
 import { storeToRefs } from "pinia";
-import LoadingIndicator from "./LoadingIndicator.vue";
+import { computed } from "vue";
 
 const store = useAuthStore();
 const { currentUser } = storeToRefs(store);
 function handleLogout() {
   store.signoutHdl();
 }
+
+const avatar = computed(() => (currentUser.value && currentUser.value.photoURL && currentUser.value.photoURL !== null && currentUser.value.photoURL !== "")
+    ? currentUser.value.photoURL : placeholderImg
+)
 </script>

@@ -25,6 +25,9 @@ import {
   onAuthStateChanged,
   updateProfile,
   signOut,
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup
 } from "firebase/auth";
 import type { IUser, ILoginPayload, IRegisterPayload } from "@/types/user.type";
 import { toast } from "vue-sonner";
@@ -123,6 +126,22 @@ export const useAuthStore = defineStore("auth", () => {
         loading.value = false;
       });
   }
+
+  async function loginGoogle() {
+    const auth = getAuth(); 
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      if (user) {
+        const res = await getDetailData(COLLECTION.USERS, "userId", user.uid);
+        setLocalStorage("auth", res?.docs[0].data());
+      }
+      isSuccess.value = true;
+    } catch (error:any) {
+      toast.error(error);
+    }
+  }
   async function getListUsers() {
     try {
       loading.value = true;
@@ -200,6 +219,7 @@ export const useAuthStore = defineStore("auth", () => {
     isSuccess,
     signoutHdl,
     userAddress,
-    addUserAddress
+    addUserAddress,
+    loginGoogle
   };
 });

@@ -16,7 +16,7 @@ const { carts, cartTotal } = storeToRefs($cart);
       <CartMobile />
     </div>
 
-    <div class="hidden xs:block">
+    <div class="hidden sm:block">
       <p>Updating..</p>
       <p>Support mobile now</p>
     </div>
