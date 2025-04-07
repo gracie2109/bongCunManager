@@ -7,7 +7,7 @@
       <AddressForm />
     </div>
 
-    <div class="relative max-h-[80vh] h-auto overflow-y-auto mt-5 px-3 space-y-4">
+    <div class="relative max-h-[80vh] h-auto overflow-y-auto mt-8 px-3 border  mb-16">
       <div v-for="i in checkoutList" v-if="checkoutList" class="checkout_list">
         <CartSimple :data="i" :showEditor="false" />
       </div>
@@ -18,7 +18,7 @@
         />
 
         <PaymentMethod />
-
+        <VoucherList />
 
 
 
@@ -26,7 +26,7 @@
 
     </div>
     <div
-      class="total_checkout fixed bottom-0 w-full  h-[60px] border-t "
+      class="total_checkout fixed bottom-0 w-full  h-[60px]  bg-white"
     >
      <div class="p-3 flex justify-end gap-4 ">
       <p>
@@ -56,6 +56,7 @@ import { calcShippingFee, getLeadTime } from "@/services/shipment.service";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import PaymentMethod from "./components/PaymentMethod.vue";
+import VoucherList from "./components/VoucherList.vue";
 
 const $cart = useCartLocal();
 const $auth = useAuthStore();
