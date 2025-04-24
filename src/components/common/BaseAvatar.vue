@@ -14,7 +14,7 @@
       <DropdownMenuLabel>{{  currentUser.email ?? ""}}</DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
-        <DropdownMenuItem>
+        <DropdownMenuItem @click="goToProfile">
           <User class="mr-2 h-4 w-4" />
           <span>Profile</span>
           <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
@@ -47,13 +47,17 @@ import { placeholderImg } from "@/setting";
 import { useAuthStore } from "@/stores";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
-
+import { useRouter } from "vue-router"
 const store = useAuthStore();
+const router = useRouter();
 const { currentUser } = storeToRefs(store);
 function handleLogout() {
   store.signoutHdl();
 }
 
+function goToProfile () {
+  router.push({name: 'profile'})
+}
 const avatar = computed(() => (currentUser.value && currentUser.value.photoURL && currentUser.value.photoURL !== null && currentUser.value.photoURL !== "")
     ? currentUser.value.photoURL : placeholderImg
 )

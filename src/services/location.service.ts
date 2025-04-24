@@ -9,26 +9,28 @@ export async function getProvince() {
 
     const controller = new AbortController();
     const signal = controller.signal;
+    if (token) {
+      const response = (
+        await (
+          await fetch(url, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Token: "51f94fe2-e02f-11ee-a2c1-ca2feb4b63fa",
+            },
+            signal,
+          })
+        ).json()
+      ).data;
+      const responseMap = response.map((i: any) => {
+        return {
+          ...i,
+          ProvinceID: String(i.ProvinceID),
+        };
+      });
 
-    const response = (
-      await (
-        await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Token: token,
-          },
-          signal,
-        })
-      ).json()
-    ).data;
-    const responseMap = response.map((i: any) => {
-      return {
-        ...i,
-        ProvinceID: String(i.ProvinceID),
-      };
-    });
-    return responseMap ? (responseMap as GHNProvince[]) : null;
+      return responseMap ? (responseMap as GHNProvince[]) : null;
+    }
   } catch (e: any) {
     console.log(new Error(e));
   }
@@ -51,7 +53,7 @@ export async function getDistrict(provinceId: number | string) {
             //@ts-ignore
             headers: {
               "Content-Type": "application/json",
-              token: token,
+              token: "51f94fe2-e02f-11ee-a2c1-ca2feb4b63fa",
               province_id: +provinceId,
             },
             signal,
@@ -86,7 +88,7 @@ export async function getWard(districtId: number | string) {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              token: token,
+              token: "51f94fe2-e02f-11ee-a2c1-ca2feb4b63fa",
             },
             signal,
           })
